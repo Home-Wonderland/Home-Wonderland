@@ -138,116 +138,123 @@
     <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200 bg-white">
         جميع الحقوق محفوظة لدى Mariam Basim S.A &copy;
     </footer>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    <script>
-        // دالة للحصول على تاريخ اليوم تلقائياً
-        function getTodayDate() {
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const yyyy = today.getFullYear();
-            return dd + '/' + mm + '/' + yyyy;
-        }
+  const firebaseConfig = {
+    apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
+    authDomain: "home-wonderland.firebaseapp.com",
+    databaseURL: "https://home-wonderland-default-rtdb.firebaseio.com",
+    projectId: "home-wonderland",
+    storageBucket: "home-wonderland.firebasestorage.app",
+    messagingSenderId: "911419710716",
+    appId: "1:911419710716:web:9ba36be5dd456b9f81cb79"
+  };
 
-        // تعيين التاريخ الافتراضي عند فتح الصفحة
-        document.getElementById('shipLastUpdate').value = getTodayDate();
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-        if (!localStorage.getItem('shipmentsData')) {
-            const initialData = {
-                "SH-1001": {
-                    customerName: "شركة المجال",
-                    shipmentType: "Sea",
-                    from: "DUBAI - UAE",
-                    to: "NORTH-RUMALI",
-                    currentLoc: "UMM-QASR PORT",
-                    status: "قيد التخليص الجمركي 🛃",
-                    statusDesc: "UNDER CLEARANCE",
-                    lastUpdate: getTodayDate(),
-                    packages: "10 Cartons / 350 Kg"
-                }
-            };
-            localStorage.setItem('shipmentsData', JSON.stringify(initialData));
-        }
+  function getTodayDate() {
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    return dd + '/' + mm + '/' + yyyy;
+  }
 
-        const form = document.getElementById('shipmentForm');
+  const dateInput = document.getElementById('shipLastUpdate');
+  if (dateInput) dateInput.value = getTodayDate();
 
-        function loadTable() {
-            const tableBody = document.getElementById('shipmentsTableBody');
-            tableBody.innerHTML = '';
-            const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
+  // جلب وتحديث الجدول من Firebase حياً
+  const tableBody = document.getElementById('shipmentTableBody');
+  if (tableBody) {
+    const shipmentsRef = ref(db, 'shipments');
+    onValue(shipmentsRef, (snapshot) => {
+      tableBody.innerHTML = '';
+      const shipments = snapshot.val();
+      if (shipments) {
+        Object.keys(shipments).forEach(code => {
+          const item = shipments[code];
+          const typeText = item.shipmentType === 'Air' ? 'جوي ✈️' : (item.shipmentType === 'Sea' ? 'بحري 🚢' : 'بري 🚚');
 
-            Object.keys(shipments).forEach(code => {
-                const item = shipments[code];
-                const typeText = item.shipmentType === 'Air' ? 'جوي ✈️' : item.shipmentType === 'Sea' ? 'بحري 🚢' : 'بري 🚛';
-                
-                const row = document.createElement('tr');
-                row.className = "border-b border-slate-100 hover:bg-slate-50";
-                row.innerHTML = `
-                    <td class="p-3 font-bold text-sky-600">${code}</td>
-                    <td class="p-3 font-semibold text-amber-700"><i class="fa-solid fa-building text-xs ml-1"></i>${item.customerName || 'غير محدد'}</td>
-                    <td class="p-3 text-xs font-bold text-slate-500">${item.lastUpdate || 'غير محدد'}</td>
-                    <td class="p-3 font-medium">${typeText}</td>
-                    <td class="p-3">${item.from} ⬅️ ${item.to}</td>
-                    <td class="p-3"><span class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs border border-slate-200 font-medium">${item.status}</span></td>
-                    <td class="p-3 text-center">
-                        <button onclick="editShipment('${code}')" class="text-amber-600 hover:text-amber-700 ml-2"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteShipment('${code}')" class="text-red-500 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const code = document.getElementById('shipCode').value.trim();
-            const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
-
-            shipments[code] = {
-                customerName: document.getElementById('shipCustomer').value,
-                shipmentType: document.getElementById('shipmentType').value,
-                from: document.getElementById('shipFrom').value,
-                to: document.getElementById('shipTo').value,
-                currentLoc: document.getElementById('shipCurrentLoc').value,
-                status: document.getElementById('shipStatus').value,
-                statusDesc: document.getElementById('shipStatusDesc').value,
-                lastUpdate: document.getElementById('shipLastUpdate').value,
-                packages: document.getElementById('shipPackages').value || 'N/A'
-            };
-
-            localStorage.setItem('shipmentsData', JSON.stringify(shipments));
-            form.reset();
-            document.getElementById('shipLastUpdate').value = getTodayDate();
-            loadTable();
-            alert("تم حفظ الشحنة بنجاح!");
+          const row = document.createElement('tr');
+          row.className = "border-b border-slate-100 hover:bg-slate-50";
+          row.innerHTML = `
+            <td class="p-3 font-bold text-sky-600">${code}</td>
+            <td class="p-3 font-semibold text-amber-700">${item.customerName || '-'}</td>
+            <td class="p-3 text-medium">${typeText}</td>
+            <td class="p-3">${item.from || '-'} ➔ ${item.to || '-'}</td>
+            <td class="p-3"><span class="bg-slate-100 text-slate-800 px-2 py-1 rounded text-xs">${item.currentLoc || '-'}</span></td>
+            <td class="p-3 text-xs font-bold text-slate-600">${item.status || '-'}</td>
+            <td class="p-3 text-center">
+              <button onclick="editShipment('${code}')" class="bg-amber-500 text-white px-2 py-1 rounded text-xs mr-1">تعديل</button>
+              <button onclick="deleteShipment('${code}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">حذف</button>
+            </td>
+          `;
+          tableBody.appendChild(row);
         });
+      }
+    });
+  }
 
-        function deleteShipment(code) {
-            if (confirm("هل أنت تأكد من حذف الشحنة " + code + "؟")) {
-                const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
-                delete shipments[code];
-                localStorage.setItem('shipmentsData', JSON.stringify(shipments));
-                loadTable();
-            }
-        }
+  // حفظ الشحنة في Firebase
+  const form = document.getElementById('shipmentForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const trackingCode = document.getElementById('shipCode').value.trim();
+      if (!trackingCode) {
+        alert("يرجى إدخال رقم الشحنة");
+        return;
+      }
 
-        function editShipment(code) {
-            const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
-            const item = shipments[code];
+      const shipmentData = {
+        customerName: document.getElementById('shipCustomer').value,
+        shipmentType: document.getElementById('shipType').value,
+        from: document.getElementById('shipFrom').value,
+        to: document.getElementById('shipTo').value,
+        currentLoc: document.getElementById('shipLoc').value,
+        status: document.getElementById('shipStatus').value,
+        statusDesc: document.getElementById('shipStatusDesc')?.value || '',
+        lastUpdate: document.getElementById('shipLastUpdate').value || getTodayDate(),
+        packages: document.getElementById('shipPackages').value
+      };
 
-            document.getElementById('shipCode').value = code;
-            document.getElementById('shipCustomer').value = item.customerName || '';
-            document.getElementById('shipmentType').value = item.shipmentType || 'Land';
-            document.getElementById('shipFrom').value = item.from;
-            document.getElementById('shipTo').value = item.to;
-            document.getElementById('shipCurrentLoc').value = item.currentLoc;
-            document.getElementById('shipStatus').value = item.status;
-            document.getElementById('shipStatusDesc').value = item.statusDesc;
-            document.getElementById('shipLastUpdate').value = item.lastUpdate || getTodayDate();
-            document.getElementById('shipPackages').value = item.packages || '';
-        }
+      set(ref(db, 'shipments/' + trackingCode), shipmentData)
+        .then(() => {
+          alert("تم حفظ الشحنة بنجاح في قاعدة البيانات الحية!");
+          form.reset();
+          if (dateInput) dateInput.value = getTodayDate();
+        })
+        .catch((error) => alert("حدث خطأ: " + error.message));
+    });
+  }
 
-        loadTable();
-    </script>
+  window.deleteShipment = function(code) {
+    if (confirm("هل تريد حذف الشحنة: " + code + "؟")) {
+      remove(ref(db, 'shipments/' + code));
+    }
+  };
+
+  window.editShipment = function(code) {
+    onValue(ref(db, 'shipments/' + code), (snapshot) => {
+      const item = snapshot.val();
+      if (item) {
+        document.getElementById('shipCode').value = code;
+        document.getElementById('shipCustomer').value = item.customerName || '';
+        document.getElementById('shipType').value = item.shipmentType || 'Sea';
+        document.getElementById('shipFrom').value = item.from || '';
+        document.getElementById('shipTo').value = item.to || '';
+        document.getElementById('shipLoc').value = item.currentLoc || '';
+        document.getElementById('shipStatus').value = item.status || '';
+        if(document.getElementById('shipStatusDesc')) document.getElementById('shipStatusDesc').value = item.statusDesc || '';
+        document.getElementById('shipLastUpdate').value = item.lastUpdate || getTodayDate();
+        document.getElementById('shipPackages').value = item.packages || '';
+      }
+    }, { onlyOnce: true });
+  };
+</script>
+
 </body>
 </html>
