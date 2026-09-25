@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة - Home wonderland</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen p-4 flex flex-col justify-between">
+
+    <div class="max-w-5xl mx-auto w-full">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3">
+                <div class="h-12 w-12 flex items-center justify-center shrink-0">
+                    <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Logo" class="h-full w-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold text-slate-900">Home wonderland</h1>
+                    <p class="text-xs font-bold text-sky-600">لوحة تحكم إدارة الشحنات</p>
+                </div>
+            </div>
+            <span class="text-xs bg-slate-900 text-white px-3 py-1.5 rounded-full font-bold">المدير العام</span>
+        </div>
+
+        <!-- Form Section -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 mb-8 shadow-sm">
+            <h2 class="text-lg font-bold mb-4 text-sky-600"><i class="fa-solid fa-plus-circle ml-2"></i>إضافة / تعديل شحنة</h2>
+            <form id="shipmentForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">رقم الشحنة (Tracking Code)</label>
+                    <input type="text" id="shipCode" placeholder="مثال: SH-1001" required
+                           class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-amber-600"><i class="fa-solid fa-lock text-xs ml-1"></i>اسم الزبون / الشركة (خاص بك)</label>
+                    <input type="text" id="shipCustomer" placeholder="مثال: شركة المجال" required
+                           class="w-full bg-amber-50/50 border border-amber-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-amber-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">نوع الشحن (Freight Type)</label>
+                    <select id="shipmentType" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                        <option value="Sea">بحري 🚢 (Sea Freight)</option>
+                        <option value="Land">بري 🚛 (Land Freight)</option>
+                        <option value="Air">جوي ✈️ (Air Freight)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">منشأ الشحنة (من)</label>
+                    <input type="text" id="shipFrom" placeholder="مثال: DUBAI - UAE" required
+                           class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">الوجهة النهائية (إلى)</label>
+                    <input type="text" id="shipTo" placeholder="مثال: NORTH-RUMALI" required
+                           class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">الموقع الحالي للشحنة</label>
+                    <input type="text" id="shipCurrentLoc" placeholder="مثال: UMM-QASR PORT" required
+                           class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                </div>
+
+                <!-- حقل تاريخ ووقت التحديث -->
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">تاريخ التحديث (Last Update)</label>
+                    <input type="text" id="shipLastUpdate" placeholder="مثال: 25/09/2026" required
+                           class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                </div>
+
+                <!-- حقل عدد الكراتين / الوزن -->
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">عدد الطرود / الوزن</label>
+                    <input type="text" id="shipPackages" placeholder="مثال: 12 Cartons / 450 Kg"
+                           class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                </div>
+
+                <!-- حالات الشحنة الشاملة والموسعة -->
+                <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-700">حالة الشحنة العامة</label>
+                    <select id="shipStatus" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                        <option value="تم استلام الشحنة 📦">تم استلام الشحنة 📦</option>
+                        <option value="قيد التجهيز والتغليف ⚙️">قيد التجهيز والتغليف ⚙️</option>
+                        <option value="قيد الشحن / النقل 🚚">قيد الشحن / النقل 🚚</option>
+                        <option value="وصلت للميناء / المطار ⚓">وصلت للميناء / المطار ⚓</option>
+                        <option value="قيد التخليص الجمركي 🛃">قيد التخليص الجمركي 🛃</option>
+                        <option value="جاهزة للتسليم 🎯">جاهزة للتسليم 🎯</option>
+                        <option value="تم التسليم بنجاح ✅">تم التسليم بنجاح ✅</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2 lg:col-span-3">
+                    <label class="block text-xs font-bold mb-1 text-slate-700">وصف أو ملاحظات للحالة</label>
+                    <input type="text" id="shipStatusDesc" placeholder="مثال: UNDER CLEARANCE" required
+                           class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-slate-800 focus:outline-none focus:border-sky-500">
+                </div>
+
+                <div class="md:col-span-2 lg:col-span-3 text-left mt-2">
+                    <button type="submit" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-6 py-2 rounded-xl transition-all shadow-sm">
+                        حفظ الشحنة <i class="fa-solid fa-save mr-1"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Shipments Table -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm overflow-x-auto mb-8">
+            <h2 class="text-lg font-bold mb-4 text-slate-800">قائمة الشحنات الحالية</h2>
+            <table class="w-full text-right text-sm text-slate-700">
+                <thead class="bg-slate-100 text-slate-600 text-xs border-b border-slate-200">
+                    <tr>
+                        <th class="p-3">رقم الشحنة</th>
+                        <th class="p-3 text-amber-700">اسم الزبون (مخفي)</th>
+                        <th class="p-3">تاريخ التحديث</th>
+                        <th class="p-3">نوع الشحن</th>
+                        <th class="p-3">المسار (من ⬅️ إلى)</th>
+                        <th class="p-3">الحالة</th>
+                        <th class="p-3 text-center">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="shipmentsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-400 border-t border-slate-200 bg-white">
+        جميع الحقوق محفوظة لدى Mariam Basim S.A &copy;
+    </footer>
+
+    <script>
+        // دالة للحصول على تاريخ اليوم تلقائياً
+        function getTodayDate() {
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+            return dd + '/' + mm + '/' + yyyy;
+        }
+
+        // تعيين التاريخ الافتراضي عند فتح الصفحة
+        document.getElementById('shipLastUpdate').value = getTodayDate();
+
+        if (!localStorage.getItem('shipmentsData')) {
+            const initialData = {
+                "SH-1001": {
+                    customerName: "شركة المجال",
+                    shipmentType: "Sea",
+                    from: "DUBAI - UAE",
+                    to: "NORTH-RUMALI",
+                    currentLoc: "UMM-QASR PORT",
+                    status: "قيد التخليص الجمركي 🛃",
+                    statusDesc: "UNDER CLEARANCE",
+                    lastUpdate: getTodayDate(),
+                    packages: "10 Cartons / 350 Kg"
+                }
+            };
+            localStorage.setItem('shipmentsData', JSON.stringify(initialData));
+        }
+
+        const form = document.getElementById('shipmentForm');
+
+        function loadTable() {
+            const tableBody = document.getElementById('shipmentsTableBody');
+            tableBody.innerHTML = '';
+            const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
+
+            Object.keys(shipments).forEach(code => {
+                const item = shipments[code];
+                const typeText = item.shipmentType === 'Air' ? 'جوي ✈️' : item.shipmentType === 'Sea' ? 'بحري 🚢' : 'بري 🚛';
+                
+                const row = document.createElement('tr');
+                row.className = "border-b border-slate-100 hover:bg-slate-50";
+                row.innerHTML = `
+                    <td class="p-3 font-bold text-sky-600">${code}</td>
+                    <td class="p-3 font-semibold text-amber-700"><i class="fa-solid fa-building text-xs ml-1"></i>${item.customerName || 'غير محدد'}</td>
+                    <td class="p-3 text-xs font-bold text-slate-500">${item.lastUpdate || 'غير محدد'}</td>
+                    <td class="p-3 font-medium">${typeText}</td>
+                    <td class="p-3">${item.from} ⬅️ ${item.to}</td>
+                    <td class="p-3"><span class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-xs border border-slate-200 font-medium">${item.status}</span></td>
+                    <td class="p-3 text-center">
+                        <button onclick="editShipment('${code}')" class="text-amber-600 hover:text-amber-700 ml-2"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteShipment('${code}')" class="text-red-500 hover:text-red-600"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = document.getElementById('shipCode').value.trim();
+            const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
+
+            shipments[code] = {
+                customerName: document.getElementById('shipCustomer').value,
+                shipmentType: document.getElementById('shipmentType').value,
+                from: document.getElementById('shipFrom').value,
+                to: document.getElementById('shipTo').value,
+                currentLoc: document.getElementById('shipCurrentLoc').value,
+                status: document.getElementById('shipStatus').value,
+                statusDesc: document.getElementById('shipStatusDesc').value,
+                lastUpdate: document.getElementById('shipLastUpdate').value,
+                packages: document.getElementById('shipPackages').value || 'N/A'
+            };
+
+            localStorage.setItem('shipmentsData', JSON.stringify(shipments));
+            form.reset();
+            document.getElementById('shipLastUpdate').value = getTodayDate();
+            loadTable();
+            alert("تم حفظ الشحنة بنجاح!");
+        });
+
+        function deleteShipment(code) {
+            if (confirm("هل أنت تأكد من حذف الشحنة " + code + "؟")) {
+                const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
+                delete shipments[code];
+                localStorage.setItem('shipmentsData', JSON.stringify(shipments));
+                loadTable();
+            }
+        }
+
+        function editShipment(code) {
+            const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
+            const item = shipments[code];
+
+            document.getElementById('shipCode').value = code;
+            document.getElementById('shipCustomer').value = item.customerName || '';
+            document.getElementById('shipmentType').value = item.shipmentType || 'Land';
+            document.getElementById('shipFrom').value = item.from;
+            document.getElementById('shipTo').value = item.to;
+            document.getElementById('shipCurrentLoc').value = item.currentLoc;
+            document.getElementById('shipStatus').value = item.status;
+            document.getElementById('shipStatusDesc').value = item.statusDesc;
+            document.getElementById('shipLastUpdate').value = item.lastUpdate || getTodayDate();
+            document.getElementById('shipPackages').value = item.packages || '';
+        }
+
+        loadTable();
+    </script>
+</body>
+</html>
