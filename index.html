@@ -46,7 +46,7 @@
           <span id="resCodeDisplay" class="text-slate-700 font-extrabold"></span>
         </div>
         <div>
-          <i class="fa-regular fa-clock"></i> <span id="resDate"></span>
+          <i class="fa-regular fa-clock"></i> Last Updated: <span id="resDate"></span>
         </div>
       </div>
 
@@ -60,6 +60,30 @@
         <div>
           <span class="text-[10px] font-bold text-slate-400 block"><i class="fa-solid fa-location-dot text-rose-500"></i> DESTINATION</span>
           <span id="resTo" class="font-bold text-slate-800 text-sm"></span>
+        </div>
+      </div>
+
+      <!-- Shipment Progress Bar (شريط الخطوات) -->
+      <div class="space-y-2">
+        <span class="text-[10px] font-bold text-slate-400 block">SHIPMENT PROGRESS</span>
+        <div class="relative flex items-center justify-between px-2">
+          <div class="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-0.5 bg-slate-200 -z-0"></div>
+          <div class="flex flex-col items-center z-10">
+            <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center">1</div>
+            <span class="text-[9px] font-bold text-slate-500 mt-1">Received</span>
+          </div>
+          <div class="flex flex-col items-center z-10">
+            <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center">2</div>
+            <span class="text-[9px] font-bold text-slate-500 mt-1">In Transit</span>
+          </div>
+          <div class="flex flex-col items-center z-10">
+            <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center">3</div>
+            <span class="text-[9px] font-bold text-slate-500 mt-1">Clearance</span>
+          </div>
+          <div class="flex flex-col items-center z-10">
+            <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-600 font-bold text-xs flex items-center justify-center">4</div>
+            <span class="text-[9px] font-bold text-slate-500 mt-1">Delivered</span>
+          </div>
         </div>
       </div>
 
