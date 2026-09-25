@@ -157,114 +157,69 @@
         All rights reserved &copy; Mariam Basim S.A
     </footer>
 
-    <script>
-        function updateTimeline(status) {
-            const bar = document.getElementById('timelineBar');
-            const steps = [
-                document.getElementById('step1'),
-                document.getElementById('step2'),
-                document.getElementById('step3'),
-                document.getElementById('step4')
-            ];
+    
+        <script type="module">
+  // استدعاء مكتبات Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-            // Reset steps
-            steps.forEach(s => {
-                s.className = "w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-xs border-2 border-white shadow";
-                s.innerHTML = s.id.replace('step', '');
-            });
+  // إعدادات Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
+    authDomain: "home-wonderland.firebaseapp.com",
+    databaseURL: "https://home-wonderland-default-rtdb.firebaseio.com",
+    projectId: "home-wonderland",
+    storageBucket: "home-wonderland.firebasestorage.app",
+    messagingSenderId: "911419710716",
+    appId: "1:911419710716:web:9ba36be5dd456b9f81cb79"
+  };
 
-            let progress = 0;
-            let currentStep = 1;
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-            if (status.includes('استلام') || status.includes('تجهيز')) {
-                progress = 0;
-                currentStep = 1;
-            } else if (status.includes('شحن') || status.includes('نقل') || status.includes('Transit')) {
-                progress = 33;
-                currentStep = 2;
-            } else if (status.includes('تخليص') || status.includes('مطار') || status.includes('ميناء') || status.includes('Clearance')) {
-                progress = 66;
-                currentStep = 3;
-            } else if (status.includes('تسليم') || status.includes('Delivered')) {
-                progress = 100;
-                currentStep = 4;
-            }
+  // ربط زر البحث بالدالة
+  const trackBtn = document.getElementById('trackBtn'); // تأكدي من ID الزر لديكِ
+  if (trackBtn) {
+    trackBtn.addEventListener('click', trackShipment);
+  }
 
-            bar.style.width = progress + '%';
+  function trackShipment() {
+    const trackingInput = document.getElementById('trackingInput'); // تأكدي من ID الحقل لديكِ
+    if (!trackingInput) return;
 
-            for (let i = 0; i < currentStep; i++) {
-                if (i === currentStep - 1 && currentStep < 4) {
-                    steps[i].className = "w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold text-xs border-2 border-white shadow ring-4 ring-sky-100 animate-bounce";
-                } else {
-                    steps[i].className = "w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs border-2 border-white shadow";
-                    steps[i].innerHTML = '<i class="fa-solid fa-check"></i>';
-                }
-            }
-        }
+    const inputCode = trackingInput.value.trim();
+    if (!inputCode) {
+      alert("يرجى إدخال رقم الشحنة");
+      return;
+    }
 
-        function trackShipment() {
-            const input = document.getElementById('trackingInput').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
-            const resultCard = document.getElementById('resultCard');
+    const dbRef = ref(db);
+    get(child(dbRef, `shipments/${inputCode}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        
+        // عرض البيانات للزبون في عناصر الصفحة
+        if (document.getElementById('resCustomer')) document.getElementById('resCustomer').innerText = data.customerName || '-';
+        if (document.getElementById('resFrom')) document.getElementById('resFrom').innerText = data.from || '-';
+        if (document.getElementById('resTo')) document.getElementById('resTo').innerText = data.to || '-';
+        if (document.getElementById('resLoc')) document.getElementById('resLoc').innerText = data.currentLoc || '-';
+        if (document.getElementById('resStatus')) document.getElementById('resStatus').innerText = data.status || '-';
+        if (document.getElementById('resDate')) document.getElementById('resDate').innerText = data.lastUpdate || '-';
+        if (document.getElementById('resPackages')) document.getElementById('resPackages').innerText = data.packages || '-';
+        
+        // إظهار كارت النتيجة إذا كان مخفياً
+        const resultCard = document.getElementById('resultCard');
+        if (resultCard) resultCard.style.display = 'block';
 
-            errorMsg.classList.add('hidden');
-            resultCard.classList.add('hidden');
+      } else {
+        alert("رقم الشحنة غير موجود، يرجى التأكد من الرقم والبحث مجدداً.");
+      }
+    }).catch((error) => {
+      console.error("خطأ في الاتصال بقاعدة البيانات:", error);
+    });
+  }
+</script>
 
-            if (!input) {
-                errorMsg.innerText = "Please enter a tracking code first.";
-                errorMsg.classList.remove('hidden');
-                return;
-            }
-
-            const shipments = JSON.parse(localStorage.getItem('shipmentsData')) || {};
-
-            if (shipments[input]) {
-                const data = shipments[input];
-                document.getElementById('resCode').innerText = input;
-                document.getElementById('resFrom').innerText = data.from;
-                document.getElementById('resTo').innerText = data.to;
-                document.getElementById('resCurrentLoc').innerText = data.currentLoc;
-                document.getElementById('resStatusDesc').innerText = data.statusDesc;
-                document.getElementById('resLastUpdate').innerText = data.lastUpdate || '25/09/2026';
-                document.getElementById('resPackages').innerText = data.packages || 'N/A';
-
-                // نوع الشحن
-                const modeBadge = document.getElementById('resModeBadge');
-                const icon = document.getElementById('resTransportIcon');
-                const mode = data.shipmentType || 'Land';
-
-                if (mode === 'Air' || mode === 'جوي') {
-                    modeBadge.innerHTML = '<i class="fa-solid fa-plane mr-1 text-sky-500"></i> Air Freight';
-                    icon.className = "fa-solid fa-plane-departure text-xl text-white";
-                } else if (mode === 'Sea' || mode === 'بحري') {
-                    modeBadge.innerHTML = '<i class="fa-solid fa-ship mr-1 text-blue-500"></i> Sea Freight';
-                    icon.className = "fa-solid fa-ship text-xl text-white";
-                } else {
-                    modeBadge.innerHTML = '<i class="fa-solid fa-truck-fast mr-1 text-amber-500"></i> Land Freight';
-                    icon.className = "fa-solid fa-truck-fast text-xl text-white";
-                }
-
-                // حالة الشحنة
-                const badge = document.getElementById('resStatusBadge');
-                badge.innerText = data.status;
-                
-                if (data.status.includes('تسليم') || data.status.includes('Delivered')) {
-                    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200";
-                } else if (data.status.includes('شحن') || data.status.includes('Transit')) {
-                    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-800 border border-sky-200";
-                } else {
-                    badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200";
-                }
-
-                // تحديث الـ Timeline تلقائياً
-                updateTimeline(data.status);
-
-                resultCard.classList.remove('hidden');
-            } else {
-                errorMsg.innerText = "No shipment found with tracking code: " + input;
-                errorMsg.classList.remove('hidden');
-            }
-        }
-    </script>
+    
 </body>
 </html>
