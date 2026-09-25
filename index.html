@@ -159,11 +159,9 @@
 
     
         <script type="module">
-  // استدعاء مكتبات Firebase
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-  // إعدادات Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
     authDomain: "home-wonderland.firebaseapp.com",
@@ -177,48 +175,54 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // ربط زر البحث بالدالة
-  const trackBtn = document.getElementById('trackBtn'); // تأكدي من ID الزر لديكِ
-  if (trackBtn) {
-    trackBtn.addEventListener('click', trackShipment);
-  }
+  // ربط زر التتبع فور تحميل الصفحة
+  window.addEventListener('DOMContentLoaded', () => {
+    // البحث عن جميع أزرار وحقول البحث المحتملة في الصفحة
+    const trackBtn = document.getElementById('trackBtn') || document.querySelector('button');
+    const trackingInput = document.getElementById('trackingInput') || document.querySelector('input[type="text"]');
 
-  function trackShipment() {
-    const trackingInput = document.getElementById('trackingInput'); // تأكدي من ID الحقل لديكِ
-    if (!trackingInput) return;
+    if (trackBtn) {
+      trackBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const code = trackingInput ? trackingInput.value.trim() : '';
+        if (!code) {
+          alert("يرجى إدخال رقم الشحنة");
+          return;
+        }
 
-    const inputCode = trackingInput.value.trim();
-    if (!inputCode) {
-      alert("يرجى إدخال رقم الشحنة");
-      return;
+        const dbRef = ref(db);
+        get(child(dbRef, `shipments/${code}`)).then((snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            
+            // تعبئة البيانات في العناصر
+            if (document.getElementById('resCustomer')) document.getElementById('resCustomer').innerText = data.customerName || '-';
+            if (document.getElementById('resFrom')) document.getElementById('resFrom').innerText = data.from || '-';
+            if (document.getElementById('resTo')) document.getElementById('resTo').innerText = data.to || '-';
+            if (document.getElementById('resLoc')) document.getElementById('resLoc').innerText = data.currentLoc || '-';
+            if (document.getElementById('resStatus')) document.getElementById('resStatus').innerText = data.status || '-';
+            if (document.getElementById('resDate')) document.getElementById('resDate').innerText = data.lastUpdate || '-';
+            if (document.getElementById('resPackages')) document.getElementById('resPackages').innerText = data.packages || '-';
+            if (document.getElementById('resStatusDesc')) document.getElementById('resStatusDesc').innerText = data.statusDesc || '-';
+
+            // إظهار كارت النتيجة إذا كان مخفياً
+            const resultCard = document.getElementById('resultCard') || document.querySelector('.result-card') || document.getElementById('shipmentResult');
+            if (resultCard) {
+              resultCard.classList.remove('hidden');
+              resultCard.style.display = 'block';
+            }
+          } else {
+            alert("رقم الشحنة غير موجود، يرجى التأكد من الرقم والبحث مجدداً.");
+          }
+        }).catch((error) => {
+          console.error("خطأ بالاتصال:", error);
+          alert("حدث خطأ أثناء جلب البيانات.");
+        });
+      });
     }
-
-    const dbRef = ref(db);
-    get(child(dbRef, `shipments/${inputCode}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.val();
-        
-        // عرض البيانات للزبون في عناصر الصفحة
-        if (document.getElementById('resCustomer')) document.getElementById('resCustomer').innerText = data.customerName || '-';
-        if (document.getElementById('resFrom')) document.getElementById('resFrom').innerText = data.from || '-';
-        if (document.getElementById('resTo')) document.getElementById('resTo').innerText = data.to || '-';
-        if (document.getElementById('resLoc')) document.getElementById('resLoc').innerText = data.currentLoc || '-';
-        if (document.getElementById('resStatus')) document.getElementById('resStatus').innerText = data.status || '-';
-        if (document.getElementById('resDate')) document.getElementById('resDate').innerText = data.lastUpdate || '-';
-        if (document.getElementById('resPackages')) document.getElementById('resPackages').innerText = data.packages || '-';
-        
-        // إظهار كارت النتيجة إذا كان مخفياً
-        const resultCard = document.getElementById('resultCard');
-        if (resultCard) resultCard.style.display = 'block';
-
-      } else {
-        alert("رقم الشحنة غير موجود، يرجى التأكد من الرقم والبحث مجدداً.");
-      }
-    }).catch((error) => {
-      console.error("خطأ في الاتصال بقاعدة البيانات:", error);
-    });
-  }
+  });
 </script>
+
 
     
 </body>
