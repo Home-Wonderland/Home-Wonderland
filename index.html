@@ -19,23 +19,27 @@
     .line-active { background-color: #0284c7 !important; }
     #map { height: 420px; width: 100%; border-radius: 1rem; z-index: 1; overflow: hidden; }
     
-    /* أنيميشن ناعم وفاخر للعلامات */
+    /* الخريطة وثيم ألوان الأزرق والأبيض */
+    .leaflet-tile-container img {
+      filter: grayscale(100%) invert(100%) hue-rotate(180deg) brightness(95%) contrast(85%);
+    }
+
+    /* أنيميشن العلامات بالأزرق والأبيض */
     .custom-ship-icon {
       display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #0284c7, #0369a1);
-      color: white; border-radius: 50%; border: 3px solid white;
-      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5); font-size: 20px;
+      background: #0284c7; color: white; border-radius: 50%; border: 3px solid #ffffff;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45); font-size: 20px;
       animation: pulse-ring 2s infinite;
     }
     .custom-start-pin {
       display: flex; align-items: center; justify-content: center;
-      background: #10b981; color: white; border-radius: 50%;
-      border: 2px solid white; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      background: #0369a1; color: white; border-radius: 50%;
+      border: 2px solid white; font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
     .custom-end-pin {
       display: flex; align-items: center; justify-content: center;
-      background: #f43f5e; color: white; border-radius: 50%;
-      border: 2px solid white; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      background: #0f172a; color: white; border-radius: 50%;
+      border: 2px solid white; font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
 
     @keyframes pulse-ring {
@@ -89,12 +93,12 @@
       <!-- Origin & Destination -->
       <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 flex justify-between items-center text-center">
         <div class="w-1/2">
-          <span class="text-xs md:text-sm font-bold text-slate-400 block mb-1"><i class="fa-solid fa-circle text-emerald-500"></i> ORIGIN</span>
+          <span class="text-xs md:text-sm font-bold text-slate-400 block mb-1"><i class="fa-solid fa-circle text-sky-500"></i> ORIGIN</span>
           <span id="resFrom" class="font-bold text-slate-800 text-base md:text-xl block"></span>
         </div>
         <div class="text-slate-300 text-2xl font-light">|</div>
         <div class="w-1/2">
-          <span class="text-xs md:text-sm font-bold text-slate-400 block mb-1"><i class="fa-solid fa-location-dot text-rose-500"></i> DESTINATION</span>
+          <span class="text-xs md:text-sm font-bold text-slate-400 block mb-1"><i class="fa-solid fa-location-dot text-sky-700"></i> DESTINATION</span>
           <span id="resTo" class="font-bold text-slate-800 text-base md:text-xl block"></span>
         </div>
       </div>
@@ -145,7 +149,7 @@
         <span class="text-xs md:text-sm font-bold text-slate-400 block flex items-center gap-2">
           <i class="fa-solid fa-route text-sky-600 text-base"></i> LIVE ROUTE & SHIPMENT TRACKING
         </span>
-        <div id="map" class="shadow-md border border-slate-200"></div>
+        <div id="map" class="shadow-sm border border-slate-200"></div>
       </div>
 
       <!-- Packages & Details -->
@@ -188,7 +192,6 @@
     let markersGroup = L.layerGroup();
     let polyline = null;
 
-    // قاموس إحداثيات شامل للموانئ والمناطق
     const dictionary = {
       "bsr": [30.5081, 47.7835], "بصرة": [30.5081, 47.7835], "البصرة": [30.5081, 47.7835], "basra": [30.5081, 47.7835],
       "أم قصر": [30.0361, 47.9250], "umm qasr": [30.0361, 47.9250], "ام قصر": [30.0361, 47.9250],
@@ -229,10 +232,10 @@
       if (!map) {
         map = L.map('map');
         
-        // خريطة سحابية ملونة وعصرية بدقة عالية
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        // خريطة سحابية باللون الأبيض والأزرق العصري
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
           maxZoom: 19,
-          attribution: '©️ CARTO Voyager / OpenStreetMap'
+          attribution: '©️ CARTO Blue/White Style'
         }).addTo(map);
         
         markersGroup.addTo(map);
@@ -250,8 +253,8 @@
       polyline = L.polyline([startC, liveC, endC], {
         color: '#0284c7',
         weight: 4,
-        opacity: 0.85,
-        dashArray: '8, 10'
+        opacity: 0.9,
+        dashArray: '6, 8'
       }).addTo(map);
 
       let iconClass = "fa-ship";
@@ -266,7 +269,7 @@
       });
 
       L.marker(liveC, { icon: currentIcon }).addTo(markersGroup)
-        .bindPopup(`<div style="text-align:center; font-family:'Tajawal',sans-serif;"><b>${currentLoc || 'الموقع الحالي'}</b><br>تتبع الشحنة المباشر</div>`).openPopup();
+        .bindPopup(`<div style="text-align:center; font-family:'Tajawal',sans-serif;"><b>${currentLoc || 'الموقع الحالي'}</b><br>تتبع الشحنة الحي</div>`).openPopup();
 
       const bounds = L.latLngBounds([startC, endC, liveC]);
       map.fitBounds(bounds, { padding: [60, 60] });
@@ -363,4 +366,4 @@
     });
   </script>
 </body>
-</html>  
+</html>
