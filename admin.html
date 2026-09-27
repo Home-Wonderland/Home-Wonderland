@@ -44,12 +44,13 @@
           <input type="text" id="shipCustomer" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-500 outline-none" placeholder="اسم الزبون">
         </div>
 
+        <!-- نوع الشحن باللغة الإنجليزية -->
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">نوع الشحن</label>
+          <label class="block text-xs font-bold text-slate-600 mb-1">نوع الشحن (Shipment Type)</label>
           <select id="shipType" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
-            <option value="Sea">بحري 🚢</option>
-            <option value="Air">جوي ✈️</option>
-            <option value="Land">بري 🚚</option>
+            <option value="Sea Freight 🚢">Sea Freight 🚢</option>
+            <option value="Air Freight ✈️">Air Freight ✈️</option>
+            <option value="Land Freight 🚚">Land Freight 🚚</option>
           </select>
         </div>
 
@@ -63,7 +64,7 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-600 mb-1">الموقع الحالي للشحنة</label>
-          <input type="text" id="shipLoc" required class="w-full border rounded-lg p-2.5 text-sm outline-none" placeholder="مثال: ميناء أم قصر">
+          <input type="text" id="shipLoc" required class="w-full border rounded-lg p-2.5 text-sm outline-none" placeholder="مثال: Um Qasr Port">
         </div>
 
         <div>
@@ -76,21 +77,24 @@
           <input type="text" id="shipPackages" placeholder="مثال: 12 Cartons / 450 Kg" required class="w-full border rounded-lg p-2.5 text-sm outline-none">
         </div>
 
+        <!-- حالة الشحنة باللغة الإنجليزية مع الحالات الجديدة والمنفصلة -->
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">حالة الشحنة العامة</label>
+          <label class="block text-xs font-bold text-slate-600 mb-1">حالة الشحنة العامة (General Status)</label>
           <select id="shipStatus" class="w-full border rounded-lg p-2.5 text-sm outline-none">
-            <option value="تم استلام الشحنة 📦">تم استلام الشحنة 📦</option>
-            <option value="قيد الشحن والتصديق 🚢">قيد الشحن والتصديق 🚢</option>
-            <option value="وصلت الميناء/المطار 🛬">وصلت الميناء/المطار 🛬</option>
-            <option value="قيد التخليص الجمركي 📑">قيد التخليص الجمركي 📑</option>
-            <option value="جاهزة للتسليم/التسليم جاري 🚚">جاهزة للتسليم/التسليم جاري 🚚</option>
-            <option value="تم التسليم بنجاح ✅">تم التسليم بنجاح ✅</option>
+            <option value="Shipment Received 📦">Shipment Received 📦</option>
+            <option value="In Transit 🚢">In Transit 🚢</option>
+            <option value="Shipment On Its Way 🚚">Shipment On Its Way 🚚</option>
+            <option value="Arrived at Seaport ⚓">Arrived at Seaport ⚓</option>
+            <option value="Arrived at Airport 🛬">Arrived at Airport 🛬</option>
+            <option value="Under Customs Clearance 📑">Under Customs Clearance 📑</option>
+            <option value="Out for Delivery 🚚">Out for Delivery 🚚</option>
+            <option value="Delivered Successfully ✅">Delivered Successfully ✅</option>
           </select>
         </div>
 
         <div class="md:col-span-2">
           <label class="block text-xs font-bold text-slate-600 mb-1">وصف أو ملاحظات للحالة</label>
-          <input type="text" id="shipStatusDesc" class="w-full border rounded-lg p-2.5 text-sm outline-none" placeholder="مثال: UNDER CLEARANCE">
+          <input type="text" id="shipStatusDesc" class="w-full border rounded-lg p-2.5 text-sm outline-none" placeholder="مثال: UNDER CLEARANCE AT PORT">
         </div>
 
         <div class="md:col-span-2">
@@ -161,14 +165,13 @@
       if (shipments) {
         Object.keys(shipments).forEach(code => {
           const item = shipments[code];
-          const typeText = item.shipmentType === 'Air' ? 'جوي ✈️' : (item.shipmentType === 'Sea' ? 'بحري 🚢' : 'بري 🚚');
-
+          
           const row = document.createElement('tr');
           row.className = "border-b border-slate-100 hover:bg-slate-50";
           row.innerHTML = `
             <td class="p-3 font-bold text-sky-600">${code}</td>
             <td class="p-3 font-semibold text-amber-700">${item.customerName || '-'}</td>
-            <td class="p-3 text-medium">${typeText}</td>
+            <td class="p-3 font-medium">${item.shipmentType || '-'}</td>
             <td class="p-3">${item.from || '-'} ➔ ${item.to || '-'}</td>
             <td class="p-3"><span class="bg-slate-100 text-slate-800 px-2 py-1 rounded text-xs">${item.currentLoc || '-'}</span></td>
             <td class="p-3 text-xs font-bold text-slate-600">${item.status || '-'}</td>
@@ -225,11 +228,11 @@
         if (item) {
           document.getElementById('shipCode').value = code;
           document.getElementById('shipCustomer').value = item.customerName || '';
-          document.getElementById('shipType').value = item.shipmentType || 'Sea';
+          document.getElementById('shipType').value = item.shipmentType || 'Sea Freight 🚢';
           document.getElementById('shipFrom').value = item.from || '';
           document.getElementById('shipTo').value = item.to || '';
           document.getElementById('shipLoc').value = item.currentLoc || '';
-          document.getElementById('shipStatus').value = item.status || '';
+          document.getElementById('shipStatus').value = item.status || 'Shipment Received 📦';
           if(document.getElementById('shipStatusDesc')) document.getElementById('shipStatusDesc').value = item.statusDesc || '';
           document.getElementById('shipLastUpdate').value = item.lastUpdate || getTodayDate();
           document.getElementById('shipPackages').value = item.packages || '';
