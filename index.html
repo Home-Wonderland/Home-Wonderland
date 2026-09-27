@@ -17,35 +17,30 @@
     .step-active { background-color: #0284c7 !important; color: white !important; border-color: #0284c7 !important; }
     .step-text-active { color: #0284c7 !important; font-weight: bold; }
     .line-active { background-color: #0284c7 !important; }
-    #map { height: 420px; width: 100%; border-radius: 0.75rem; z-index: 1; }
+    #map { height: 420px; width: 100%; border-radius: 1rem; z-index: 1; overflow: hidden; }
     
-    /* أنيميشن أداة النقل على الخريطة */
-    .custom-map-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0284c7;
-      color: white;
-      border-radius: 50%;
-      border: 3px solid white;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
-      font-size: 20px;
-      animation: pulse 2s infinite;
+    /* أنيميشن ناعم وفاخر للعلامات */
+    .custom-ship-icon {
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white; border-radius: 50%; border: 3px solid white;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5); font-size: 20px;
+      animation: pulse-ring 2s infinite;
     }
-    .custom-start-icon {
+    .custom-start-pin {
       display: flex; align-items: center; justify-content: center;
       background: #10b981; color: white; border-radius: 50%;
-      border: 2px solid white; font-size: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      border: 2px solid white; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .custom-end-icon {
+    .custom-end-pin {
       display: flex; align-items: center; justify-content: center;
       background: #f43f5e; color: white; border-radius: 50%;
-      border: 2px solid white; font-size: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      border: 2px solid white; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
-    @keyframes pulse {
+    @keyframes pulse-ring {
       0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7); }
-      70% { transform: scale(1.15); box-shadow: 0 0 0 12px rgba(2, 132, 199, 0); }
+      70% { transform: scale(1.15); box-shadow: 0 0 0 14px rgba(2, 132, 199, 0); }
       100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
     }
   </style>
@@ -150,7 +145,7 @@
         <span class="text-xs md:text-sm font-bold text-slate-400 block flex items-center gap-2">
           <i class="fa-solid fa-route text-sky-600 text-base"></i> LIVE ROUTE & SHIPMENT TRACKING
         </span>
-        <div id="map" class="shadow-inner border border-slate-200"></div>
+        <div id="map" class="shadow-md border border-slate-200"></div>
       </div>
 
       <!-- Packages & Details -->
@@ -193,88 +188,88 @@
     let markersGroup = L.layerGroup();
     let polyline = null;
 
-    const staticCoords = {
+    // قاموس إحداثيات شامل للموانئ والمناطق
+    const dictionary = {
       "bsr": [30.5081, 47.7835], "بصرة": [30.5081, 47.7835], "البصرة": [30.5081, 47.7835], "basra": [30.5081, 47.7835],
-      "أم قصر": [30.0361, 47.9250], "umm qasr": [30.0361, 47.9250],
-      "dubai": [25.2048, 55.2708], "دبي": [25.2048, 55.2708], "إمارات": [25.2048, 55.2708], "uae": [25.2048, 55.2708],
+      "أم قصر": [30.0361, 47.9250], "umm qasr": [30.0361, 47.9250], "ام قصر": [30.0361, 47.9250],
+      "dubai": [25.2048, 55.2708], "دبي": [25.2048, 55.2708], "إمارات": [25.2048, 55.2708], "uae": [25.2048, 55.2708], "الإمارات": [25.2048, 55.2708],
+      "jebel ali": [24.9857, 55.0272], "جبل علي": [24.9857, 55.0272],
       "بغداد": [33.3152, 44.3661], "baghdad": [33.3152, 44.3661],
       "عرعر": [30.9083, 41.1389], "north rumella": [30.5500, 47.4500], "الرميلة": [30.5500, 47.4500],
-      "china": [31.2304, 121.4737], "الصين": [31.2304, 121.4737], "guangzhou": [23.1291, 113.2644],
-      "italy": [41.8719, 12.5674], "إيطاليا": [41.8719, 12.5674]
+      "china": [31.2304, 121.4737], "الصين": [31.2304, 121.4737], "guangzhou": [23.1291, 113.2644], "كوانزو": [23.1291, 113.2644],
+      "italy": [41.8719, 12.5674], "إيطاليا": [41.8719, 12.5674],
+      "turkey": [38.9637, 35.2433], "تركيا": [38.9637, 35.2433], "istanbul": [41.0082, 28.9784], "اسطنبول": [41.0082, 28.9784]
     };
 
-    async function getCoordinates(locationQuery) {
-      if (!locationQuery) return null;
-      const q = locationQuery.toLowerCase().trim();
+    async function fetchCoords(loc) {
+      if (!loc) return null;
+      const clean = loc.toLowerCase().trim();
       
-      for (const key in staticCoords) {
-        if (q.includes(key)) return staticCoords[key];
+      for (const k in dictionary) {
+        if (clean.includes(k)) return dictionary[k];
       }
 
       try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationQuery)}`);
-        const data = await response.json();
-        if (data && data.length > 0) {
-          return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(loc)}`);
+        const resData = await res.json();
+        if (resData && resData.length > 0) {
+          return [parseFloat(resData[0].lat), parseFloat(resData[0].lon)];
         }
-      } catch (e) {
-        console.log("Geocoding error", e);
+      } catch (err) {
+        console.log("Error in Nominatim geocoding", err);
       }
       return null;
     }
 
     async function renderRouteMap(fromLoc, toLoc, currentLoc, shipType) {
-      const fromCoords = await getCoordinates(fromLoc) || [25.2048, 55.2708];
-      const toCoords = await getCoordinates(toLoc) || [30.0361, 47.9250];
-      const currentCoords = await getCoordinates(currentLoc) || fromCoords;
+      const startC = await fetchCoords(fromLoc) || [25.2048, 55.2708];
+      const endC = await fetchCoords(toLoc) || [30.0361, 47.9250];
+      const liveC = await fetchCoords(currentLoc) || startC;
 
       if (!map) {
         map = L.map('map');
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 18,
-          attribution: '©️ OpenStreetMap'
+        
+        // خريطة سحابية ملونة وعصرية بدقة عالية
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+          maxZoom: 19,
+          attribution: '©️ CARTO Voyager / OpenStreetMap'
         }).addTo(map);
+        
         markersGroup.addTo(map);
       }
 
       markersGroup.clearLayers();
 
-      // دبابيس نقطة البداية والنهاية
-      const startIcon = L.divIcon({ className: 'custom-start-icon', html: '<i class="fa-solid fa-play"></i>', iconSize: [26, 26] });
-      const endIcon = L.divIcon({ className: 'custom-end-icon', html: '<i class="fa-solid fa-flag-checkered"></i>', iconSize: [26, 26] });
+      const startIcon = L.divIcon({ className: 'custom-start-pin', html: '<i class="fa-solid fa-play"></i>', iconSize: [26, 26] });
+      const endIcon = L.divIcon({ className: 'custom-end-pin', html: '<i class="fa-solid fa-flag-checkered"></i>', iconSize: [26, 26] });
 
-      L.marker(fromCoords, { icon: startIcon }).addTo(markersGroup).bindPopup(`<b>المبدأ:</b> ${fromLoc}`);
-      L.marker(toCoords, { icon: endIcon }).addTo(markersGroup).bindPopup(`<b>الوجهة:</b> ${toLoc}`);
+      L.marker(startC, { icon: startIcon }).addTo(markersGroup).bindPopup(`<b>من المنطلق:</b> ${fromLoc}`);
+      L.marker(endC, { icon: endIcon }).addTo(markersGroup).bindPopup(`<b>إلى الوجهة:</b> ${toLoc}`);
 
-      // رسم خط المسار بين المنطلق والوصول
-      const latlngs = [fromCoords, currentCoords, toCoords];
       if (polyline) map.removeLayer(polyline);
-      
-      polyline = L.polyline(latlngs, {
+      polyline = L.polyline([startC, liveC, endC], {
         color: '#0284c7',
         weight: 4,
-        opacity: 0.8,
-        dashArray: '8, 8'
+        opacity: 0.85,
+        dashArray: '8, 10'
       }).addTo(map);
 
-      // تحديد رمز الشحن الحالي
       let iconClass = "fa-ship";
       if (shipType === "Air" || shipType === "جوي") iconClass = "fa-plane";
       if (shipType === "Land" || shipType === "بري") iconClass = "fa-truck";
 
       const currentIcon = L.divIcon({
-        className: 'custom-map-icon',
+        className: 'custom-ship-icon',
         html: `<i class="fa-solid ${iconClass}"></i>`,
-        iconSize: [46, 46],
-        iconAnchor: [23, 23]
+        iconSize: [48, 48],
+        iconAnchor: [24, 24]
       });
 
-      L.marker(currentCoords, { icon: currentIcon }).addTo(markersGroup)
-        .bindPopup(`<div style="text-align:center; font-family:'Tajawal',sans-serif;"><b>${currentLoc || 'الموقع الحالي'}</b><br>موقع الشحنة الحي</div>`).openPopup();
+      L.marker(liveC, { icon: currentIcon }).addTo(markersGroup)
+        .bindPopup(`<div style="text-align:center; font-family:'Tajawal',sans-serif;"><b>${currentLoc || 'الموقع الحالي'}</b><br>تتبع الشحنة المباشر</div>`).openPopup();
 
-      // ضبط الخريطة لتبين كامل الخط بين المبدأ والوصول
-      const bounds = L.latLngBounds([fromCoords, toCoords, currentCoords]);
-      map.fitBounds(bounds, { padding: [50, 50] });
+      const bounds = L.latLngBounds([startC, endC, liveC]);
+      map.fitBounds(bounds, { padding: [60, 60] });
 
       setTimeout(() => { map.invalidateSize(); }, 300);
     }
@@ -352,7 +347,6 @@
                   resultCard.classList.remove('hidden');
                 }
 
-                // رسم الخريطة الكاملة بخط السير والموقع الحالي
                 renderRouteMap(data.from, data.to, data.currentLoc, data.shipmentType);
 
               } else {
@@ -369,4 +363,4 @@
     });
   </script>
 </body>
-</html>
+</html>  
