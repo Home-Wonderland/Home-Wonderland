@@ -3,161 +3,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Track Your Shipment - Home Wonderland</title>
+  <title>Home Wonderland - Cargo Tracking</title>
   
+  <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
-    body { font-family: 'Inter', 'Tajawal', sans-serif; background-color: #f0f4f8; color: #1e293b; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
     
-    /* ألوان المراحل بالدائرة والمرقمة */
-    .step-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; z-index: 10; transition: all 0.3s ease; }
-    .step-active-bg { background-color: #0284c7; color: white; box-shadow: 0 0 0 4px #e0f2fe; }
-    .step-completed-bg { background-color: #0284c7; color: white; }
-    .step-inactive-bg { background-color: #e2e8f0; color: #64748b; }
+    #map { 
+      height: 380px; 
+      width: 100%; 
+      border-radius: 0.75rem; 
+      z-index: 1; 
+      overflow: hidden; 
+    }
+
+    @media (max-width: 640px) {
+      #map {
+        height: 260px;
+      }
+    }
     
-    .line-active { background-color: #0284c7; }
-    .line-inactive { background-color: #e2e8f0; }
+    .leaflet-tile-container img {
+      filter: brightness(0.97) contrast(1.1) hue-rotate(180deg) invert(0.9) saturate(1.8);
+    }
+
+    .custom-ship-icon {
+      display: flex; align-items: center; justify-content: center;
+      background: #0284c7; color: white; border-radius: 50%; border: 3px solid #ffffff;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35); font-size: 18px;
+      animation: pulse-ring 2s infinite;
+    }
+    .custom-start-pin, .custom-end-pin {
+      display: flex; align-items: center; justify-content: center;
+      background: #0f172a; color: white; border-radius: 50%;
+      border: 2px solid white; font-size: 11px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6); }
+      70% { transform: scale(1.15); box-shadow: 0 0 0 12px rgba(2, 132, 199, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
+    }
+
+    .step-active { background-color: #0284c7 !important; color: white !important; border-color: #0284c7 !important; }
+    .step-text-active { color: #0284c7 !important; font-weight: 600; }
+    .line-active { background-color: #0284c7 !important; }
   </style>
 </head>
-<body class="min-h-screen bg-slate-100 flex flex-col justify-between py-6 px-3">
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-  <main class="max-w-md w-full mx-auto space-y-6">
-    
-    <!-- Header Title -->
-    <div class="text-center space-y-1">
-      <h1 class="text-2xl font-bold text-slate-700">Track Your Shipment</h1>
-      <p class="text-xs text-slate-400">Enter your tracking number below to see live updates</p>
-    </div>
-
-    <!-- Search Form -->
-    <div class="space-y-3">
-      <input type="text" id="searchInput" required placeholder="4502487526" class="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3.5 text-center text-slate-800 font-bold text-base shadow-sm outline-none focus:border-sky-500">
-      <button id="searchBtn" type="button" class="w-full bg-[#006cae] hover:bg-[#005a93] text-white font-bold py-3.5 rounded-2xl transition flex items-center justify-center gap-2 shadow-md">
-        <span class="text-base">Track</span>
-        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+  <!-- Header عالمي -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <button class="text-slate-600 hover:text-slate-900 text-lg sm:text-xl focus:outline-none">
+        <i class="fa-solid fa-bars"></i>
       </button>
+
+      <div class="flex flex-col items-center">
+        <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Home Wonderland Logo" class="h-8 sm:h-10 object-contain">
+      </div>
+
+      <div class="flex items-center space-x-3 sm:space-x-5 text-slate-600 text-base sm:text-lg">
+        <button class="hover:text-slate-900 transition"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="hover:text-slate-900 transition hidden sm:inline-block"><i class="fa-solid fa-location-dot"></i></button>
+        <button class="hover:text-slate-900 transition"><i class="fa-solid fa-globe"></i></button>
+        <button class="hover:text-slate-900 transition"><i class="fa-regular fa-user"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Tracking Section -->
+  <main class="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-10">
+    
+    <div class="text-center space-y-2">
+      <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400">Track a shipment</span>
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Tracking</h1>
+      <div class="w-10 h-1 bg-amber-400 mx-auto rounded-full mt-2"></div>
     </div>
 
-    <!-- Result Box -->
-    <div id="resultCard" class="hidden bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-6">
+    <!-- Search Box -->
+    <div class="bg-white p-4 sm:p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-4 sm:space-y-6">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-slate-500">
+        <div class="flex items-center space-x-2">
+          <input type="radio" id="containerRadio" name="searchType" value="bl" checked class="accent-sky-600 w-4 h-4 cursor-pointer">
+          <label for="containerRadio" class="cursor-pointer font-medium">Container / Bill of Lading Number</label>
+        </div>
+        <div class="flex items-center space-x-2">
+          <input type="radio" id="bookingRadio" name="searchType" value="booking" class="accent-sky-600 w-4 h-4 cursor-pointer">
+          <label for="bookingRadio" class="cursor-pointer font-medium">Booking Number</label>
+        </div>
+      </div>
+
+      <div class="relative max-w-2xl mx-auto flex flex-col sm:block gap-2">
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 text-sm">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <input type="text" id="trackingInput" placeholder="Enter a Container / Bill of Lading Number" 
+            class="w-full bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-800 placeholder-slate-400 pl-11 pr-4 sm:pr-32 py-3 sm:py-4 rounded-xl text-xs sm:text-sm font-medium border border-transparent focus:border-sky-500 outline-none transition-all shadow-inner">
+        </div>
+        <button id="trackBtn" class="w-full sm:w-auto sm:absolute sm:right-1.5 sm:top-1.5 sm:bottom-1.5 bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 sm:py-0 rounded-xl sm:rounded-lg text-xs sm:text-sm font-semibold transition flex items-center justify-center gap-2">
+          Search
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Result Container -->
+    <div id="resultCard" class="hidden bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 sm:p-8 space-y-6 sm:space-y-8 transition-all">
       
-      <!-- Top Info (Tracking Code & Date) -->
-      <div class="flex items-center justify-between text-xs font-bold text-slate-400 border-b border-slate-100 pb-3">
-        <div>TRACKING CODE: <span id="resTrackingCode" class="text-slate-800 font-extrabold">4502487526</span></div>
-        <div class="flex items-center gap-1">
-          <i class="fa-regular fa-clock"></i>
-          <span>Last Updated:</span>
-          <span id="resLastUpdate" class="text-slate-600">25/09/2026</span>
-        </div>
-      </div>
-
-      <!-- Origin & Destination Card -->
-      <div class="bg-slate-50/80 rounded-2xl p-4 flex items-center justify-between border border-slate-100">
-        <div class="space-y-1 text-left">
-          <div class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 uppercase">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> ORIGIN
-          </div>
-          <div id="resFrom" class="text-sm font-extrabold text-slate-900">Dubai-UAE</div>
+      <!-- Summary Grid Header (نمط MSC) -->
+      <div class="border-b border-slate-200 pb-4 sm:pb-6 space-y-3 sm:space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
+          <h2 class="text-base sm:text-xl font-bold text-slate-900 tracking-tight break-all">
+            BILL OF LADING: <span id="resCodeDisplay" class="text-sky-700"></span>
+          </h2>
+          <span id="resDate" class="text-[11px] sm:text-xs text-slate-500 font-medium bg-slate-100 px-3 py-1 rounded-full self-start sm:self-auto"></span>
         </div>
 
-        <div class="h-8 w-[1px] bg-slate-200"></div>
-
-        <div class="space-y-1 text-right">
-          <div class="text-[10px] font-bold text-rose-500 flex items-center gap-1 justify-end uppercase">
-            <i class="fa-solid fa-location-dot text-[10px]"></i> DESTINATION
-          </div>
-          <div id="resTo" class="text-sm font-extrabold text-slate-900">NORTH RUMELLA</div>
-        </div>
-      </div>
-
-      <!-- Shipment Progress (Numbered Steps) -->
-      <div class="space-y-3 pt-2">
-        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">SHIPMENT PROGRESS</span>
-        
-        <div class="relative flex items-center justify-between px-2">
-          <!-- Line Background -->
-          <div class="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-1 bg-slate-200 z-0"></div>
-          <div id="progressLine" class="absolute left-6 top-1/2 -translate-y-1/2 h-1 bg-[#0284c7] z-0 transition-all duration-500" style="width: 0%;"></div>
-
-          <!-- Step 1 -->
-          <div class="flex flex-col items-center gap-1.5 z-10">
-            <div id="c1" class="step-circle step-inactive-bg">1</div>
-            <span id="t1" class="text-[11px] font-bold text-slate-400">Received</span>
-          </div>
-
-          <!-- Step 2 -->
-          <div class="flex flex-col items-center gap-1.5 z-10">
-            <div id="c2" class="step-circle step-inactive-bg">2</div>
-            <span id="t2" class="text-[11px] font-bold text-slate-400">In Transit</span>
-          </div>
-
-          <!-- Step 3 -->
-          <div class="flex flex-col items-center gap-1.5 z-10">
-            <div id="c3" class="step-circle step-inactive-bg">3</div>
-            <span id="t3" class="text-[11px] font-bold text-slate-400">Clearance</span>
-          </div>
-
-          <!-- Step 4 -->
-          <div class="flex flex-col items-center gap-1.5 z-10">
-            <div id="c4" class="step-circle step-inactive-bg">4</div>
-            <span id="t4" class="text-[11px] font-bold text-slate-400">Delivered</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Current Location Blue Box -->
-      <div class="bg-[#006cae] rounded-2xl p-4 text-white flex items-center justify-between shadow-md">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl">
-            <i class="fa-solid fa-truck-fast"></i>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-100 text-xs">
+          <div>
+            <span class="text-slate-400 font-semibold block uppercase text-[10px] sm:text-xs">Shipped From</span>
+            <span id="resFrom" class="font-bold text-slate-800 text-xs sm:text-sm break-words"></span>
           </div>
           <div>
-            <span class="text-xs text-sky-100 font-medium block">Current Location</span>
-            <span id="resCurrentLoc" class="text-lg font-bold">Dubai</span>
+            <span class="text-slate-400 font-semibold block uppercase text-[10px] sm:text-xs">Shipped To</span>
+            <span id="resTo" class="font-bold text-slate-800 text-xs sm:text-sm break-words"></span>
+          </div>
+          <div>
+            <span class="text-slate-400 font-semibold block uppercase text-[10px] sm:text-xs">Transhipment</span>
+            <span id="resTranshipment" class="font-bold text-slate-800 text-xs sm:text-sm break-words">-</span>
+          </div>
+          <div>
+            <span class="text-slate-400 font-semibold block uppercase text-[10px] sm:text-xs">Packages / Weight</span>
+            <span id="resPackages" class="font-bold text-slate-800 text-xs sm:text-sm break-words"></span>
           </div>
         </div>
-        <span class="bg-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
-          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Live
-        </span>
       </div>
 
-      <!-- Packages / Weight -->
-      <div class="bg-slate-50/80 rounded-2xl p-4 border border-slate-100 space-y-1">
-        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">PACKAGES / WEIGHT</span>
-        <div id="resPackages" class="text-sm font-extrabold text-slate-800">1Box/68.40kg</div>
-      </div>
-
-      <!-- Status Details / Notes (Only appears if desc exists) -->
-      <div id="statusDetailsBox" class="bg-slate-50/80 rounded-2xl p-4 border border-slate-100 space-y-1">
-        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">STATUS DETAILS</span>
-        <div id="resStatusTitle" class="text-sm font-bold text-slate-900 flex items-center gap-2">
-          <span>تم استلام الشحنة</span> 📦
+      <!-- Current Location Highlight -->
+      <div class="bg-slate-900 text-white p-4 sm:p-5 rounded-xl flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="bg-white/10 p-2.5 sm:p-3 rounded-lg">
+            <i class="fa-solid fa-truck-fast text-lg sm:text-xl text-sky-400"></i>
+          </div>
+          <div>
+            <span class="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider font-semibold block">Current Location</span>
+            <span id="resLoc" class="text-base sm:text-lg font-bold"></span>
+          </div>
         </div>
-        <p id="resStatusDesc" class="text-xs text-slate-500 leading-relaxed" dir="auto"></p>
+        <span class="text-[10px] sm:text-xs bg-sky-500/20 text-sky-300 font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border border-sky-500/30 whitespace-nowrap">Live Status</span>
       </div>
 
-    </div>
+      <!-- Live Map Route -->
+      <div class="space-y-2">
+        <span class="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider block">Live Map Route</span>
+        <div id="map"></div>
+      </div>
 
-    <!-- Not Found Msg -->
-    <div id="notFound" class="hidden bg-white p-6 rounded-2xl text-center space-y-2 border border-slate-100">
-      <i class="fa-solid fa-circle-exclamation text-2xl text-amber-500"></i>
-      <h3 class="text-sm font-bold text-slate-800">Shipment Not Found</h3>
-      <p class="text-xs text-slate-400">Please check your B/L or PO Number and try again.</p>
+      <!-- Vertical Timeline Section (MSC Style) -->
+      <div class="space-y-4 pt-4 border-t border-slate-100">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 tracking-tight uppercase">Shipment Timeline & Events</h3>
+        
+        <div id="timelineContainer" class="relative pl-6 space-y-6 sm:space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-amber-400">
+          <!-- سيتم توليد نقاط التتبع زمنياً هنا تلقائياً -->
+        </div>
+      </div>
+
     </div>
 
   </main>
 
   <!-- Footer -->
-  <footer class="text-center text-xs text-slate-400 font-medium pt-6">
-    الحقوق الملكية لمريم باسم صالح
+  <footer class="bg-white border-t border-slate-200 py-4 sm:py-6 text-center text-[11px] sm:text-xs text-slate-400 font-medium px-4">
+    ©️ Home Wonderland Logistics - All rights reserved
   </footer>
 
+  <!-- Firebase & Logic Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
@@ -172,120 +208,138 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const performSearch = async () => {
-      const query = document.getElementById('searchInput').value.trim();
-      if (!query) return;
+    let map = null;
+    let markersGroup = L.layerGroup();
+    let polyline = null;
 
-      const resultCard = document.getElementById('resultCard');
-      const notFound = document.getElementById('notFound');
-
-      try {
-        const shipmentsRef = ref(db, 'shipments');
-        const snapshot = await get(shipmentsRef);
-
-        let foundItem = null;
-
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          
-          for (let key in data) {
-            const item = data[key];
-            if (
-              key.toLowerCase() === query.toLowerCase() ||
-              (item.trackingCode && item.trackingCode.toLowerCase() === query.toLowerCase()) ||
-              (item.poNumber && item.poNumber.toLowerCase() === query.toLowerCase())
-            ) {
-              foundItem = item;
-              break;
-            }
-          }
-        }
-
-        if (foundItem) {
-          notFound.classList.add('hidden');
-          resultCard.classList.remove('hidden');
-
-          document.getElementById('resTrackingCode').textContent = foundItem.trackingCode || query;
-          document.getElementById('resLastUpdate').textContent = foundItem.lastUpdate || '25/09/2026';
-          document.getElementById('resFrom').textContent = foundItem.from || '-';
-          document.getElementById('resTo').textContent = foundItem.to || '-';
-          document.getElementById('resCurrentLoc').textContent = foundItem.currentLoc || '-';
-          document.getElementById('resPackages').textContent = foundItem.packages || '-';
-
-          // Status Details / Description
-          document.getElementById('resStatusTitle').textContent = foundItem.status || 'In Progress';
-          
-          const descElem = document.getElementById('resStatusDesc');
-          if (foundItem.statusDesc && foundItem.statusDesc.trim() !== '') {
-            descElem.textContent = foundItem.statusDesc;
-            descElem.style.display = 'block';
-          } else {
-            descElem.style.display = 'none';
-          }
-
-          // Update Numbered Steps Line
-          updateProgressSteps(foundItem.status);
-
-        } else {
-          resultCard.classList.add('hidden');
-          notFound.classList.remove('hidden');
-        }
-
-      } catch (err) {
-        console.error(err);
-        alert("Error fetching shipment details.");
-      }
+    const dictionary = {
+      "bsr": [30.5081, 47.7835], "بصرة": [30.5081, 47.7835], "البصرة": [30.5081, 47.7835], "basra": [30.5081, 47.7835],
+      "أم قصر": [30.0361, 47.9250], "umm qasr": [30.0361, 47.9250], "ام قصر": [30.0361, 47.9250],
+      "dubai": [25.2048, 55.2708], "دبي": [25.2048, 55.2708], "uae": [25.2048, 55.2708],
+      "jebel ali": [24.9857, 55.0272], "جبل علي": [24.9857, 55.0272],
+      "baghdad": [33.3152, 44.3661], "بغداد": [33.3152, 44.3661],
+      "xiamen": [24.4798, 118.0819], "shanghai": [31.2304, 121.4737], "khor fakkan": [25.3313, 56.3420]
     };
 
-    document.getElementById('searchBtn').addEventListener('click', performSearch);
-
-    function updateProgressSteps(status) {
-      const c1 = document.getElementById('c1');
-      const c2 = document.getElementById('c2');
-      const c3 = document.getElementById('c3');
-      const c4 = document.getElementById('c4');
-
-      const t1 = document.getElementById('t1');
-      const t2 = document.getElementById('t2');
-      const t3 = document.getElementById('t3');
-      const t4 = document.getElementById('t4');
-
-      const line = document.getElementById('progressLine');
-
-      // Reset
-      [c1, c2, c3, c4].forEach(c => c.className = "step-circle step-inactive-bg");
-      [t1, t2, t3, t4].forEach(t => t.className = "text-[11px] font-bold text-slate-400");
-
-      const st = (status || '').toLowerCase();
-
-      if (st.includes('received') || st.includes('loaded')) {
-        c1.className = "step-circle step-active-bg";
-        t1.className = "text-[11px] font-bold text-sky-600";
-        line.style.width = "0%";
-      } else if (st.includes('transit')) {
-        c1.className = "step-circle step-completed-bg";
-        c2.className = "step-circle step-active-bg";
-        t2.className = "text-[11px] font-bold text-sky-600";
-        line.style.width = "33%";
-      } else if (st.includes('customs') || st.includes('clearance') || st.includes('port')) {
-        c1.className = "step-circle step-completed-bg";
-        c2.className = "step-circle step-completed-bg";
-        c3.className = "step-circle step-active-bg";
-        t3.className = "text-[11px] font-bold text-sky-600";
-        line.style.width = "66%";
-      } else if (st.includes('delivered') || st.includes('out for delivery')) {
-        c1.className = "step-circle step-completed-bg";
-        c2.className = "step-circle step-completed-bg";
-        c3.className = "step-circle step-completed-bg";
-        c4.className = "step-circle step-active-bg";
-        t4.className = "text-[11px] font-bold text-sky-600";
-        line.style.width = "100%";
-      } else {
-        c1.className = "step-circle step-active-bg";
-        t1.className = "text-[11px] font-bold text-sky-600";
-        line.style.width = "0%";
+    async function fetchCoords(loc) {
+      if (!loc) return null;
+      const clean = loc.toLowerCase().trim();
+      for (const k in dictionary) {
+        if (clean.includes(k)) return dictionary[k];
       }
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(loc)}`);
+        const resData = await res.json();
+        if (resData && resData.length > 0) {
+          return [parseFloat(resData[0].lat), parseFloat(resData[0].lon)];
+        }
+      } catch (err) {}
+      return null;
     }
+
+    async function renderRouteMap(fromLoc, toLoc, currentLoc, shipType) {
+      const startC = await fetchCoords(fromLoc) || [25.2048, 55.2708];
+      const endC = await fetchCoords(toLoc) || [30.0361, 47.9250];
+      const liveC = await fetchCoords(currentLoc) || startC;
+
+      if (!map) {
+        map = L.map('map');
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+        markersGroup.addTo(map);
+      }
+
+      markersGroup.clearLayers();
+
+      const startIcon = L.divIcon({ className: 'custom-start-pin', html: '<i class="fa-solid fa-play"></i>', iconSize: [24, 24] });
+      const endIcon = L.divIcon({ className: 'custom-end-pin', html: '<i class="fa-solid fa-flag-checkered"></i>', iconSize: [24, 24] });
+
+      L.marker(startC, { icon: startIcon }).addTo(markersGroup);
+      L.marker(endC, { icon: endIcon }).addTo(markersGroup);
+
+      if (polyline) map.removeLayer(polyline);
+      polyline = L.polyline([startC, liveC, endC], { color: '#0284c7', weight: 3, opacity: 0.8, dashArray: '5, 8' }).addTo(map);
+
+      let iconClass = "fa-ship";
+      if (shipType === "Air" || shipType === "جوي") iconClass = "fa-plane";
+      if (shipType === "Land" || shipType === "بري") iconClass = "fa-truck";
+
+      const currentIcon = L.divIcon({
+        className: 'custom-ship-icon',
+        html: `<i class="fa-solid ${iconClass}"></i>`,
+        iconSize: [42, 42],
+        iconAnchor: [21, 21]
+      });
+
+      L.marker(liveC, { icon: currentIcon }).addTo(markersGroup).bindPopup(`<b>${currentLoc || 'Current'}</b>`).openPopup();
+      
+      setTimeout(() => { 
+        map.invalidateSize();
+        map.fitBounds(L.latLngBounds([startC, endC, liveC]), { padding: [30, 30] });
+      }, 300);
+    }
+
+    function renderTimeline(data) {
+      const container = document.getElementById('timelineContainer');
+      container.innerHTML = '';
+
+      // أحداث افتراضية مبنية على البيانات أو تاريخ التحديث
+      const events = data.timelineEvents || [
+        { date: data.lastUpdate || "Recent", location: data.currentLoc || "-", status: data.status || "In Transit", desc: data.statusDesc || "Shipment status updated" },
+        { date: "Initial Processing", location: data.from || "Origin Port", status: "Loaded on Vessel", desc: "Container loaded and cleared for export" }
+      ];
+
+      events.forEach((ev, idx) => {
+        const item = document.createElement('div');
+        item.className = "relative flex flex-col space-y-1";
+        
+        item.innerHTML = `
+          <div class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-amber-400 border-2 border-white shadow-sm"></div>
+          <span class="text-[11px] sm:text-xs font-semibold text-slate-400">${ev.date}</span>
+          <span class="text-xs sm:text-sm font-bold text-slate-800">${ev.location}</span>
+          <span class="text-[11px] sm:text-xs font-semibold text-sky-700 uppercase">${ev.status}</span>
+          <p class="text-xs text-slate-500">${ev.desc}</p>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const trackBtn = document.getElementById('trackBtn');
+      const trackingInput = document.getElementById('trackingInput');
+
+      if (trackBtn) {
+        trackBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const code = trackingInput ? trackingInput.value.trim() : '';
+          if (!code) { alert("Please enter tracking number"); return; }
+
+          get(child(ref(db), 'shipments')).then((snapshot) => {
+            if (snapshot.exists()) {
+              const shipments = snapshot.val();
+              const matchedKey = Object.keys(shipments).find(k => k.trim().toLowerCase() === code.toLowerCase());
+
+              if (matchedKey) {
+                const data = shipments[matchedKey];
+                
+                document.getElementById('resCodeDisplay').innerText = matchedKey;
+                document.getElementById('resFrom').innerText = data.from || '-';
+                document.getElementById('resTo').innerText = data.to || '-';
+                document.getElementById('resLoc').innerText = data.currentLoc || '-';
+                document.getElementById('resDate').innerText = data.lastUpdate ? `Updated: ${data.lastUpdate}` : '';
+                document.getElementById('resPackages').innerText = data.packages || '-';
+                document.getElementById('resTranshipment').innerText = data.transhipment || 'Direct';
+
+                document.getElementById('resultCard').classList.remove('hidden');
+
+                renderRouteMap(data.from, data.to, data.currentLoc, data.shipmentType);
+                renderTimeline(data);
+
+              } else { alert("Tracking number not found."); }
+            } else { alert("No registered shipments found."); }
+          }).catch(() => { alert("Error fetching tracking details."); });
+        });
+      }
+    });
   </script>
 </body>
 </html>
