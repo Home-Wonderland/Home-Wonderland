@@ -1,147 +1,157 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تتبع الشحنات - Home Wonderland</title>
+  <title>Track Your Shipment - Home Wonderland</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@500;700&display=swap" rel="stylesheet">
 
   <style>
-    body { font-family: 'Tajawal', sans-serif; background-color: #f8fafc; color: #0f172a; }
-    .step-active { background-color: #0284c7; color: white; border-color: #0284c7; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); }
-    .step-completed { background-color: #10b981; color: white; border-color: #10b981; }
-    .step-inactive { background-color: #f1f5f9; color: #94a3b8; border-color: #e2e8f0; }
+    body { font-family: 'Inter', 'Tajawal', sans-serif; background-color: #f0f4f8; color: #1e293b; }
+    
+    /* ألوان المراحل بالدائرة والمرقمة */
+    .step-circle { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; z-index: 10; transition: all 0.3s ease; }
+    .step-active-bg { background-color: #0284c7; color: white; box-shadow: 0 0 0 4px #e0f2fe; }
+    .step-completed-bg { background-color: #0284c7; color: white; }
+    .step-inactive-bg { background-color: #e2e8f0; color: #64748b; }
+    
+    .line-active { background-color: #0284c7; }
+    .line-inactive { background-color: #e2e8f0; }
   </style>
 </head>
-<body class="min-h-screen bg-slate-50 flex flex-col justify-between">
+<body class="min-h-screen bg-slate-100 flex flex-col justify-between py-6 px-3">
 
-  <!-- Header -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <div class="flex items-center space-x-3 space-x-reverse">
-        <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Logo" class="h-10 object-contain">
-        <span class="text-xl font-bold text-slate-900">Home Wonderland</span>
-      </div>
-      <span class="text-xs font-bold bg-sky-50 text-sky-700 px-3 py-1.5 rounded-full border border-sky-100">
-        نظام تتبع الشحنات
-      </span>
-    </div>
-  </header>
-
-  <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8 space-y-8">
+  <main class="max-w-md w-full mx-auto space-y-6">
     
-    <!-- Search Section -->
-    <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4 text-center">
-      <h1 class="text-2xl font-extrabold text-slate-900">تتبع حالة شحنتك</h1>
-      <p class="text-xs text-slate-500">أدخل رقم البوليصة (B/L Number) أو رقم أمر الشراء (PO Number)</p>
-      
-      <form id="searchForm" class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto pt-2">
-        <input type="text" id="searchInput" required placeholder="أدخل رقم الشحنة..." class="flex-grow bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-xl px-4 py-3 text-sm outline-none text-center sm:text-right" dir="ltr">
-        <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3 rounded-xl transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <span>بحث</span>
-        </button>
-      </form>
+    <!-- Header Title -->
+    <div class="text-center space-y-1">
+      <h1 class="text-2xl font-bold text-slate-700">Track Your Shipment</h1>
+      <p class="text-xs text-slate-400">Enter your tracking number below to see live updates</p>
     </div>
 
-    <!-- Result Card -->
-    <div id="resultCard" class="hidden bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-8">
+    <!-- Search Form -->
+    <div class="space-y-3">
+      <input type="text" id="searchInput" required placeholder="4502487526" class="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3.5 text-center text-slate-800 font-bold text-base shadow-sm outline-none focus:border-sky-500">
+      <button id="searchBtn" type="button" class="w-full bg-[#006cae] hover:bg-[#005a93] text-white font-bold py-3.5 rounded-2xl transition flex items-center justify-center gap-2 shadow-md">
+        <span class="text-base">Track</span>
+        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Result Box -->
+    <div id="resultCard" class="hidden bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-6">
       
-      <!-- Top Info -->
-      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-        <div>
-          <span class="text-xs font-bold text-slate-400 block mb-1">رقم الشحنة</span>
-          <h2 id="resTrackingCode" class="text-xl font-black text-slate-900" dir="ltr">-</h2>
-        </div>
-        <div class="text-left">
-          <span class="text-xs font-bold text-slate-400 block mb-1">نوع الشحن</span>
-          <p id="resShipmentType" class="text-sm font-bold text-sky-600" dir="ltr">-</p>
+      <!-- Top Info (Tracking Code & Date) -->
+      <div class="flex items-center justify-between text-xs font-bold text-slate-400 border-b border-slate-100 pb-3">
+        <div>TRACKING CODE: <span id="resTrackingCode" class="text-slate-800 font-extrabold">4502487526</span></div>
+        <div class="flex items-center gap-1">
+          <i class="fa-regular fa-clock"></i>
+          <span>Last Updated:</span>
+          <span id="resLastUpdate" class="text-slate-600">25/09/2026</span>
         </div>
       </div>
 
-      <!-- Current Stage Indicator -->
-      <div class="space-y-3">
-        <span class="text-xs font-bold text-slate-400 block">مرحلة الشحنة الحالية</span>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-          
-          <div id="step1" class="p-3 rounded-xl border flex flex-col items-center gap-1.5 transition">
-            <i class="fa-solid fa-box text-sm"></i>
-            <span class="text-xs font-bold">تم استلام الشحنة</span>
+      <!-- Origin & Destination Card -->
+      <div class="bg-slate-50/80 rounded-2xl p-4 flex items-center justify-between border border-slate-100">
+        <div class="space-y-1 text-left">
+          <div class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 uppercase">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> ORIGIN
           </div>
+          <div id="resFrom" class="text-sm font-extrabold text-slate-900">Dubai-UAE</div>
+        </div>
 
-          <div id="step2" class="p-3 rounded-xl border flex flex-col items-center gap-1.5 transition">
-            <i class="fa-solid fa-truck-fast text-sm"></i>
-            <span class="text-xs font-bold">في الطريق</span>
+        <div class="h-8 w-[1px] bg-slate-200"></div>
+
+        <div class="space-y-1 text-right">
+          <div class="text-[10px] font-bold text-rose-500 flex items-center gap-1 justify-end uppercase">
+            <i class="fa-solid fa-location-dot text-[10px]"></i> DESTINATION
           </div>
-
-          <div id="step3" class="p-3 rounded-xl border flex flex-col items-center gap-1.5 transition">
-            <i class="fa-solid fa-passport text-sm"></i>
-            <span class="text-xs font-bold">التخليص الجمركي</span>
-          </div>
-
-          <div id="step4" class="p-3 rounded-xl border flex flex-col items-center gap-1.5 transition">
-            <i class="fa-solid fa-circle-check text-sm"></i>
-            <span class="text-xs font-bold">تم التسليم</span>
-          </div>
-
+          <div id="resTo" class="text-sm font-extrabold text-slate-900">NORTH RUMELLA</div>
         </div>
       </div>
 
-      <!-- Details Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Shipment Progress (Numbered Steps) -->
+      <div class="space-y-3 pt-2">
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">SHIPMENT PROGRESS</span>
         
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-          <span class="text-xs font-bold text-slate-400 block mb-1">مكان الشحن الأصلي (Shipped From)</span>
-          <span id="resFrom" class="text-sm font-bold text-slate-800" dir="ltr">-</span>
-        </div>
+        <div class="relative flex items-center justify-between px-2">
+          <!-- Line Background -->
+          <div class="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-1 bg-slate-200 z-0"></div>
+          <div id="progressLine" class="absolute left-6 top-1/2 -translate-y-1/2 h-1 bg-[#0284c7] z-0 transition-all duration-500" style="width: 0%;"></div>
 
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-          <span class="text-xs font-bold text-slate-400 block mb-1">الوجهة النهائية (Shipped To)</span>
-          <span id="resTo" class="text-sm font-bold text-slate-800" dir="ltr">-</span>
-        </div>
+          <!-- Step 1 -->
+          <div class="flex flex-col items-center gap-1.5 z-10">
+            <div id="c1" class="step-circle step-inactive-bg">1</div>
+            <span id="t1" class="text-[11px] font-bold text-slate-400">Received</span>
+          </div>
 
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-          <span class="text-xs font-bold text-slate-400 block mb-1">الموقع الحالي (Current Location)</span>
-          <span id="resCurrentLoc" class="text-sm font-bold text-sky-600" dir="ltr">-</span>
-        </div>
+          <!-- Step 2 -->
+          <div class="flex flex-col items-center gap-1.5 z-10">
+            <div id="c2" class="step-circle step-inactive-bg">2</div>
+            <span id="t2" class="text-[11px] font-bold text-slate-400">In Transit</span>
+          </div>
 
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-          <span class="text-xs font-bold text-slate-400 block mb-1">عدد الطرود والوزن (Packages / Weight)</span>
-          <span id="resPackages" class="text-sm font-bold text-slate-800" dir="ltr">-</span>
-        </div>
+          <!-- Step 3 -->
+          <div class="flex flex-col items-center gap-1.5 z-10">
+            <div id="c3" class="step-circle step-inactive-bg">3</div>
+            <span id="t3" class="text-[11px] font-bold text-slate-400">Clearance</span>
+          </div>
 
+          <!-- Step 4 -->
+          <div class="flex flex-col items-center gap-1.5 z-10">
+            <div id="c4" class="step-circle step-inactive-bg">4</div>
+            <span id="t4" class="text-[11px] font-bold text-slate-400">Delivered</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Notes Box (Only displays if filled) -->
-      <div id="notesBox" class="hidden bg-sky-50 border border-sky-200 p-4 rounded-xl text-sky-900 text-xs leading-relaxed">
-        <span class="font-bold block mb-1"><i class="fa-solid fa-circle-info ml-1"></i> ملاحظة الشحنة:</span>
-        <p id="resNotes" dir="ltr">-</p>
+      <!-- Current Location Blue Box -->
+      <div class="bg-[#006cae] rounded-2xl p-4 text-white flex items-center justify-between shadow-md">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-truck-fast"></i>
+          </div>
+          <div>
+            <span class="text-xs text-sky-100 font-medium block">Current Location</span>
+            <span id="resCurrentLoc" class="text-lg font-bold">Dubai</span>
+          </div>
+        </div>
+        <span class="bg-white/20 text-white text-[11px] font-bold px-3 py-1 rounded-full flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Live
+        </span>
       </div>
 
-      <!-- Mini Map -->
-      <div class="space-y-2">
-        <span class="text-xs font-bold text-slate-400 block">الموقع الحالي على الخريطة</span>
-        <div class="w-full h-44 rounded-xl overflow-hidden border border-slate-200">
-          <iframe id="mapFrame" class="w-full h-full border-0" src="" loading="lazy"></iframe>
+      <!-- Packages / Weight -->
+      <div class="bg-slate-50/80 rounded-2xl p-4 border border-slate-100 space-y-1">
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">PACKAGES / WEIGHT</span>
+        <div id="resPackages" class="text-sm font-extrabold text-slate-800">1Box/68.40kg</div>
+      </div>
+
+      <!-- Status Details / Notes (Only appears if desc exists) -->
+      <div id="statusDetailsBox" class="bg-slate-50/80 rounded-2xl p-4 border border-slate-100 space-y-1">
+        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">STATUS DETAILS</span>
+        <div id="resStatusTitle" class="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <span>تم استلام الشحنة</span> 📦
         </div>
+        <p id="resStatusDesc" class="text-xs text-slate-500 leading-relaxed" dir="auto"></p>
       </div>
 
     </div>
 
-    <!-- Not Found Card -->
-    <div id="notFound" class="hidden bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-2">
+    <!-- Not Found Msg -->
+    <div id="notFound" class="hidden bg-white p-6 rounded-2xl text-center space-y-2 border border-slate-100">
       <i class="fa-solid fa-circle-exclamation text-2xl text-amber-500"></i>
-      <h3 class="text-sm font-bold text-slate-800">لم يتم العثور على الشحنة</h3>
-      <p class="text-xs text-slate-500">تأكد من كتابة رقم B/L أو PO بشكل صحيح وترتيب الأرقام.</p>
+      <h3 class="text-sm font-bold text-slate-800">Shipment Not Found</h3>
+      <p class="text-xs text-slate-400">Please check your B/L or PO Number and try again.</p>
     </div>
 
   </main>
 
   <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 font-medium">
+  <footer class="text-center text-xs text-slate-400 font-medium pt-6">
     الحقوق الملكية لمريم باسم صالح
   </footer>
 
@@ -162,8 +172,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    document.getElementById('searchForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    const performSearch = async () => {
       const query = document.getElementById('searchInput').value.trim();
       if (!query) return;
 
@@ -179,7 +188,6 @@
         if (snapshot.exists()) {
           const data = snapshot.val();
           
-          // البحث بالتوازي عن B/L Number أو PO Number
           for (let key in data) {
             const item = data[key];
             if (
@@ -198,27 +206,25 @@
           resultCard.classList.remove('hidden');
 
           document.getElementById('resTrackingCode').textContent = foundItem.trackingCode || query;
-          document.getElementById('resShipmentType').textContent = foundItem.shipmentType || 'Sea Freight';
+          document.getElementById('resLastUpdate').textContent = foundItem.lastUpdate || '25/09/2026';
           document.getElementById('resFrom').textContent = foundItem.from || '-';
           document.getElementById('resTo').textContent = foundItem.to || '-';
           document.getElementById('resCurrentLoc').textContent = foundItem.currentLoc || '-';
           document.getElementById('resPackages').textContent = foundItem.packages || '-';
 
-          // Notes
-          const notesBox = document.getElementById('notesBox');
+          // Status Details / Description
+          document.getElementById('resStatusTitle').textContent = foundItem.status || 'In Progress';
+          
+          const descElem = document.getElementById('resStatusDesc');
           if (foundItem.statusDesc && foundItem.statusDesc.trim() !== '') {
-            document.getElementById('resNotes').textContent = foundItem.statusDesc;
-            notesBox.classList.remove('hidden');
+            descElem.textContent = foundItem.statusDesc;
+            descElem.style.display = 'block';
           } else {
-            notesBox.classList.add('hidden');
+            descElem.style.display = 'none';
           }
 
-          // Map
-          const mapLoc = encodeURIComponent(foundItem.currentLoc || "Umm Qasr, Iraq");
-          document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${mapLoc}&t=&z=6&ie=UTF8&iwloc=&output=embed`;
-
-          // Active Stage
-          updateSteps(foundItem.status);
+          // Update Numbered Steps Line
+          updateProgressSteps(foundItem.status);
 
         } else {
           resultCard.classList.add('hidden');
@@ -227,36 +233,57 @@
 
       } catch (err) {
         console.error(err);
-        alert("حدث خطأ أثناء جلب بيانات الشحنة.");
+        alert("Error fetching shipment details.");
       }
-    });
+    };
 
-    function updateSteps(status) {
-      const step1 = document.getElementById('step1');
-      const step2 = document.getElementById('step2');
-      const step3 = document.getElementById('step3');
-      const step4 = document.getElementById('step4');
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
 
-      [step1, step2, step3, step4].forEach(s => s.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-inactive");
+    function updateProgressSteps(status) {
+      const c1 = document.getElementById('c1');
+      const c2 = document.getElementById('c2');
+      const c3 = document.getElementById('c3');
+      const c4 = document.getElementById('c4');
+
+      const t1 = document.getElementById('t1');
+      const t2 = document.getElementById('t2');
+      const t3 = document.getElementById('t3');
+      const t4 = document.getElementById('t4');
+
+      const line = document.getElementById('progressLine');
+
+      // Reset
+      [c1, c2, c3, c4].forEach(c => c.className = "step-circle step-inactive-bg");
+      [t1, t2, t3, t4].forEach(t => t.className = "text-[11px] font-bold text-slate-400");
 
       const st = (status || '').toLowerCase();
 
       if (st.includes('received') || st.includes('loaded')) {
-        step1.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-active";
+        c1.className = "step-circle step-active-bg";
+        t1.className = "text-[11px] font-bold text-sky-600";
+        line.style.width = "0%";
       } else if (st.includes('transit')) {
-        step1.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-completed";
-        step2.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-active";
-      } else if (st.includes('customs') || st.includes('port') || st.includes('clearance')) {
-        step1.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-completed";
-        step2.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-completed";
-        step3.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-active";
+        c1.className = "step-circle step-completed-bg";
+        c2.className = "step-circle step-active-bg";
+        t2.className = "text-[11px] font-bold text-sky-600";
+        line.style.width = "33%";
+      } else if (st.includes('customs') || st.includes('clearance') || st.includes('port')) {
+        c1.className = "step-circle step-completed-bg";
+        c2.className = "step-circle step-completed-bg";
+        c3.className = "step-circle step-active-bg";
+        t3.className = "text-[11px] font-bold text-sky-600";
+        line.style.width = "66%";
       } else if (st.includes('delivered') || st.includes('out for delivery')) {
-        step1.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-completed";
-        step2.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-completed";
-        step3.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-completed";
-        step4.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-active";
+        c1.className = "step-circle step-completed-bg";
+        c2.className = "step-circle step-completed-bg";
+        c3.className = "step-circle step-completed-bg";
+        c4.className = "step-circle step-active-bg";
+        t4.className = "text-[11px] font-bold text-sky-600";
+        line.style.width = "100%";
       } else {
-        step1.className = "p-3 rounded-xl border flex flex-col items-center gap-1.5 transition step-active";
+        c1.className = "step-circle step-active-bg";
+        t1.className = "text-[11px] font-bold text-sky-600";
+        line.style.width = "0%";
       }
     }
   </script>
