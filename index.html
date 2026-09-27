@@ -19,9 +19,9 @@
     .line-active { background-color: #0284c7 !important; }
     #map { height: 420px; width: 100%; border-radius: 1rem; z-index: 1; overflow: hidden; }
     
-    /* الخريطة وثيم ألوان الأزرق والأبيض */
+    /* فلتر عصري بدرجات الأبيض والأزرق السماوي */
     .leaflet-tile-container img {
-      filter: grayscale(100%) invert(100%) hue-rotate(180deg) brightness(95%) contrast(85%);
+      filter: brightness(0.97) contrast(1.1) hue-rotate(180deg) invert(0.9) saturate(1.8);
     }
 
     /* أنيميشن العلامات بالأزرق والأبيض */
@@ -232,10 +232,10 @@
       if (!map) {
         map = L.map('map');
         
-        // خريطة سحابية باللون الأبيض والأزرق العصري
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
-          maxZoom: 19,
-          attribution: '©️ CARTO Blue/White Style'
+        // استخدام خدمة الخرائط المجانية المفتوحة والآمنة 100% بدون أي API Key
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: '©️ OpenStreetMap'
         }).addTo(map);
         
         markersGroup.addTo(map);
