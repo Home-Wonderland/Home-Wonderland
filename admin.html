@@ -1,244 +1,1400 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم - Home wonderland</title>
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>
+    لوحة التحكم - Home Wonderland
+  </title>
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+  <!-- QR Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+  </script>
+
   <style>
-    body { font-family: 'Tajawal', sans-serif; }
-  </style>
-</head>
-<body class="bg-slate-100 text-slate-800 min-h-screen p-4">
 
-  <div class="max-w-5xl mx-auto w-full space-y-6">
-    <!-- Header -->
-    <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-200 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <div class="h-12 w-12 flex items-center justify-center shrink-0">
-          <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Logo" class="max-h-full max-w-full object-contain">
-        </div>
-        <div>
-          <h1 class="text-xl font-bold text-slate-800">Home wonderland</h1>
-          <p class="text-xs font-semibold text-sky-600">لوحة إدارة وتتبع الشحنات الحية</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Form Section -->
-    <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
-      <h2 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b flex items-center gap-2">
-        <i class="fa-solid fa-box-archive text-sky-600"></i> إضافة / تعديل شحنة
-      </h2>
-
-      <form id="shipmentForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">رقم الشحنة (Tracking Code)</label>
-          <input type="text" id="shipCode" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-500 outline-none" placeholder="مثال: SH-1001">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">اسم الزبون (مخفي للعملاء)</label>
-          <input type="text" id="shipCustomer" required class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-500 outline-none" placeholder="اسم الزبون">
-        </div>
-
-        <!-- نوع الشحن باللغة الإنجليزية -->
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">نوع الشحن (Shipment Type)</label>
-          <select id="shipType" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
-            <option value="Sea Freight 🚢">Sea Freight 🚢</option>
-            <option value="Air Freight ✈️">Air Freight ✈️</option>
-            <option value="Land Freight 🚚">Land Freight 🚚</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">المسار (من ➔ إلى)</label>
-          <div class="flex gap-2">
-            <input type="text" id="shipFrom" placeholder="من" required class="w-1/2 border rounded-lg p-2.5 text-sm outline-none">
-            <input type="text" id="shipTo" placeholder="إلى" required class="w-1/2 border rounded-lg p-2.5 text-sm outline-none">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">الموقع الحالي للشحنة</label>
-          <input type="text" id="shipLoc" required class="w-full border rounded-lg p-2.5 text-sm outline-none" placeholder="مثال: Um Qasr Port">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">تاريخ التحديث (Last Update)</label>
-          <input type="text" id="shipLastUpdate" required class="w-full border rounded-lg p-2.5 text-sm outline-none">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">عدد الطرود / الوزن</label>
-          <input type="text" id="shipPackages" placeholder="مثال: 12 Cartons / 450 Kg" required class="w-full border rounded-lg p-2.5 text-sm outline-none">
-        </div>
-
-        <!-- حالة الشحنة باللغة الإنجليزية مع الحالات الجديدة والمنفصلة -->
-        <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">حالة الشحنة العامة (General Status)</label>
-          <select id="shipStatus" class="w-full border rounded-lg p-2.5 text-sm outline-none">
-            <option value="Shipment Received 📦">Shipment Received 📦</option>
-            <option value="In Transit 🚢">In Transit 🚢</option>
-            <option value="Shipment On Its Way 🚚">Shipment On Its Way 🚚</option>
-            <option value="Arrived at Seaport ⚓">Arrived at Seaport ⚓</option>
-            <option value="Arrived at Airport 🛬">Arrived at Airport 🛬</option>
-            <option value="Under Customs Clearance 📑">Under Customs Clearance 📑</option>
-            <option value="Out for Delivery 🚚">Out for Delivery 🚚</option>
-            <option value="Delivered Successfully ✅">Delivered Successfully ✅</option>
-          </select>
-        </div>
-
-        <div class="md:col-span-2">
-          <label class="block text-xs font-bold text-slate-600 mb-1">وصف أو ملاحظات للحالة</label>
-          <input type="text" id="shipStatusDesc" class="w-full border rounded-lg p-2.5 text-sm outline-none" placeholder="مثال: UNDER CLEARANCE AT PORT">
-        </div>
-
-        <div class="md:col-span-2">
-          <button type="submit" id="saveBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-3 rounded-lg shadow transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-floppy-disk"></i> حفظ الشحنة
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Table Section -->
-    <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200 overflow-x-auto">
-      <h2 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b">قائمة الشحنات الحالية</h2>
-      <table class="w-full text-right text-sm">
-        <thead class="bg-slate-50 text-slate-600 border-b">
-          <tr>
-            <th class="p-3">رقم الشحنة</th>
-            <th class="p-3">اسم الزبون</th>
-            <th class="p-3">نوع الشحن</th>
-            <th class="p-3">المسار</th>
-            <th class="p-3">الموقع الحالي</th>
-            <th class="p-3">الحالة</th>
-            <th class="p-3 text-center">إجراءات</th>
-          </tr>
-        </thead>
-        <tbody id="shipmentTableBody">
-          <!-- Live Data from Firebase -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
-      authDomain: "home-wonderland.firebaseapp.com",
-      databaseURL: "https://home-wonderland-default-rtdb.firebaseio.com",
-      projectId: "home-wonderland",
-      storageBucket: "home-wonderland.firebasestorage.app",
-      messagingSenderId: "911419710716",
-      appId: "1:911419710716:web:9ba36be5dd456b9f81cb79"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    function getTodayDate() {
-      const today = new Date();
-      const dd = String(today.getDate()).padStart(2, '0');
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const yyyy = today.getFullYear();
-      return dd + '/' + mm + '/' + yyyy;
+    body {
+      font-family: 'Tajawal', sans-serif;
     }
 
-    const dateInput = document.getElementById('shipLastUpdate');
-    if (dateInput) dateInput.value = getTodayDate();
+    #qrModal {
+      backdrop-filter: blur(4px);
+    }
 
-    // جلب وتحديث الجدول من Firebase حياً
-    const tableBody = document.getElementById('shipmentTableBody');
-    const shipmentsRef = ref(db, 'shipments');
+  </style>
 
-    onValue(shipmentsRef, (snapshot) => {
-      tableBody.innerHTML = '';
-      const shipments = snapshot.val();
-      if (shipments) {
-        Object.keys(shipments).forEach(code => {
-          const item = shipments[code];
-          
-          const row = document.createElement('tr');
-          row.className = "border-b border-slate-100 hover:bg-slate-50";
-          row.innerHTML = `
-            <td class="p-3 font-bold text-sky-600">${code}</td>
-            <td class="p-3 font-semibold text-amber-700">${item.customerName || '-'}</td>
-            <td class="p-3 font-medium">${item.shipmentType || '-'}</td>
-            <td class="p-3">${item.from || '-'} ➔ ${item.to || '-'}</td>
-            <td class="p-3"><span class="bg-slate-100 text-slate-800 px-2 py-1 rounded text-xs">${item.currentLoc || '-'}</span></td>
-            <td class="p-3 text-xs font-bold text-slate-600">${item.status || '-'}</td>
-            <td class="p-3 text-center">
-              <button onclick="editShipment('${code}')" class="bg-amber-500 text-white px-2 py-1 rounded text-xs ml-1">تعديل</button>
-              <button onclick="deleteShipment('${code}')" class="bg-red-500 text-white px-2 py-1 rounded text-xs">حذف</button>
-            </td>
-          `;
-          tableBody.appendChild(row);
-        });
+</head>
+
+
+<body class="bg-slate-100 text-slate-800 min-h-screen p-4">
+
+
+<div class="max-w-6xl mx-auto w-full space-y-6">
+
+
+  <!-- HEADER -->
+
+  <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-200 flex justify-between items-center">
+
+    <div class="flex items-center gap-3">
+
+      <div class="h-12 w-12 flex items-center justify-center">
+
+        <img
+          src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg"
+          alt="Logo"
+          class="max-h-full max-w-full object-contain">
+
+      </div>
+
+      <div>
+
+        <h1 class="text-xl font-bold text-slate-800">
+          Home Wonderland
+        </h1>
+
+        <p class="text-xs font-semibold text-sky-600">
+          لوحة إدارة وتتبع الشحنات
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- FORM -->
+
+  <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
+
+    <h2 class="text-lg font-bold text-slate-800 mb-5 pb-2 border-b">
+
+      <i class="fa-solid fa-file-circle-plus text-sky-600"></i>
+
+      إضافة / تعديل شحنة
+
+    </h2>
+
+
+    <form
+      id="shipmentForm"
+      class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+
+      <!-- TRACKING -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          رقم الشحنة Tracking Code
+        </label>
+
+        <input
+          type="text"
+          id="shipCode"
+          required
+          placeholder="مثال: HWL-0001"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-sky-500">
+
+      </div>
+
+
+      <!-- B/L -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          رقم بوليصة الشحن B/L No.
+        </label>
+
+        <input
+          type="text"
+          id="shipBL"
+          placeholder="مثال: HWL-BL-0001"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- CUSTOMER -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          اسم الزبون
+        </label>
+
+        <input
+          type="text"
+          id="shipCustomer"
+          placeholder="اسم الزبون"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- TYPE -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          نوع الشحن
+        </label>
+
+        <select
+          id="shipType"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+          <option value="Sea Freight">
+            Sea Freight 🚢
+          </option>
+
+          <option value="Land Freight">
+            Land Freight 🚚
+          </option>
+
+          <option value="Air Freight">
+            Air Freight ✈️
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- SHIPPER -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Shipper
+        </label>
+
+        <input
+          type="text"
+          id="shipShipper"
+          placeholder="اسم الشاحن"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- CONSIGNEE -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Consignee
+        </label>
+
+        <input
+          type="text"
+          id="shipConsignee"
+          placeholder="اسم المستلم"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- NOTIFY -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Notify Party
+        </label>
+
+        <input
+          type="text"
+          id="shipNotify"
+          placeholder="Notify Party"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- LOADING -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Place of Loading
+        </label>
+
+        <input
+          type="text"
+          id="shipLoading"
+          placeholder="مثال: Umm Qasr Port"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- DISCHARGE -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Place of Discharge
+        </label>
+
+        <input
+          type="text"
+          id="shipDischarge"
+          placeholder="مثال: Basra"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- FINAL -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Final Destination
+        </label>
+
+        <input
+          type="text"
+          id="shipFinal"
+          placeholder="مثال: Baghdad"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- FROM -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Origin / From
+        </label>
+
+        <input
+          type="text"
+          id="shipFrom"
+          required
+          placeholder="من"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- TO -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Destination / To
+        </label>
+
+        <input
+          type="text"
+          id="shipTo"
+          required
+          placeholder="إلى"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- CURRENT LOCATION -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          الموقع الحالي
+        </label>
+
+        <input
+          type="text"
+          id="shipLoc"
+          required
+          placeholder="مثال: Umm Qasr Port"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- CONTAINER -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Container No.
+        </label>
+
+        <input
+          type="text"
+          id="shipContainer"
+          placeholder="مثال: TCLU1234567"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- SEAL -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Seal No.
+        </label>
+
+        <input
+          type="text"
+          id="shipSeal"
+          placeholder="Seal Number"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- PACKAGES -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Packages
+        </label>
+
+        <input
+          type="text"
+          id="shipPackages"
+          placeholder="مثال: 12 Cartons"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- WEIGHT -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Gross Weight
+        </label>
+
+        <input
+          type="text"
+          id="shipWeight"
+          placeholder="مثال: 450 Kg"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- CBM -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          CBM
+        </label>
+
+        <input
+          type="text"
+          id="shipCBM"
+          placeholder="مثال: 12.5 CBM"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- DESCRIPTION -->
+
+      <div class="md:col-span-2">
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Description of Goods
+        </label>
+
+        <textarea
+          id="shipDescription"
+          rows="2"
+          placeholder="وصف البضاعة"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+        </textarea>
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          حالة الشحنة
+        </label>
+
+        <select
+          id="shipStatus"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+          <option value="Shipment Received">
+            Shipment Received 📦
+          </option>
+
+          <option value="In Transit">
+            In Transit 🚢
+          </option>
+
+          <option value="Shipment On Its Way">
+            Shipment On Its Way 🚚
+          </option>
+
+          <option value="Arrived at Seaport">
+            Arrived at Seaport ⚓
+          </option>
+
+          <option value="Arrived at Airport">
+            Arrived at Airport 🛬
+          </option>
+
+          <option value="Under Customs Clearance">
+            Under Customs Clearance 📑
+          </option>
+
+          <option value="Out for Delivery">
+            Out for Delivery 🚚
+          </option>
+
+          <option value="Delivered Successfully">
+            Delivered Successfully ✅
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- DATE -->
+
+      <div>
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Last Update
+        </label>
+
+        <input
+          type="text"
+          id="shipLastUpdate"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- STATUS DESCRIPTION -->
+
+      <div class="md:col-span-2">
+
+        <label class="block text-xs font-bold text-slate-600 mb-1">
+          Status Details
+        </label>
+
+        <input
+          type="text"
+          id="shipStatusDesc"
+          placeholder="مثال: UNDER CLEARANCE AT PORT"
+          class="w-full border rounded-lg p-2.5 text-sm outline-none">
+
+      </div>
+
+
+      <!-- SAVE -->
+
+      <div class="md:col-span-2">
+
+        <button
+          type="submit"
+          class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-3 rounded-lg shadow">
+
+          <i class="fa-solid fa-floppy-disk"></i>
+
+          حفظ الشحنة
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <!-- TABLE -->
+
+  <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200 overflow-x-auto">
+
+    <h2 class="text-lg font-bold text-slate-800 mb-4 pb-2 border-b">
+
+      قائمة الشحنات
+
+    </h2>
+
+
+    <table class="w-full text-right text-sm">
+
+      <thead class="bg-slate-50 text-slate-600 border-b">
+
+        <tr>
+
+          <th class="p-3">
+            Tracking
+          </th>
+
+          <th class="p-3">
+            B/L
+          </th>
+
+          <th class="p-3">
+            Customer
+          </th>
+
+          <th class="p-3">
+            Type
+          </th>
+
+          <th class="p-3">
+            Route
+          </th>
+
+          <th class="p-3">
+            Status
+          </th>
+
+          <th class="p-3 text-center">
+            Actions
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody id="shipmentTableBody"></tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- QR MODAL -->
+
+<div
+  id="qrModal"
+  class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+
+  <div class="bg-white rounded-2xl p-6 w-full max-w-md text-center">
+
+    <h2 class="text-xl font-bold mb-2">
+      Shipment QR Code
+    </h2>
+
+    <p
+      id="qrTracking"
+      class="text-sky-600 font-bold mb-4">
+    </p>
+
+
+    <div
+      id="qrcode"
+      class="flex justify-center mb-5">
+    </div>
+
+
+    <p class="text-xs text-slate-500 mb-4">
+      امسح الكود لفتح وتتبع هذه الشحنة مباشرة
+    </p>
+
+
+    <div class="flex gap-2">
+
+      <button
+        id="downloadQR"
+        class="flex-1 bg-sky-600 text-white p-3 rounded-lg font-bold">
+
+        <i class="fa-solid fa-download"></i>
+        تنزيل QR
+
+      </button>
+
+
+      <button
+        onclick="closeQR()"
+        class="flex-1 bg-slate-200 text-slate-700 p-3 rounded-lg font-bold">
+
+        إغلاق
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue,
+  remove
+}
+from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+
+/* =========================
+   FIREBASE
+========================= */
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
+
+  authDomain:
+    "home-wonderland.firebaseapp.com",
+
+  databaseURL:
+    "https://home-wonderland-default-rtdb.firebaseio.com",
+
+  projectId:
+    "home-wonderland",
+
+  storageBucket:
+    "home-wonderland.firebasestorage.app",
+
+  messagingSenderId:
+    "911419710716",
+
+  appId:
+    "1:911419710716:web:9ba36be5dd456b9f81cb79"
+
+};
+
+
+const app =
+  initializeApp(firebaseConfig);
+
+const db =
+  getDatabase(app);
+
+
+/* =========================
+   DATE
+========================= */
+
+function getTodayDate() {
+
+  const today =
+    new Date();
+
+  const dd =
+    String(today.getDate()).padStart(2, '0');
+
+  const mm =
+    String(today.getMonth() + 1).padStart(2, '0');
+
+  const yyyy =
+    today.getFullYear();
+
+  return `${dd}/${mm}/${yyyy}`;
+}
+
+
+document.getElementById(
+  'shipLastUpdate'
+).value = getTodayDate();
+
+
+/* =========================
+   TABLE
+========================= */
+
+const tableBody =
+  document.getElementById(
+    'shipmentTableBody'
+  );
+
+
+const shipmentsRef =
+  ref(db, 'shipments');
+
+
+onValue(
+  shipmentsRef,
+  (snapshot) => {
+
+    tableBody.innerHTML = '';
+
+    const shipments =
+      snapshot.val();
+
+    if (!shipments) return;
+
+
+    Object.keys(shipments).forEach(
+      code => {
+
+        const item =
+          shipments[code];
+
+
+        const row =
+          document.createElement('tr');
+
+
+        row.className =
+          "border-b border-slate-100 hover:bg-slate-50";
+
+
+        row.innerHTML = `
+
+          <td class="p-3 font-bold text-sky-600">
+            ${escapeHTML(code)}
+          </td>
+
+          <td class="p-3 font-bold">
+            ${escapeHTML(item.blNo || '-')}
+          </td>
+
+          <td class="p-3">
+            ${escapeHTML(item.customerName || '-')}
+          </td>
+
+          <td class="p-3">
+            ${escapeHTML(item.shipmentType || '-')}
+          </td>
+
+          <td class="p-3">
+            ${escapeHTML(item.from || '-')}
+            ➔
+            ${escapeHTML(item.to || '-')}
+          </td>
+
+          <td class="p-3 text-xs font-bold">
+            ${escapeHTML(item.status || '-')}
+          </td>
+
+          <td class="p-3 text-center whitespace-nowrap">
+
+            <button
+              onclick="showQR('${encodeURIComponent(code)}')"
+              class="bg-sky-600 text-white px-2 py-1 rounded text-xs ml-1">
+
+              <i class="fa-solid fa-qrcode"></i>
+              QR
+
+            </button>
+
+            <button
+              onclick="editShipment('${encodeURIComponent(code)}')"
+              class="bg-amber-500 text-white px-2 py-1 rounded text-xs ml-1">
+
+              تعديل
+
+            </button>
+
+            <button
+              onclick="deleteShipment('${encodeURIComponent(code)}')"
+              class="bg-red-500 text-white px-2 py-1 rounded text-xs">
+
+              حذف
+
+            </button>
+
+          </td>
+        `;
+
+
+        tableBody.appendChild(row);
+
       }
-    });
+    );
 
-    // حفظ الشحنة في Firebase
-    const form = document.getElementById('shipmentForm');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const trackingCode = document.getElementById('shipCode').value.trim();
+  }
+);
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+document
+  .getElementById('shipmentForm')
+  .addEventListener(
+    'submit',
+    async (event) => {
+
+      event.preventDefault();
+
+
+      const trackingCode =
+        document
+          .getElementById('shipCode')
+          .value
+          .trim();
+
+
       if (!trackingCode) {
-        alert("يرجى إدخال رقم الشحنة");
+
+        alert(
+          "يرجى إدخال رقم الشحنة"
+        );
+
         return;
       }
 
+
       const shipmentData = {
-        customerName: document.getElementById('shipCustomer').value,
-        shipmentType: document.getElementById('shipType').value,
-        from: document.getElementById('shipFrom').value,
-        to: document.getElementById('shipTo').value,
-        currentLoc: document.getElementById('shipLoc').value,
-        status: document.getElementById('shipStatus').value,
-        statusDesc: document.getElementById('shipStatusDesc')?.value || '',
-        lastUpdate: document.getElementById('shipLastUpdate').value || getTodayDate(),
-        packages: document.getElementById('shipPackages').value
+
+        customerName:
+          document.getElementById(
+            'shipCustomer'
+          ).value.trim(),
+
+        blNo:
+          document.getElementById(
+            'shipBL'
+          ).value.trim(),
+
+        shipmentType:
+          document.getElementById(
+            'shipType'
+          ).value,
+
+        shipper:
+          document.getElementById(
+            'shipShipper'
+          ).value.trim(),
+
+        consignee:
+          document.getElementById(
+            'shipConsignee'
+          ).value.trim(),
+
+        notifyParty:
+          document.getElementById(
+            'shipNotify'
+          ).value.trim(),
+
+        loadingPlace:
+          document.getElementById(
+            'shipLoading'
+          ).value.trim(),
+
+        dischargePlace:
+          document.getElementById(
+            'shipDischarge'
+          ).value.trim(),
+
+        finalDestination:
+          document.getElementById(
+            'shipFinal'
+          ).value.trim(),
+
+        from:
+          document.getElementById(
+            'shipFrom'
+          ).value.trim(),
+
+        to:
+          document.getElementById(
+            'shipTo'
+          ).value.trim(),
+
+        currentLoc:
+          document.getElementById(
+            'shipLoc'
+          ).value.trim(),
+
+        containerNo:
+          document.getElementById(
+            'shipContainer'
+          ).value.trim(),
+
+        sealNo:
+          document.getElementById(
+            'shipSeal'
+          ).value.trim(),
+
+        packages:
+          document.getElementById(
+            'shipPackages'
+          ).value.trim(),
+
+        weight:
+          document.getElementById(
+            'shipWeight'
+          ).value.trim(),
+
+        cbm:
+          document.getElementById(
+            'shipCBM'
+          ).value.trim(),
+
+        description:
+          document.getElementById(
+            'shipDescription'
+          ).value.trim(),
+
+        status:
+          document.getElementById(
+            'shipStatus'
+          ).value,
+
+        statusDesc:
+          document.getElementById(
+            'shipStatusDesc'
+          ).value.trim(),
+
+        lastUpdate:
+          document.getElementById(
+            'shipLastUpdate'
+          ).value.trim() ||
+          getTodayDate()
+
       };
 
-      set(ref(db, 'shipments/' + trackingCode), shipmentData)
-        .then(() => {
-          alert("تم حفظ الشحنة بنجاح في قاعدة البيانات الحية!");
-          form.reset();
-          if (dateInput) dateInput.value = getTodayDate();
-        })
-        .catch((error) => alert("حدث خطأ: " + error.message));
-    });
 
-    window.deleteShipment = function(code) {
-      if (confirm("هل تريد حذف الشحنة: " + code + "؟")) {
-        remove(ref(db, 'shipments/' + code));
+      try {
+
+        await set(
+          ref(
+            db,
+            'shipments/' + trackingCode
+          ),
+          shipmentData
+        );
+
+
+        alert(
+          "تم حفظ الشحنة بنجاح!"
+        );
+
+
+        document
+          .getElementById('shipmentForm')
+          .reset();
+
+
+        document
+          .getElementById('shipLastUpdate')
+          .value =
+          getTodayDate();
+
+
+      } catch (error) {
+
+        alert(
+          "حدث خطأ: " +
+          error.message
+        );
+
       }
-    };
 
-    window.editShipment = function(code) {
-      onValue(ref(db, 'shipments/' + code), (snapshot) => {
-        const item = snapshot.val();
-        if (item) {
-          document.getElementById('shipCode').value = code;
-          document.getElementById('shipCustomer').value = item.customerName || '';
-          document.getElementById('shipType').value = item.shipmentType || 'Sea Freight 🚢';
-          document.getElementById('shipFrom').value = item.from || '';
-          document.getElementById('shipTo').value = item.to || '';
-          document.getElementById('shipLoc').value = item.currentLoc || '';
-          document.getElementById('shipStatus').value = item.status || 'Shipment Received 📦';
-          if(document.getElementById('shipStatusDesc')) document.getElementById('shipStatusDesc').value = item.statusDesc || '';
-          document.getElementById('shipLastUpdate').value = item.lastUpdate || getTodayDate();
-          document.getElementById('shipPackages').value = item.packages || '';
+    }
+  );
+
+
+/* =========================
+   DELETE
+========================= */
+
+window.deleteShipment =
+  function(encodedCode) {
+
+    const code =
+      decodeURIComponent(encodedCode);
+
+
+    if (
+      confirm(
+        "هل تريد حذف الشحنة: " +
+        code +
+        " ؟"
+      )
+    ) {
+
+      remove(
+        ref(
+          db,
+          'shipments/' + code
+        )
+      );
+
+    }
+
+  };
+
+
+/* =========================
+   EDIT
+========================= */
+
+window.editShipment =
+  function(encodedCode) {
+
+    const code =
+      decodeURIComponent(encodedCode);
+
+
+    onValue(
+      ref(
+        db,
+        'shipments/' + code
+      ),
+
+      (snapshot) => {
+
+        const item =
+          snapshot.val();
+
+
+        if (!item) return;
+
+
+        document.getElementById(
+          'shipCode'
+        ).value = code;
+
+
+        document.getElementById(
+          'shipBL'
+        ).value =
+          item.blNo || '';
+
+
+        document.getElementById(
+          'shipCustomer'
+        ).value =
+          item.customerName || '';
+
+
+        document.getElementById(
+          'shipType'
+        ).value =
+          item.shipmentType ||
+          'Sea Freight';
+
+
+        document.getElementById(
+          'shipShipper'
+        ).value =
+          item.shipper || '';
+
+
+        document.getElementById(
+          'shipConsignee'
+        ).value =
+          item.consignee || '';
+
+
+        document.getElementById(
+          'shipNotify'
+        ).value =
+          item.notifyParty || '';
+
+
+        document.getElementById(
+          'shipLoading'
+        ).value =
+          item.loadingPlace || '';
+
+
+        document.getElementById(
+          'shipDischarge'
+        ).value =
+          item.dischargePlace || '';
+
+
+        document.getElementById(
+          'shipFinal'
+        ).value =
+          item.finalDestination || '';
+
+
+        document.getElementById(
+          'shipFrom'
+        ).value =
+          item.from || '';
+
+
+        document.getElementById(
+          'shipTo'
+        ).value =
+          item.to || '';
+
+
+        document.getElementById(
+          'shipLoc'
+        ).value =
+          item.currentLoc || '';
+
+
+        document.getElementById(
+          'shipContainer'
+        ).value =
+          item.containerNo || '';
+
+
+        document.getElementById(
+          'shipSeal'
+        ).value =
+          item.sealNo || '';
+
+
+        document.getElementById(
+          'shipPackages'
+        ).value =
+          item.packages || '';
+
+
+        document.getElementById(
+          'shipWeight'
+        ).value =
+          item.weight || '';
+
+
+        document.getElementById(
+          'shipCBM'
+        ).value =
+          item.cbm || '';
+
+
+        document.getElementById(
+          'shipDescription'
+        ).value =
+          item.description || '';
+
+
+        document.getElementById(
+          'shipStatus'
+        ).value =
+          item.status ||
+          'Shipment Received';
+
+
+        document.getElementById(
+          'shipStatusDesc'
+        ).value =
+          item.statusDesc || '';
+
+
+        document.getElementById(
+          'shipLastUpdate'
+        ).value =
+          item.lastUpdate ||
+          getTodayDate();
+
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
+      },
+
+      {
+        onlyOnce: true
+      }
+    );
+
+  };
+
+
+/* =========================
+   QR
+========================= */
+
+let currentQRCode = '';
+let currentQRObject = null;
+
+
+window.showQR =
+  function(encodedCode) {
+
+    const code =
+      decodeURIComponent(encodedCode);
+
+
+    currentQRCode =
+      code;
+
+
+    const baseURL =
+      "https://home-wonderland.github.io/Home-Wonderland/";
+
+
+    const trackingURL =
+      baseURL +
+      "?tracking=" +
+      encodeURIComponent(code);
+
+
+    const qrContainer =
+      document.getElementById(
+        'qrcode'
+      );
+
+
+    qrContainer.innerHTML = '';
+
+
+    currentQRObject =
+      new QRCode(
+        qrContainer,
+        {
+          text: trackingURL,
+          width: 240,
+          height: 240,
+          colorDark: "#111827",
+          colorLight: "#ffffff",
+          correctLevel:
+            QRCode.CorrectLevel.H
         }
-      }, { onlyOnce: true });
-    };
-  </script>
+      );
+
+
+    document.getElementById(
+      'qrTracking'
+    ).innerText =
+      "Tracking No.: " + code;
+
+
+    document
+      .getElementById('qrModal')
+      .classList.remove('hidden');
+
+  };
+
+
+/* =========================
+   CLOSE QR
+========================= */
+
+window.closeQR =
+  function() {
+
+    document
+      .getElementById('qrModal')
+      .classList.add('hidden');
+
+  };
+
+
+/* =========================
+   DOWNLOAD QR
+========================= */
+
+document
+  .getElementById('downloadQR')
+  .addEventListener(
+    'click',
+    () => {
+
+      const canvas =
+        document.querySelector(
+          '#qrcode canvas'
+        );
+
+
+      const image =
+        document.querySelector(
+          '#qrcode img'
+        );
+
+
+      let dataURL = '';
+
+
+      if (canvas) {
+
+        dataURL =
+          canvas.toDataURL(
+            'image/png'
+          );
+
+      }
+
+      else if (image) {
+
+        dataURL =
+          image.src;
+
+      }
+
+
+      if (!dataURL) {
+
+        alert(
+          "تعذر إنشاء صورة QR"
+        );
+
+        return;
+      }
+
+
+      const link =
+        document.createElement('a');
+
+
+      link.href =
+        dataURL;
+
+
+      link.download =
+        currentQRCode +
+        '-QR.png';
+
+
+      link.click();
+
+    }
+  );
+
+</script>
+
 </body>
 </html>
