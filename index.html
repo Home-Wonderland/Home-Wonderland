@@ -21,8 +21,9 @@
       color: #0f172a;
     }
     
+    /* الخريطة بحجم صغير ومدمج */
     #map { 
-      height: 380px; 
+      height: 250px; 
       width: 100%; 
       border-radius: 0.75rem; 
       z-index: 1; 
@@ -33,89 +34,76 @@
       filter: brightness(0.97) contrast(1.1) hue-rotate(180deg) invert(0.9) saturate(1.8);
     }
 
-    .custom-ship-icon {
+    /* نقاط الخريطة البسيطة بدون أيقونة باخرة أو أنيميشن */
+    .custom-start-pin, .custom-end-pin, .custom-live-pin {
       display: flex; align-items: center; justify-content: center;
-      background: #0284c7; color: white; border-radius: 50%; border: 3px solid #ffffff;
-      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35); font-size: 18px;
-      animation: pulse-ring 2s infinite;
+      background: #0284c7; color: white; border-radius: 50%;
+      border: 2px solid white; font-size: 11px; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     .custom-start-pin, .custom-end-pin {
-      display: flex; align-items: center; justify-content: center;
-      background: #0f172a; color: white; border-radius: 50%;
-      border: 2px solid white; font-size: 11px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a;
     }
-
-    @keyframes pulse-ring {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6); }
-      70% { transform: scale(1.15); box-shadow: 0 0 0 12px rgba(2, 132, 199, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
-    }
-
-    .step-active { background-color: #0284c7 !important; color: white !important; border-color: #0284c7 !important; }
-    .step-text-active { color: #0284c7 !important; font-weight: 600; }
-    .line-active { background-color: #0284c7 !important; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-  <!-- Header عالمي -->
+  <!-- Header بسيط يحتوي على الشعار واسمه فقط -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      <button class="text-slate-600 hover:text-slate-900 text-xl focus:outline-none">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-
-      <div class="flex flex-col items-center">
-        <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Home Wonderland Logo" class="h-10 object-contain">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-center">
+      
+      <!-- الشعار أكبر وبجانبه الاسم -->
+      <div class="flex items-center space-x-3">
+        <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Home Wonderland Logo" class="h-12 md:h-14 object-contain">
+        <span class="text-xl md:text-2xl font-bold tracking-tight text-slate-900">Home wonderland</span>
       </div>
 
-      <div class="flex items-center space-x-5 text-slate-600 text-lg">
-        <button class="hover:text-slate-900 transition"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button class="hover:text-slate-900 transition"><i class="fa-solid fa-location-dot"></i></button>
-        <button class="hover:text-slate-900 transition"><i class="fa-solid fa-globe"></i></button>
-        <button class="hover:text-slate-900 transition"><i class="fa-regular fa-user"></i></button>
-      </div>
     </div>
   </header>
 
   <!-- Main Tracking Section -->
   <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-10 space-y-10">
     
+    <!-- Title & Subtitle -->
     <div class="text-center space-y-2">
       <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Track a shipment</span>
       <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Tracking</h1>
-      <div class="w-10 h-1 bg-amber-400 mx-auto rounded-full mt-2"></div>
+      <!-- خط زرق تحت كلمة التتبع -->
+      <div class="w-10 h-1 bg-sky-600 mx-auto rounded-full mt-2"></div>
     </div>
 
     <!-- Search Box -->
     <div class="bg-white p-8 rounded-2xl border border-slate-200/80 shadow-sm space-y-6">
+      
+      <!-- Radio Selection بدون Container ومع PO No -->
       <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500">
         <div class="flex items-center space-x-2">
-          <input type="radio" id="containerRadio" name="searchType" value="bl" checked class="accent-sky-600 w-4 h-4 cursor-pointer">
-          <label for="containerRadio" class="cursor-pointer font-medium">Container / Bill of Lading Number</label>
+          <input type="radio" id="blRadio" name="searchType" value="bl" checked class="accent-sky-600 w-4 h-4 cursor-pointer">
+          <label for="blRadio" class="cursor-pointer font-medium">Bill of Lading Number</label>
         </div>
         <div class="flex items-center space-x-2">
-          <input type="radio" id="bookingRadio" name="searchType" value="booking" class="accent-sky-600 w-4 h-4 cursor-pointer">
-          <label for="bookingRadio" class="cursor-pointer font-medium">Booking Number</label>
+          <input type="radio" id="poRadio" name="searchType" value="po" class="accent-sky-600 w-4 h-4 cursor-pointer">
+          <label for="poRadio" class="cursor-pointer font-medium">PO No</label>
         </div>
       </div>
 
+      <!-- Search Input Field -->
       <div class="relative max-w-2xl mx-auto">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
-        <input type="text" id="trackingInput" placeholder="Enter a Container / Bill of Lading Number" 
+        <input type="text" id="trackingInput" placeholder="Enter Bill of Lading Number" 
           class="w-full bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-800 placeholder-slate-400 pl-11 pr-32 py-4 rounded-xl text-sm font-medium border border-transparent focus:border-sky-500 outline-none transition-all shadow-inner">
         <button id="trackBtn" class="absolute right-1.5 top-1.5 bottom-1.5 bg-slate-900 hover:bg-slate-800 text-white px-6 rounded-lg text-sm font-semibold transition flex items-center gap-2">
           Search
         </button>
       </div>
+
     </div>
 
     <!-- Live Result Container -->
     <div id="resultCard" class="hidden bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 md:p-8 space-y-8 transition-all">
       
-      <!-- Summary Grid Header (نمط MSC) -->
+      <!-- Summary Grid Header -->
       <div class="border-b border-slate-200 pb-6 space-y-4">
         <div class="flex justify-between items-center">
           <h2 class="text-lg md:text-xl font-bold text-slate-900 tracking-tight">
@@ -158,28 +146,27 @@
         <span class="text-xs bg-sky-500/20 text-sky-300 font-semibold px-3 py-1.5 rounded-full border border-sky-500/30">Live Status</span>
       </div>
 
-      <!-- Live Map Route -->
-      <div class="space-y-2">
-        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Live Map Route</span>
-        <div id="map"></div>
-      </div>
-
-      <!-- Vertical Timeline Section (MSC Style) -->
+      <!-- Vertical Timeline Section -->
       <div class="space-y-4 pt-4 border-t border-slate-100">
         <h3 class="text-base font-bold text-slate-900 tracking-tight uppercase">Shipment Timeline & Events</h3>
-        
-        <div id="timelineContainer" class="relative pl-6 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-amber-400">
-          <!-- سيتم توليد نقاط التتبع زمنياً هنا تلقائياً -->
+        <div id="timelineContainer" class="relative pl-6 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-sky-600">
+          <!-- Timeline events injected via JS -->
         </div>
+      </div>
+
+      <!-- Live Map Route (في النهاية بحجم صغير وبدون أيقونة باخرة) -->
+      <div class="space-y-2 pt-4 border-t border-slate-100">
+        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Live Map Route</span>
+        <div id="map"></div>
       </div>
 
     </div>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 font-medium">
-    ©️ Home Wonderland Logistics - All rights reserved
+  <!-- Footer بحقوق Mariam Basim s.A -->
+  <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 font-medium">
+    Mariam Basim s.A
   </footer>
 
   <!-- Firebase & Logic Script -->
@@ -229,7 +216,7 @@
       return null;
     }
 
-    async function renderRouteMap(fromLoc, toLoc, currentLoc, shipType) {
+    async function renderRouteMap(fromLoc, toLoc, currentLoc) {
       const startC = await fetchCoords(fromLoc) || [25.2048, 55.2708];
       const endC = await fetchCoords(toLoc) || [30.0361, 47.9250];
       const liveC = await fetchCoords(currentLoc) || startC;
@@ -242,28 +229,19 @@
 
       markersGroup.clearLayers();
 
-      const startIcon = L.divIcon({ className: 'custom-start-pin', html: '<i class="fa-solid fa-play"></i>', iconSize: [24, 24] });
-      const endIcon = L.divIcon({ className: 'custom-end-pin', html: '<i class="fa-solid fa-flag-checkered"></i>', iconSize: [24, 24] });
+      // نقاط بسيطة بدون أيقونة باخرة
+      const startIcon = L.divIcon({ className: 'custom-start-pin', html: '<i class="fa-solid fa-circle"></i>', iconSize: [16, 16] });
+      const endIcon = L.divIcon({ className: 'custom-end-pin', html: '<i class="fa-solid fa-flag"></i>', iconSize: [16, 16] });
+      const liveIcon = L.divIcon({ className: 'custom-live-pin', html: '<i class="fa-solid fa-location-dot"></i>', iconSize: [20, 20] });
 
       L.marker(startC, { icon: startIcon }).addTo(markersGroup);
       L.marker(endC, { icon: endIcon }).addTo(markersGroup);
+      L.marker(liveC, { icon: liveIcon }).addTo(markersGroup).bindPopup(`<b>${currentLoc || 'Current Location'}</b>`);
 
       if (polyline) map.removeLayer(polyline);
-      polyline = L.polyline([startC, liveC, endC], { color: '#0284c7', weight: 3, opacity: 0.8, dashArray: '5, 8' }).addTo(map);
+      polyline = L.polyline([startC, liveC, endC], { color: '#0284c7', weight: 2.5, opacity: 0.8, dashArray: '4, 6' }).addTo(map);
 
-      let iconClass = "fa-ship";
-      if (shipType === "Air" || shipType === "جوي") iconClass = "fa-plane";
-      if (shipType === "Land" || shipType === "بري") iconClass = "fa-truck";
-
-      const currentIcon = L.divIcon({
-        className: 'custom-ship-icon',
-        html: `<i class="fa-solid ${iconClass}"></i>`,
-        iconSize: [42, 42],
-        iconAnchor: [21, 21]
-      });
-
-      L.marker(liveC, { icon: currentIcon }).addTo(markersGroup).bindPopup(`<b>${currentLoc || 'Current'}</b>`).openPopup();
-      map.fitBounds(L.latLngBounds([startC, endC, liveC]), { padding: [50, 50] });
+      map.fitBounds(L.latLngBounds([startC, endC, liveC]), { padding: [30, 30] });
       setTimeout(() => { map.invalidateSize(); }, 300);
     }
 
@@ -271,18 +249,17 @@
       const container = document.getElementById('timelineContainer');
       container.innerHTML = '';
 
-      // أحداث افتراضية مبنية على البيانات أو تاريخ التحديث
       const events = data.timelineEvents || [
         { date: data.lastUpdate || "Recent", location: data.currentLoc || "-", status: data.status || "In Transit", desc: data.statusDesc || "Shipment status updated" },
-        { date: "Initial Processing", location: data.from || "Origin Port", status: "Loaded on Vessel", desc: "Container loaded and cleared for export" }
+        { date: "Initial Processing", location: data.from || "Origin Port", status: "Loaded", desc: "Container loaded and cleared for export" }
       ];
 
-      events.forEach((ev, idx) => {
+      events.forEach((ev) => {
         const item = document.createElement('div');
         item.className = "relative flex flex-col space-y-1";
         
         item.innerHTML = `
-          <div class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-amber-400 border-2 border-white shadow-sm"></div>
+          <div class="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-sky-600 border-2 border-white shadow-sm"></div>
           <span class="text-xs font-semibold text-slate-400">${ev.date}</span>
           <span class="text-sm font-bold text-slate-800">${ev.location}</span>
           <span class="text-xs font-semibold text-sky-700 uppercase">${ev.status}</span>
@@ -292,9 +269,20 @@
       });
     }
 
+    // تغيير الملاحظة بناءً على اختيار خيار البحث
+    const blRadio = document.getElementById('blRadio');
+    const poRadio = document.getElementById('poRadio');
+    const trackingInput = document.getElementById('trackingInput');
+
+    blRadio?.addEventListener('change', () => {
+      if (trackingInput) trackingInput.placeholder = "Enter Bill of Lading Number";
+    });
+    poRadio?.addEventListener('change', () => {
+      if (trackingInput) trackingInput.placeholder = "Enter PO No";
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
       const trackBtn = document.getElementById('trackBtn');
-      const trackingInput = document.getElementById('trackingInput');
 
       if (trackBtn) {
         trackBtn.addEventListener('click', (e) => {
@@ -320,8 +308,8 @@
 
                 document.getElementById('resultCard').classList.remove('hidden');
 
-                renderRouteMap(data.from, data.to, data.currentLoc, data.shipmentType);
                 renderTimeline(data);
+                renderRouteMap(data.from, data.to, data.currentLoc);
 
               } else { alert("Tracking number not found."); }
             } else { alert("No registered shipments found."); }
