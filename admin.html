@@ -1,305 +1,1726 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home wonderland - Tracking</title>
+
+  <title>لوحة التحكم - Home Wonderland</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+  <!-- QR Code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
   <style>
-    body { font-family: 'Tajawal', sans-serif; }
-    
-    /* الخطوات المكتملة */
-    .step-active { 
-      background-color: #0284c7 !important; 
-      color: white !important; 
-      border-color: #0284c7 !important; 
+    body {
+      font-family: 'Tajawal', sans-serif;
     }
-    
-    /* الخطوة الحالية التي تنبض */
-    .step-current { 
-      background-color: #0284c7 !important; 
-      color: white !important; 
-      border-color: #0284c7 !important;
-      animation: pulse-ring 1.8s infinite;
-    }
-    
-    @keyframes pulse-ring {
-      0% {
-        box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6);
+
+    @media print {
+
+      body {
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
       }
-      70% {
-        box-shadow: 0 0 0 10px rgba(2, 132, 199, 0);
+
+      .no-print {
+        display: none !important;
       }
-      100% {
-        box-shadow: 0 0 0 0 rgba(2, 132, 199, 0);
+
+      #adminPage {
+        display: none !important;
+      }
+
+      #blPrint {
+        display: block !important;
+      }
+
+      @page {
+        size: A4;
+        margin: 10mm;
       }
     }
 
-    .step-text-active { color: #0284c7 !important; font-weight: bold; }
-    .line-active { background-color: #0284c7 !important; }
+    #blPrint {
+      display: none;
+    }
+
+    .bl-page {
+      width: 190mm;
+      min-height: 277mm;
+      margin: auto;
+      background: white;
+      color: #111827;
+      padding: 8mm;
+      box-sizing: border-box;
+      direction: ltr;
+    }
+
+    .bl-border {
+      border: 2px solid #1e293b;
+    }
+
+    .bl-cell {
+      border: 1px solid #64748b;
+      padding: 7px;
+      min-height: 42px;
+    }
+
+    .bl-label {
+      font-size: 9px;
+      font-weight: bold;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .bl-value {
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .bl-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .bl-subtitle {
+      font-size: 10px;
+      color: #475569;
+      font-weight: bold;
+    }
+
+    .bl-description {
+      min-height: 90px;
+    }
   </style>
 </head>
-<body class="bg-slate-100 min-h-screen p-4 md:p-8 flex flex-col justify-between items-center">
 
-  <div class="max-w-5xl w-full space-y-6">
-    <!-- Header -->
-    <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-200 flex items-center gap-3">
-      <div class="h-16 w-16 flex items-center justify-center shrink-0">
-        <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Logo" class="max-h-full max-w-full object-contain">
+<body class="bg-slate-100 text-slate-800 min-h-screen p-4">
+
+<div id="adminPage" class="max-w-6xl mx-auto w-full space-y-6">
+
+  <!-- HEADER -->
+  <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-200 flex justify-between items-center">
+
+    <div class="flex items-center gap-3">
+
+      <div class="h-14 w-14 flex items-center justify-center">
+        <img
+          src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg"
+          alt="Logo"
+          class="max-h-full max-w-full object-contain">
       </div>
+
       <div>
-        <h1 class="text-xl font-bold text-slate-800">Home wonderland</h1>
-        <p class="text-xs font-semibold text-sky-600">Logistics & Express Cargo</p>
+        <h1 class="text-xl font-bold text-slate-800">
+          Home wonderland
+        </h1>
+
+        <p class="text-xs font-semibold text-sky-600">
+          SHIPPING LINE & LOGISTICS
+        </p>
       </div>
+
     </div>
 
-    <!-- Search Box -->
-    <div class="bg-white rounded-2xl shadow-sm p-8 border border-slate-200 text-center space-y-6">
-      <h2 class="text-2xl font-bold text-slate-800">Track Your Shipment</h2>
-      <p class="text-sm text-slate-400">Enter your tracking number below to see live updates</p>
-      
-      <div class="max-w-xl mx-auto space-y-4">
-        <input type="text" id="trackingInput" placeholder="Enter Tracking Number" class="w-full border rounded-xl p-3.5 text-center text-base font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-sky-500">
-        <button id="trackBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-3.5 rounded-xl shadow transition flex items-center justify-center gap-2 text-base">
-          Track <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Result Card -->
-    <div id="resultCard" class="hidden bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200 space-y-6">
-      <div class="flex justify-between items-center text-xs md:text-sm text-slate-400 font-bold border-b pb-3">
-        <div>
-          <span>TRACKING CODE: </span>
-          <span id="resCodeDisplay" class="text-slate-700 font-extrabold"></span>
-        </div>
-        <div>
-          <i class="fa-regular fa-clock"></i> Last Updated: <span id="resDate"></span>
-        </div>
-      </div>
-
-      <!-- Origin & Destination -->
-      <div class="bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100 flex justify-between items-center text-center">
-        <div>
-          <span class="text-xs font-bold text-slate-400 block"><i class="fa-solid fa-circle text-emerald-500"></i> ORIGIN</span>
-          <span id="resFrom" class="font-bold text-slate-800 text-base md:text-lg"></span>
-        </div>
-        <div class="text-slate-300">|</div>
-        <div>
-          <span class="text-xs font-bold text-slate-400 block"><i class="fa-solid fa-location-dot text-rose-500"></i> DESTINATION</span>
-          <span id="resTo" class="font-bold text-slate-800 text-base md:text-lg"></span>
-        </div>
-      </div>
-
-      <!-- Shipment Progress Bar -->
-      <div class="space-y-3 py-2">
-        <span class="text-xs font-bold text-slate-400 block">SHIPMENT PROGRESS</span>
-        <div class="relative flex items-center justify-between px-4">
-          <!-- Lines Background -->
-          <div class="absolute left-8 right-8 top-4 h-1 bg-slate-200 -z-0">
-            <div id="progressLine" class="h-full bg-slate-200 transition-all duration-500" style="width: 0%;"></div>
-          </div>
-
-          <!-- Step 1 -->
-          <div class="flex flex-col items-center z-10">
-            <div id="step1" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">1</div>
-            <span id="stepText1" class="text-xs font-bold text-slate-400 mt-2">Received</span>
-          </div>
-          <!-- Step 2 -->
-          <div class="flex flex-col items-center z-10">
-            <div id="step2" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">2</div>
-            <span id="stepText2" class="text-xs font-bold text-slate-400 mt-2">In Transit</span>
-          </div>
-          <!-- Step 3 -->
-          <div class="flex flex-col items-center z-10">
-            <div id="step3" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">3</div>
-            <span id="stepText3" class="text-xs font-bold text-slate-400 mt-2">Clearance</span>
-          </div>
-          <!-- Step 4 -->
-          <div class="flex flex-col items-center z-10">
-            <div id="step4" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">4</div>
-            <span id="stepText4" class="text-xs font-bold text-slate-400 mt-2">Delivered</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Current Location Box -->
-      <div class="bg-sky-600 text-white p-5 rounded-xl flex items-center justify-between shadow-md">
-        <div class="flex items-center gap-4">
-          <div class="bg-white/20 p-3 rounded-lg">
-            <i class="fa-solid fa-truck-fast text-2xl"></i>
-          </div>
-          <div>
-            <span class="text-xs text-sky-100 block font-semibold">Current Location</span>
-            <span id="resLoc" class="text-xl font-bold block mt-0.5"></span>
-          </div>
-        </div>
-        <span class="bg-white/20 text-xs md:text-sm px-3 py-1.5 rounded-full font-bold">● Live</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Packages -->
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-          <span class="text-xs font-bold text-slate-400 block">PACKAGES / WEIGHT</span>
-          <span id="resPackages" class="font-bold text-slate-800 text-base mt-1 block"></span>
-        </div>
-
-        <!-- Status Details -->
-        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-1">
-          <span class="text-xs font-bold text-slate-400 block">STATUS DETAILS</span>
-          <div id="resStatus" class="font-bold text-slate-800 text-base"></div>
-          <div id="resStatusDesc" class="text-xs text-slate-500"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="text-center text-xs text-slate-400 pt-4">
-      All rights reserved ©️ Mariam Basim S.A
-    </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
-      authDomain: "home-wonderland.firebaseapp.com",
-      databaseURL: "https://home-wonderland-default-rtdb.firebaseio.com",
-      projectId: "home-wonderland",
-      storageBucket: "home-wonderland.firebasestorage.app",
-      messagingSenderId: "911419710716",
-      appId: "1:911419710716:web:9ba36be5dd456b9f81cb79"
-    };
+  <!-- FORM -->
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200">
 
-    function updateProgress(statusText) {
-      // إعادة تعيين الشارات إلى الحالة الطبيعية
-      for (let i = 1; i <= 4; i++) {
-        const step = document.getElementById('step' + i);
-        const text = document.getElementById('stepText' + i);
-        if (step) {
-          step.className = "w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all";
+    <h2 class="text-lg font-bold text-slate-800 mb-5 pb-2 border-b">
+      <i class="fa-solid fa-file-invoice text-sky-600"></i>
+      إنشاء / تعديل الشحنة والبوليصة
+    </h2>
+
+
+    <form id="shipmentForm"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+
+      <!-- TRACKING -->
+
+      <div>
+        <label class="block text-xs font-bold mb-1">
+          Tracking No.
+        </label>
+
+        <div class="flex gap-2">
+
+          <input
+            type="text"
+            id="shipCode"
+            readonly
+            required
+            class="w-full border rounded-lg p-2.5 text-sm bg-slate-50 font-bold text-sky-700">
+
+          <button
+            type="button"
+            id="newTrackingBtn"
+            class="bg-slate-800 text-white px-4 rounded-lg text-xs whitespace-nowrap">
+            رقم جديد
+          </button>
+
+        </div>
+
+        <p class="text-[10px] text-slate-400 mt-1">
+          Example: 2026-0001
+        </p>
+      </div>
+
+
+      <!-- BL NUMBER -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          B/L No.
+        </label>
+
+        <input
+          type="text"
+          id="blNo"
+          readonly
+          class="w-full border rounded-lg p-2.5 text-sm bg-slate-50 font-bold">
+
+        <p class="text-[10px] text-slate-400 mt-1">
+          Example: HWL/2026/0001
+        </p>
+
+      </div>
+
+
+      <!-- CUSTOMER -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Customer Name
+        </label>
+
+        <input
+          type="text"
+          id="shipCustomer"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Customer Name">
+
+      </div>
+
+
+      <!-- SHIPMENT TYPE -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Shipment Type
+        </label>
+
+        <select
+          id="shipType"
+          class="w-full border rounded-lg p-2.5 text-sm">
+
+          <option value="Sea Freight">Sea Freight 🚢</option>
+          <option value="Air Freight">Air Freight ✈️</option>
+          <option value="Land Freight">Land Freight 🚚</option>
+
+        </select>
+
+      </div>
+
+
+      <!-- SHIPPER -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Shipper
+        </label>
+
+        <input
+          type="text"
+          id="shipper"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Shipper">
+
+      </div>
+
+
+      <!-- CONSIGNEE -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Consignee
+        </label>
+
+        <input
+          type="text"
+          id="consignee"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Consignee">
+
+      </div>
+
+
+      <!-- NOTIFY -->
+
+      <div class="md:col-span-2">
+
+        <label class="block text-xs font-bold mb-1">
+          Notify Party
+        </label>
+
+        <input
+          type="text"
+          id="notifyParty"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Notify Party">
+
+      </div>
+
+
+      <!-- LOADING -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Place of Loading
+        </label>
+
+        <input
+          type="text"
+          id="loadingPlace"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Example: Umm Qasr Port">
+
+      </div>
+
+
+      <!-- DISCHARGE -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Place of Discharge
+        </label>
+
+        <input
+          type="text"
+          id="dischargePlace"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Example: Basra">
+
+      </div>
+
+
+      <!-- FINAL DESTINATION -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Final Destination
+        </label>
+
+        <input
+          type="text"
+          id="finalDestination"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Final Destination">
+
+      </div>
+
+
+      <!-- FROM -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Tracking Origin
+        </label>
+
+        <input
+          type="text"
+          id="shipFrom"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="From">
+
+      </div>
+
+
+      <!-- TO -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Tracking Destination
+        </label>
+
+        <input
+          type="text"
+          id="shipTo"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="To">
+
+      </div>
+
+
+      <!-- CONTAINER -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Container No.
+        </label>
+
+        <input
+          type="text"
+          id="containerNo"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Container Number">
+
+      </div>
+
+
+      <!-- SEAL -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Seal No.
+        </label>
+
+        <input
+          type="text"
+          id="sealNo"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Seal Number">
+
+      </div>
+
+
+      <!-- PACKAGES -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Number of Packages
+        </label>
+
+        <input
+          type="text"
+          id="packages"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Example: 12 Cartons">
+
+      </div>
+
+
+      <!-- WEIGHT -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Gross Weight
+        </label>
+
+        <input
+          type="text"
+          id="weight"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Example: 450 KG">
+
+      </div>
+
+
+      <!-- CBM -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          CBM
+        </label>
+
+        <input
+          type="text"
+          id="cbm"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Example: 12.50 CBM">
+
+      </div>
+
+
+      <!-- FREIGHT -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Freight
+        </label>
+
+        <select
+          id="freight"
+          class="w-full border rounded-lg p-2.5 text-sm">
+
+          <option value="Prepaid">Freight Prepaid</option>
+          <option value="Collect">Freight Collect</option>
+
+        </select>
+
+      </div>
+
+
+      <!-- DESCRIPTION -->
+
+      <div class="md:col-span-2">
+
+        <label class="block text-xs font-bold mb-1">
+          Description of Goods
+        </label>
+
+        <textarea
+          id="description"
+          rows="4"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Description of Goods"></textarea>
+
+      </div>
+
+
+      <!-- CURRENT LOCATION -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Current Location
+        </label>
+
+        <input
+          type="text"
+          id="shipLoc"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="Example: Umm Qasr Port">
+
+      </div>
+
+
+      <!-- LAST UPDATE -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Last Update
+        </label>
+
+        <input
+          type="text"
+          id="shipLastUpdate"
+          required
+          class="w-full border rounded-lg p-2.5 text-sm">
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          General Status
+        </label>
+
+        <select
+          id="shipStatus"
+          class="w-full border rounded-lg p-2.5 text-sm">
+
+          <option value="Shipment Received">Shipment Received 📦</option>
+          <option value="In Transit">In Transit 🚢</option>
+          <option value="Shipment On Its Way">Shipment On Its Way 🚚</option>
+          <option value="Arrived at Seaport">Arrived at Seaport ⚓</option>
+          <option value="Arrived at Airport">Arrived at Airport 🛬</option>
+          <option value="Under Customs Clearance">Under Customs Clearance 📑</option>
+          <option value="Out for Delivery">Out for Delivery 🚚</option>
+          <option value="Delivered Successfully">Delivered Successfully ✅</option>
+
+        </select>
+
+      </div>
+
+
+      <!-- STATUS DESCRIPTION -->
+
+      <div>
+
+        <label class="block text-xs font-bold mb-1">
+          Status Details
+        </label>
+
+        <input
+          type="text"
+          id="shipStatusDesc"
+          class="w-full border rounded-lg p-2.5 text-sm"
+          placeholder="UNDER CLEARANCE AT PORT">
+
+      </div>
+
+
+      <!-- SAVE -->
+
+      <div class="md:col-span-2">
+
+        <button
+          type="submit"
+          id="saveBtn"
+          class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-3 rounded-lg shadow">
+
+          <i class="fa-solid fa-floppy-disk"></i>
+          حفظ الشحنة
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <!-- TABLE -->
+
+  <div class="bg-white rounded-xl shadow-sm p-6 border border-slate-200 overflow-x-auto">
+
+    <h2 class="text-lg font-bold mb-4 pb-2 border-b">
+      قائمة الشحنات
+    </h2>
+
+    <table class="w-full text-right text-sm">
+
+      <thead class="bg-slate-50 border-b">
+
+        <tr>
+
+          <th class="p-3">Tracking</th>
+          <th class="p-3">B/L</th>
+          <th class="p-3">Customer</th>
+          <th class="p-3">Route</th>
+          <th class="p-3">Status</th>
+          <th class="p-3 text-center">Actions</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="shipmentTableBody"></tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     PRINTABLE BILL OF LADING
+===================================================== -->
+
+<div id="blPrint">
+
+  <div class="bl-page">
+
+    <!-- TOP HEADER -->
+
+    <div class="bl-border">
+
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:12px;">
+
+        <div style="width:25%; text-align:left;">
+
+          <img
+            src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg"
+            style="max-width:100px; max-height:70px; object-fit:contain;">
+
+        </div>
+
+        <div style="text-align:center; width:50%;">
+
+          <div class="bl-title">
+            HOME WONDERLAND
+          </div>
+
+          <div class="bl-subtitle">
+            SHIPPING LINE & LOGISTICS
+          </div>
+
+          <div style="font-size:18px; font-weight:800; margin-top:8px;">
+            BILL OF LADING
+          </div>
+
+        </div>
+
+        <div style="width:25%; text-align:right;">
+
+          <div class="bl-label">
+            B/L NO.
+          </div>
+
+          <div id="printBlNo" class="bl-value"></div>
+
+          <div class="bl-label" style="margin-top:8px;">
+            TRACKING NO.
+          </div>
+
+          <div id="printTracking" class="bl-value"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SHIPPER / CONSIGNEE -->
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; margin-top:10px;">
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          SHIPPER
+        </div>
+
+        <div id="printShipper" class="bl-value"></div>
+
+      </div>
+
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          CONSIGNEE
+        </div>
+
+        <div id="printConsignee" class="bl-value"></div>
+
+      </div>
+
+
+      <div class="bl-cell" style="grid-column:1 / 3;">
+
+        <div class="bl-label">
+          NOTIFY PARTY
+        </div>
+
+        <div id="printNotify" class="bl-value"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ROUTING -->
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; margin-top:10px;">
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          PLACE OF LOADING
+        </div>
+
+        <div id="printLoading" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          PLACE OF DISCHARGE
+        </div>
+
+        <div id="printDischarge" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          FINAL DESTINATION
+        </div>
+
+        <div id="printFinalDestination" class="bl-value"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SHIPMENT DETAILS -->
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; margin-top:10px;">
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          SHIPMENT TYPE
+        </div>
+
+        <div id="printType" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          CONTAINER NO.
+        </div>
+
+        <div id="printContainer" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          SEAL NO.
+        </div>
+
+        <div id="printSeal" class="bl-value"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- CARGO -->
+
+    <div style="margin-top:10px;">
+
+      <div class="bl-cell bl-description">
+
+        <div class="bl-label">
+          DESCRIPTION OF GOODS
+        </div>
+
+        <div id="printDescription"
+             class="bl-value"
+             style="white-space:pre-line;">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- CARGO SUMMARY -->
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; margin-top:10px;">
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          PACKAGES
+        </div>
+
+        <div id="printPackages" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          GROSS WEIGHT
+        </div>
+
+        <div id="printWeight" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          CBM
+        </div>
+
+        <div id="printCbm" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          FREIGHT
+        </div>
+
+        <div id="printFreight" class="bl-value"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- TRACKING INFO -->
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; margin-top:10px;">
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          CURRENT LOCATION
+        </div>
+
+        <div id="printCurrentLocation" class="bl-value"></div>
+
+      </div>
+
+      <div class="bl-cell">
+
+        <div class="bl-label">
+          STATUS
+        </div>
+
+        <div id="printStatus" class="bl-value"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- QR -->
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+
+      <div style="width:60%;">
+
+        <div style="font-size:12px; font-weight:bold;">
+          SHIPMENT TRACKING
+        </div>
+
+        <div style="font-size:10px; color:#64748b; margin-top:5px;">
+          Scan the QR code to track this shipment online.
+        </div>
+
+        <div style="font-size:10px; margin-top:5px;">
+          Tracking No:
+          <strong id="printTrackingBottom"></strong>
+        </div>
+
+      </div>
+
+
+      <div style="text-align:center;">
+
+        <div id="qrcode"></div>
+
+        <div style="font-size:8px; font-weight:bold; margin-top:3px;">
+          SCAN TO TRACK
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SIGNATURE -->
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:25px;">
+
+      <div style="border-top:1px solid #64748b; padding-top:7px; text-align:center; font-size:10px;">
+        Authorized Signature
+      </div>
+
+      <div style="border-top:1px solid #64748b; padding-top:7px; text-align:center; font-size:10px;">
+        Company Stamp
+      </div>
+
+    </div>
+
+
+    <div style="text-align:center; font-size:8px; color:#64748b; margin-top:18px;">
+      HOME WONDERLAND SHIPPING LINE
+    </div>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue,
+  remove,
+  get
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
+
+  authDomain: "home-wonderland.firebaseapp.com",
+
+  databaseURL:
+    "https://home-wonderland-default-rtdb.firebaseio.com",
+
+  projectId: "home-wonderland",
+
+  storageBucket:
+    "home-wonderland.firebasestorage.app",
+
+  messagingSenderId: "911419710716",
+
+  appId:
+    "1:911419710716:web:9ba36be5dd456b9f81cb79"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+
+const form =
+  document.getElementById('shipmentForm');
+
+const tableBody =
+  document.getElementById('shipmentTableBody');
+
+const dateInput =
+  document.getElementById('shipLastUpdate');
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function getTodayDate() {
+
+  const today = new Date();
+
+  const dd =
+    String(today.getDate()).padStart(2, '0');
+
+  const mm =
+    String(today.getMonth() + 1).padStart(2, '0');
+
+  const yyyy =
+    today.getFullYear();
+
+  return dd + '/' + mm + '/' + yyyy;
+
+}
+
+dateInput.value = getTodayDate();
+
+
+/* =====================================================
+   GENERATE NEXT TRACKING NUMBER
+===================================================== */
+
+async function generateNextTracking() {
+
+  const snapshot =
+    await get(ref(db, 'shipments'));
+
+  let maxNumber = 0;
+
+  if (snapshot.exists()) {
+
+    const shipments = snapshot.val();
+
+    Object.keys(shipments).forEach(code => {
+
+      const match =
+        code.match(/^2026-(\d+)$/);
+
+      if (match) {
+
+        const number =
+          parseInt(match[1], 10);
+
+        if (number > maxNumber) {
+          maxNumber = number;
         }
-        if (text) {
-          text.className = "text-xs font-bold text-slate-400 mt-2";
-        }
+
       }
 
-      const line = document.getElementById('progressLine');
-      let stepNumber = 1;
+    });
 
-      if (!statusText) statusText = '';
-      const textLower = statusText.toLowerCase();
+  }
 
-      // تحديد رقم الخطوة بناءً على الحالة الحالية
-      if (textLower.includes('received') || textLower.includes('استلام')) {
-        stepNumber = 1;
-      } else if (
-        textLower.includes('transit') || 
-        textLower.includes('way') || 
-        textLower.includes('seaport') || 
-        textLower.includes('airport') || 
-        textLower.includes('طريقها') || 
-        textLower.includes('الشحن') || 
-        textLower.includes('الميناء') || 
-        textLower.includes('المطار')
-      ) {
-        stepNumber = 2;
-      } else if (
-        textLower.includes('clearance') || 
-        textLower.includes('customs') || 
-        textLower.includes('تخليص')
-      ) {
-        stepNumber = 3;
-      } else if (
-        textLower.includes('delivered') || 
-        textLower.includes('out for delivery') || 
-        textLower.includes('تسليم') || 
-        textLower.includes('جاهزة')
-      ) {
-        stepNumber = 4;
-      }
+  const next =
+    String(maxNumber + 1).padStart(4, '0');
 
-      // تلوين الخطوات السابقة باللون الأزرق المكتمل
-      for (let i = 1; i < stepNumber; i++) {
-        const step = document.getElementById('step' + i);
-        const text = document.getElementById('stepText' + i);
-        if (step) step.classList.add('step-active');
-        if (text) text.classList.add('step-text-active');
-      }
+  return `2026-${next}`;
 
-      // تطبيق تأثير "النبض الحي" للخطوة الحالية النشطة
-      const currentStep = document.getElementById('step' + stepNumber);
-      const currentText = document.getElementById('stepText' + stepNumber);
-      if (currentStep) currentStep.classList.add('step-current');
-      if (currentText) currentText.classList.add('step-text-active');
+}
 
-      // تحديث خط الشريط السفلي الأزرق
-      if (line) {
-        if (stepNumber === 1) line.style.width = '0%';
-        if (stepNumber === 2) line.style.width = '33%';
-        if (stepNumber === 3) line.style.width = '66%';
-        if (stepNumber === 4) line.style.width = '100%';
-        line.classList.add('line-active');
-      }
+
+/* =====================================================
+   GENERATE BL NUMBER
+===================================================== */
+
+function makeBlNumber(tracking) {
+
+  const number =
+    tracking.replace('2026-', '');
+
+  return `HWL/2026/${number}`;
+
+}
+
+
+/* =====================================================
+   NEW TRACKING
+===================================================== */
+
+document
+  .getElementById('newTrackingBtn')
+  .addEventListener('click', async () => {
+
+    try {
+
+      const tracking =
+        await generateNextTracking();
+
+      document
+        .getElementById('shipCode')
+        .value = tracking;
+
+      document
+        .getElementById('blNo')
+        .value = makeBlNumber(tracking);
+
+    } catch (error) {
+
+      alert(
+        "حدث خطأ أثناء إنشاء رقم الشحنة"
+      );
+
+      console.error(error);
+
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const trackBtn = document.getElementById('trackBtn');
-      const trackingInput = document.getElementById('trackingInput');
+  });
 
-      if (trackBtn) {
-        trackBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const code = trackingInput ? trackingInput.value.trim() : '';
-          if (!code) {
-            alert("Please enter tracking number");
-            return;
-          }
 
-          get(child(ref(db), 'shipments')).then((snapshot) => {
-            if (snapshot.exists()) {
-              const shipments = snapshot.val();
-              const matchedKey = Object.keys(shipments).find(
-                k => k.trim().toLowerCase() === code.toLowerCase()
-              );
+/* =====================================================
+   AUTO CREATE FIRST NUMBER
+===================================================== */
 
-              if (matchedKey) {
-                const data = shipments[matchedKey];
-                
-                if (document.getElementById('resCodeDisplay')) document.getElementById('resCodeDisplay').innerText = matchedKey;
-                if (document.getElementById('resFrom')) document.getElementById('resFrom').innerText = data.from || '-';
-                if (document.getElementById('resTo')) document.getElementById('resTo').innerText = data.to || '-';
-                if (document.getElementById('resLoc')) document.getElementById('resLoc').innerText = data.currentLoc || '-';
-                if (document.getElementById('resStatus')) document.getElementById('resStatus').innerText = data.status || '-';
-                if (document.getElementById('resDate')) document.getElementById('resDate').innerText = data.lastUpdate || '-';
-                if (document.getElementById('resPackages')) document.getElementById('resPackages').innerText = data.packages || '-';
-                if (document.getElementById('resStatusDesc')) document.getElementById('resStatusDesc').innerText = data.statusDesc || '-';
+async function prepareNewShipment() {
 
-                updateProgress(data.status);
+  const codeInput =
+    document.getElementById('shipCode');
 
-                const resultCard = document.getElementById('resultCard');
-                if (resultCard) {
-                  resultCard.classList.remove('hidden');
-                }
-              } else {
-                alert("رقم الشحنة غير موجود، يرجى التأكد من الرقم والبحث مجدداً.");
-              }
-            } else {
-              alert("لا توجد شحنات مسجلة حالياً.");
-            }
-          }).catch((error) => {
-            alert("حدث خطأ أثناء جلب البيانات.");
-          });
-        });
-      }
+  if (!codeInput.value) {
+
+    const tracking =
+      await generateNextTracking();
+
+    codeInput.value = tracking;
+
+    document
+      .getElementById('blNo')
+      .value = makeBlNumber(tracking);
+
+  }
+
+}
+
+prepareNewShipment();
+
+
+/* =====================================================
+   LIVE TABLE
+===================================================== */
+
+const shipmentsRef =
+  ref(db, 'shipments');
+
+
+onValue(shipmentsRef, (snapshot) => {
+
+  tableBody.innerHTML = '';
+
+  const shipments =
+    snapshot.val();
+
+  if (!shipments) return;
+
+
+  Object.keys(shipments).forEach(code => {
+
+    const item =
+      shipments[code];
+
+
+    const row =
+      document.createElement('tr');
+
+    row.className =
+      "border-b border-slate-100 hover:bg-slate-50";
+
+
+    row.innerHTML = `
+
+      <td class="p-3 font-bold text-sky-600">
+        ${code}
+      </td>
+
+      <td class="p-3 font-semibold">
+        ${item.blNo || '-'}
+      </td>
+
+      <td class="p-3">
+        ${item.customerName || '-'}
+      </td>
+
+      <td class="p-3">
+        ${item.from || '-'} ➔ ${item.to || '-'}
+      </td>
+
+      <td class="p-3 text-xs font-bold">
+        ${item.status || '-'}
+      </td>
+
+      <td class="p-3 text-center whitespace-nowrap">
+
+        <button
+          onclick="editShipment('${code}')"
+          class="bg-amber-500 text-white px-2 py-1 rounded text-xs ml-1">
+          تعديل
+        </button>
+
+        <button
+          onclick="generateBL('${code}')"
+          class="bg-slate-800 text-white px-2 py-1 rounded text-xs ml-1">
+          <i class="fa-solid fa-file-invoice"></i>
+          B/L
+        </button>
+
+        <button
+          onclick="deleteShipment('${code}')"
+          class="bg-red-500 text-white px-2 py-1 rounded text-xs">
+          حذف
+        </button>
+
+      </td>
+
+    `;
+
+    tableBody.appendChild(row);
+
+  });
+
+});
+
+
+/* =====================================================
+   SAVE SHIPMENT
+===================================================== */
+
+form.addEventListener('submit', async (e) => {
+
+  e.preventDefault();
+
+
+  const trackingCode =
+    document
+      .getElementById('shipCode')
+      .value
+      .trim();
+
+
+  if (!trackingCode) {
+
+    alert("يرجى إنشاء رقم Tracking أولاً");
+
+    return;
+
+  }
+
+
+  const shipmentData = {
+
+    blNo:
+      document.getElementById('blNo').value,
+
+    customerName:
+      document.getElementById('shipCustomer').value,
+
+    shipmentType:
+      document.getElementById('shipType').value,
+
+    shipper:
+      document.getElementById('shipper').value,
+
+    consignee:
+      document.getElementById('consignee').value,
+
+    notifyParty:
+      document.getElementById('notifyParty').value,
+
+    loadingPlace:
+      document.getElementById('loadingPlace').value,
+
+    dischargePlace:
+      document.getElementById('dischargePlace').value,
+
+    finalDestination:
+      document.getElementById('finalDestination').value,
+
+    from:
+      document.getElementById('shipFrom').value,
+
+    to:
+      document.getElementById('shipTo').value,
+
+    containerNo:
+      document.getElementById('containerNo').value,
+
+    sealNo:
+      document.getElementById('sealNo').value,
+
+    packages:
+      document.getElementById('packages').value,
+
+    weight:
+      document.getElementById('weight').value,
+
+    cbm:
+      document.getElementById('cbm').value,
+
+    freight:
+      document.getElementById('freight').value,
+
+    description:
+      document.getElementById('description').value,
+
+    currentLoc:
+      document.getElementById('shipLoc').value,
+
+    status:
+      document.getElementById('shipStatus').value,
+
+    statusDesc:
+      document.getElementById('shipStatusDesc').value,
+
+    lastUpdate:
+      document.getElementById('shipLastUpdate').value ||
+      getTodayDate()
+
+  };
+
+
+  try {
+
+    await set(
+      ref(db, 'shipments/' + trackingCode),
+      shipmentData
+    );
+
+
+    alert(
+      "تم حفظ الشحنة والبوليصة بنجاح ✅"
+    );
+
+
+    form.reset();
+
+    dateInput.value =
+      getTodayDate();
+
+
+    const nextTracking =
+      await generateNextTracking();
+
+
+    document
+      .getElementById('shipCode')
+      .value = nextTracking;
+
+
+    document
+      .getElementById('blNo')
+      .value =
+      makeBlNumber(nextTracking);
+
+
+  } catch (error) {
+
+    alert(
+      "حدث خطأ: " +
+      error.message
+    );
+
+    console.error(error);
+
+  }
+
+});
+
+
+/* =====================================================
+   EDIT
+===================================================== */
+
+window.editShipment =
+  async function(code) {
+
+    const snapshot =
+      await get(
+        ref(db, 'shipments/' + code)
+      );
+
+
+    const item =
+      snapshot.val();
+
+
+    if (!item) return;
+
+
+    document
+      .getElementById('shipCode')
+      .value = code;
+
+
+    document
+      .getElementById('blNo')
+      .value =
+      item.blNo ||
+      makeBlNumber(code);
+
+
+    document
+      .getElementById('shipCustomer')
+      .value =
+      item.customerName || '';
+
+
+    document
+      .getElementById('shipType')
+      .value =
+      item.shipmentType ||
+      'Sea Freight';
+
+
+    document
+      .getElementById('shipper')
+      .value =
+      item.shipper || '';
+
+
+    document
+      .getElementById('consignee')
+      .value =
+      item.consignee || '';
+
+
+    document
+      .getElementById('notifyParty')
+      .value =
+      item.notifyParty || '';
+
+
+    document
+      .getElementById('loadingPlace')
+      .value =
+      item.loadingPlace || '';
+
+
+    document
+      .getElementById('dischargePlace')
+      .value =
+      item.dischargePlace || '';
+
+
+    document
+      .getElementById('finalDestination')
+      .value =
+      item.finalDestination || '';
+
+
+    document
+      .getElementById('shipFrom')
+      .value =
+      item.from || '';
+
+
+    document
+      .getElementById('shipTo')
+      .value =
+      item.to || '';
+
+
+    document
+      .getElementById('containerNo')
+      .value =
+      item.containerNo || '';
+
+
+    document
+      .getElementById('sealNo')
+      .value =
+      item.sealNo || '';
+
+
+    document
+      .getElementById('packages')
+      .value =
+      item.packages || '';
+
+
+    document
+      .getElementById('weight')
+      .value =
+      item.weight || '';
+
+
+    document
+      .getElementById('cbm')
+      .value =
+      item.cbm || '';
+
+
+    document
+      .getElementById('freight')
+      .value =
+      item.freight || 'Prepaid';
+
+
+    document
+      .getElementById('description')
+      .value =
+      item.description || '';
+
+
+    document
+      .getElementById('shipLoc')
+      .value =
+      item.currentLoc || '';
+
+
+    document
+      .getElementById('shipStatus')
+      .value =
+      item.status || 'Shipment Received';
+
+
+    document
+      .getElementById('shipStatusDesc')
+      .value =
+      item.statusDesc || '';
+
+
+    document
+      .getElementById('shipLastUpdate')
+      .value =
+      item.lastUpdate ||
+      getTodayDate();
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
     });
-  </script>
+
+  };
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+window.deleteShipment =
+  function(code) {
+
+    if (
+      confirm(
+        "هل تريد حذف الشحنة: " +
+        code +
+        " ؟"
+      )
+    ) {
+
+      remove(
+        ref(db, 'shipments/' + code)
+      );
+
+    }
+
+  };
+
+
+/* =====================================================
+   GENERATE BILL OF LADING
+===================================================== */
+
+window.generateBL =
+  async function(code) {
+
+    const snapshot =
+      await get(
+        ref(db, 'shipments/' + code)
+      );
+
+
+    if (!snapshot.exists()) {
+
+      alert(
+        "لم يتم العثور على الشحنة"
+      );
+
+      return;
+
+    }
+
+
+    const data =
+      snapshot.val();
+
+
+    document.getElementById('printBlNo').innerText =
+      data.blNo || makeBlNumber(code);
+
+
+    document.getElementById('printTracking').innerText =
+      code;
+
+
+    document.getElementById('printTrackingBottom').innerText =
+      code;
+
+
+    document.getElementById('printShipper').innerText =
+      data.shipper || '-';
+
+
+    document.getElementById('printConsignee').innerText =
+      data.consignee || '-';
+
+
+    document.getElementById('printNotify').innerText =
+      data.notifyParty || '-';
+
+
+    document.getElementById('printLoading').innerText =
+      data.loadingPlace || '-';
+
+
+    document.getElementById('printDischarge').innerText =
+      data.dischargePlace || '-';
+
+
+    document.getElementById('printFinalDestination').innerText =
+      data.finalDestination || '-';
+
+
+    document.getElementById('printType').innerText =
+      data.shipmentType || '-';
+
+
+    document.getElementById('printContainer').innerText =
+      data.containerNo || '-';
+
+
+    document.getElementById('printSeal').innerText =
+      data.sealNo || '-';
+
+
+    document.getElementById('printDescription').innerText =
+      data.description || '-';
+
+
+    document.getElementById('printPackages').innerText =
+      data.packages || '-';
+
+
+    document.getElementById('printWeight').innerText =
+      data.weight || '-';
+
+
+    document.getElementById('printCbm').innerText =
+      data.cbm || '-';
+
+
+    document.getElementById('printFreight').innerText =
+      data.freight || '-';
+
+
+    document.getElementById('printCurrentLocation').innerText =
+      data.currentLoc || '-';
+
+
+    document.getElementById('printStatus').innerText =
+      data.status || '-';
+
+
+    /* QR */
+
+    const qrContainer =
+      document.getElementById('qrcode');
+
+
+    qrContainer.innerHTML = '';
+
+
+    const trackingUrl =
+      `https://home-wonderland.github.io/Home-Wonderland/?tracking=${encodeURIComponent(code)}`;
+
+
+    new QRCode(qrContainer, {
+
+      text: trackingUrl,
+
+      width: 110,
+
+      height: 110,
+
+      correctLevel:
+        QRCode.CorrectLevel.H
+
+    });
+
+
+    /* PRINT */
+
+    setTimeout(() => {
+
+      window.print();
+
+    }, 500);
+
+  };
+
+
+</script>
+
 </body>
 </html>
