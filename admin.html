@@ -27,25 +27,32 @@
     </div>
   </header>
 
-  <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-10 space-y-8">
-    <div class="flex items-center justify-between border-b border-slate-200 pb-5">
-      <div>
-        <h1 class="text-2xl font-extrabold text-slate-900">إضافة / تحديث محطة لشحنة</h1>
-        <p class="text-xs text-slate-500 mt-1">عند حفظ نفس رقم الشحنة، سيتم إضافة التحديث الجديد للخط الزمني تلقائياً</p>
-      </div>
-      <i class="fa-solid fa-boxes-packing text-2xl text-sky-600"></i>
-    </div>
-
+  <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-10 space-y-10">
+    
+    <!-- قسم إضافة / تحديث شحنة -->
     <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <h1 class="text-xl font-extrabold text-slate-900">إضافة أو تحديث شحنة</h1>
+          <p class="text-xs text-slate-500 mt-1">أدخل بيانات الشحنة للبحث بواسطة B/L أو PO Number</p>
+        </div>
+        <i class="fa-solid fa-boxes-packing text-2xl text-sky-600"></i>
+      </div>
+
       <form id="shipmentForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">رقم الشحنة (B/L or PO No) *</label>
-          <input type="text" id="trackingCode" required placeholder="e.g. 4502516358" class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none text-left" dir="ltr">
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">رقم البوليصة (B/L Number) *</label>
+          <input type="text" id="trackingCode" required placeholder="e.g. BL12345678" class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none text-left" dir="ltr">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">اسم الزبون (مخفي)</label>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">رقم أمر الشراء (PO Number)</label>
+          <input type="text" id="poNumber" placeholder="e.g. PO-987654" class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none text-left" dir="ltr">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">اسم العميل (اختياري)</label>
           <input type="text" id="customerName" placeholder="e.g. Al-Muntazar Co." class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none text-left" dir="ltr">
         </div>
 
@@ -67,9 +74,9 @@
         <div>
           <label class="block text-xs font-bold text-slate-700 uppercase mb-2">نوع الشحن (Shipment Type)</label>
           <select id="shipmentType" class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none font-medium">
-            <option value="Sea">Sea Freight 🚢</option>
-            <option value="Air">Air Freight ✈️</option>
-            <option value="Land">Land Freight 🚛</option>
+            <option value="Sea Freight">شحن بحري (Sea Freight)</option>
+            <option value="Air Freight">شحن جوي (Air Freight)</option>
+            <option value="Land Freight">شحن بري (Land Freight)</option>
           </select>
         </div>
 
@@ -84,38 +91,59 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">ميناء الترانزيت (Transhipment Port)</label>
-          <input type="text" id="transhipment" placeholder="e.g. Khor Fakkan / Direct" class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none text-left" dir="ltr">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">حالة الشحنة الحالية (Status)</label>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">حالة الشحنة (Shipment Status)</label>
           <select id="status" class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none font-medium">
-            <option value="Shipment Received">📦 Shipment Received (تم استلام الشحنة)</option>
-            <option value="In Transit (Sea)">🚢 In Transit (في الطريق - باخرة)</option>
-            <option value="In Transit (Land)">🚛 In Transit (في الطريق - سيارة/شاحنة)</option>
-            <option value="Arrived at Port">⚓ Arrived at Port (وصلت الميناء)</option>
-            <option value="Arrived at Airport">✈️ Arrived at Airport (وصلت المطار)</option>
-            <option value="Under Customs Clearance">🛃 Under Customs Clearance (قيد التخليص الجمركي)</option>
-            <option value="Out for Delivery">🚚 Out for Delivery (جاهزة للتسليم / قيد التوصيل)</option>
-            <option value="Delivered Successfully">✅ Delivered Successfully (تم التسليم بنجاح)</option>
+            <option value="Shipment Received">Shipment Received</option>
+            <option value="In Transit">In Transit</option>
+            <option value="Arrived at Port">Arrived at Port</option>
+            <option value="Under Customs Clearance">Under Customs Clearance</option>
+            <option value="Out for Delivery">Out for Delivery</option>
+            <option value="Delivered Successfully">Delivered Successfully</option>
           </select>
         </div>
 
         <div class="md:col-span-2">
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">تفاصيل/ملاحظة الحدث الحالي (Event Details)</label>
-          <textarea id="statusDesc" rows="3" placeholder="e.g. Ship arrived at Arar border crossing for inspection." class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none text-left" dir="ltr"></textarea>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-2">ملاحظات الحدث الحالي (اختياري - لا تظهر إن كانت فارغة)</label>
+          <textarea id="statusDesc" rows="3" placeholder="ملاحظة أو تفاصيل إضافية للزبون..." class="w-full bg-slate-50 text-slate-900 border border-slate-300 focus:border-sky-500 rounded-lg px-4 py-2.5 text-sm outline-none text-left" dir="ltr"></textarea>
         </div>
 
         <div class="md:col-span-2 pt-2">
           <button type="submit" id="saveBtn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-6 rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
             <i class="fa-solid fa-plus-circle"></i>
-            <span>إضافة الحدث إلى الخط الزمني للشحنة</span>
+            <span>حفظ / تحديث الشحنة</span>
           </button>
         </div>
 
       </form>
     </div>
+
+    <!-- قسم الشحنات المضافة سابقاً -->
+    <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <h2 class="text-lg font-bold text-slate-900">قائمة الشحنات المضافة</h2>
+        <span id="shipmentCount" class="text-xs font-bold bg-sky-50 text-sky-700 px-3 py-1 rounded-full border border-sky-100">0 شحنة</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-right text-slate-600">
+          <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+            <tr>
+              <th class="px-4 py-3">رقم B/L</th>
+              <th class="px-4 py-3">رقم PO</th>
+              <th class="px-4 py-3">الموقع الحالي</th>
+              <th class="px-4 py-3">الحالة</th>
+              <th class="px-4 py-3">آخر تحديث</th>
+            </tr>
+          </thead>
+          <tbody id="shipmentsTableBody">
+            <tr>
+              <td colspan="5" class="text-center py-6 text-slate-400">جاري تحميل الشحنات...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </main>
 
   <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 font-medium">
@@ -124,7 +152,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
@@ -141,23 +169,26 @@
 
     document.getElementById('lastUpdate').value = new Date().toISOString().split('T')[0];
 
+    // حفظ / تحديث الشحنة
     document.getElementById('shipmentForm').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const trackingCode = document.getElementById('trackingCode').value.trim();
-      if (!trackingCode) { alert("يرجى إدخال رقم الشحنة."); return; }
+      const poNumber = document.getElementById('poNumber').value.trim();
+      if (!trackingCode) { alert("يرجى إدخال رقم B/L للشحنة."); return; }
+
+      const statusDescText = document.getElementById('statusDesc').value.trim();
 
       const newEvent = {
         date: document.getElementById('lastUpdate').value,
         location: document.getElementById('currentLoc').value.trim() || "In Transit",
         status: document.getElementById('status').value,
-        desc: document.getElementById('statusDesc').value.trim() || "Status updated."
+        desc: statusDescText
       };
 
       const shipmentRef = ref(db, 'shipments/' + trackingCode);
 
       try {
-        // جلب الأحداث السابقة إن وجدت
         const snapshot = await get(shipmentRef);
         let existingEvents = [];
 
@@ -168,10 +199,11 @@
           }
         }
 
-        // إضافة الحدث الجديد في البداية (الأحدث أولاً)
         const updatedTimeline = [newEvent, ...existingEvents];
 
         const shipmentData = {
+          trackingCode: trackingCode,
+          poNumber: poNumber,
           customerName: document.getElementById('customerName').value.trim(),
           from: document.getElementById('fromLoc').value.trim(),
           to: document.getElementById('toLoc').value.trim(),
@@ -179,19 +211,49 @@
           shipmentType: document.getElementById('shipmentType').value,
           lastUpdate: document.getElementById('lastUpdate').value,
           packages: document.getElementById('packages').value.trim(),
-          transhipment: document.getElementById('transhipment').value.trim(),
           status: document.getElementById('status').value,
-          statusDesc: document.getElementById('statusDesc').value.trim(),
+          statusDesc: statusDescText,
           timelineEvents: updatedTimeline
         };
 
         await set(shipmentRef, shipmentData);
-        alert("تم إضافة التحديث الجديد للخط الزمني بنجاح!");
+        alert("تم حفظ الشحنة وتحديث الخط الزمني بنجاح!");
         document.getElementById('statusDesc').value = '';
 
       } catch (err) {
         console.error(err);
-        alert("حدث خطأ أثناء حفظ التحديث.");
+        alert("حدث خطأ أثناء الحفظ.");
+      }
+    });
+
+    // جلب وعرض قائمة الشحنات المضافة أسفل الصفحة
+    const shipmentsRef = ref(db, 'shipments');
+    onValue(shipmentsRef, (snapshot) => {
+      const tableBody = document.getElementById('shipmentsTableBody');
+      const countLabel = document.getElementById('shipmentCount');
+      
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const keys = Object.keys(data);
+        countLabel.textContent = `${keys.length} شحنة`;
+        tableBody.innerHTML = '';
+
+        keys.forEach(key => {
+          const item = data[key];
+          const row = document.createElement('tr');
+          row.className = "border-b border-slate-100 hover:bg-slate-50";
+          row.innerHTML = `
+            <td class="px-4 py-3 font-bold text-slate-900" dir="ltr">${item.trackingCode || key}</td>
+            <td class="px-4 py-3 text-slate-600" dir="ltr">${item.poNumber || '-'}</td>
+            <td class="px-4 py-3" dir="ltr">${item.currentLoc || '-'}</td>
+            <td class="px-4 py-3"><span class="bg-emerald-50 text-emerald-700 text-xs px-2 py-1 rounded font-medium">${item.status || '-'}</span></td>
+            <td class="px-4 py-3 text-xs text-slate-500" dir="ltr">${item.lastUpdate || '-'}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        countLabel.textContent = `0 شحنة`;
+        tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-400">لا توجد شحنات مضافة حتى الآن.</td></tr>`;
       }
     });
   </script>
