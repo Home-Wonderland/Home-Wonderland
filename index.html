@@ -4,302 +4,852 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home wonderland - Tracking</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
   <style>
-    body { font-family: 'Tajawal', sans-serif; }
-    
-    /* الخطوات المكتملة */
-    .step-active { 
-      background-color: #0284c7 !important; 
-      color: white !important; 
-      border-color: #0284c7 !important; 
+    body {
+      font-family: 'Tajawal', sans-serif;
     }
-    
-    /* الخطوة الحالية التي تنبض */
-    .step-current { 
-      background-color: #0284c7 !important; 
-      color: white !important; 
+
+    /* الخطوات المكتملة */
+    .step-active {
+      background-color: #0284c7 !important;
+      color: white !important;
+      border-color: #0284c7 !important;
+    }
+
+    /* الخطوة الحالية */
+    .step-current {
+      background-color: #0284c7 !important;
+      color: white !important;
       border-color: #0284c7 !important;
       animation: pulse-ring 1.8s infinite;
     }
-    
+
     @keyframes pulse-ring {
       0% {
         box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.6);
       }
+
       70% {
         box-shadow: 0 0 0 10px rgba(2, 132, 199, 0);
       }
+
       100% {
         box-shadow: 0 0 0 0 rgba(2, 132, 199, 0);
       }
     }
 
-    .step-text-active { color: #0284c7 !important; font-weight: bold; }
-    .line-active { background-color: #0284c7 !important; }
+    .step-text-active {
+      color: #0284c7 !important;
+      font-weight: bold;
+    }
+
+    .line-active {
+      background-color: #0284c7 !important;
+    }
   </style>
 </head>
+
 <body class="bg-slate-100 min-h-screen p-4 md:p-8 flex flex-col justify-between items-center">
 
   <div class="max-w-5xl w-full space-y-6">
+
     <!-- Header -->
     <div class="bg-white rounded-xl shadow-sm p-4 border border-slate-200 flex items-center gap-3">
+
       <div class="h-16 w-16 flex items-center justify-center shrink-0">
-        <img src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg" alt="Logo" class="max-h-full max-w-full object-contain">
+        <img
+          src="WhatsApp Image 2026-09-25 at 18.32.28.jpeg"
+          alt="Logo"
+          class="max-h-full max-w-full object-contain"
+        >
       </div>
+
       <div>
-        <h1 class="text-xl font-bold text-slate-800">Home wonderland</h1>
-        <p class="text-xs font-semibold text-sky-600">Logistics & Express Cargo</p>
+        <h1 class="text-xl font-bold text-slate-800">
+          Home wonderland
+        </h1>
+
+        <p class="text-xs font-semibold text-sky-600">
+          Logistics & Express Cargo
+        </p>
       </div>
+
     </div>
+
 
     <!-- Search Box -->
     <div class="bg-white rounded-2xl shadow-sm p-8 border border-slate-200 text-center space-y-6">
-      <h2 class="text-2xl font-bold text-slate-800">Track Your Shipment</h2>
-      <p class="text-sm text-slate-400">Enter your tracking number below to see live updates</p>
-      
+
+      <h2 class="text-2xl font-bold text-slate-800">
+        Track Your Shipment
+      </h2>
+
+      <p class="text-sm text-slate-400">
+        Enter your tracking number below to see live updates
+      </p>
+
       <div class="max-w-xl mx-auto space-y-4">
-        <input type="text" id="trackingInput" placeholder="Enter Tracking Number" class="w-full border rounded-xl p-3.5 text-center text-base font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-sky-500">
-        <button id="trackBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-3.5 rounded-xl shadow transition flex items-center justify-center gap-2 text-base">
-          Track <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          type="text"
+          id="trackingInput"
+          placeholder="Enter Tracking Number"
+          class="w-full border rounded-xl p-3.5 text-center text-base font-semibold text-slate-700 outline-none focus:ring-2 focus:ring-sky-500"
+        >
+
+        <button
+          id="trackBtn"
+          class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-3.5 rounded-xl shadow transition flex items-center justify-center gap-2 text-base"
+        >
+          Track
+          <i class="fa-solid fa-magnifying-glass"></i>
         </button>
+
       </div>
     </div>
 
+
     <!-- Result Card -->
-    <div id="resultCard" class="hidden bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200 space-y-6">
+    <div
+      id="resultCard"
+      class="hidden bg-white rounded-2xl shadow-sm p-6 md:p-8 border border-slate-200 space-y-6"
+    >
+
+      <!-- Tracking Header -->
       <div class="flex justify-between items-center text-xs md:text-sm text-slate-400 font-bold border-b pb-3">
+
         <div>
           <span>TRACKING CODE: </span>
-          <span id="resCodeDisplay" class="text-slate-700 font-extrabold"></span>
+
+          <span
+            id="resCodeDisplay"
+            class="text-slate-700 font-extrabold"
+          ></span>
         </div>
+
         <div>
-          <i class="fa-regular fa-clock"></i> Last Updated: <span id="resDate"></span>
+          <i class="fa-regular fa-clock"></i>
+          Last Updated:
+          <span id="resDate"></span>
         </div>
+
       </div>
+
 
       <!-- Origin & Destination -->
-      <div class="bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100 flex justify-between items-center text-center">
+      <div
+        class="bg-slate-50 p-4 md:p-6 rounded-xl border border-slate-100 flex justify-between items-center text-center"
+      >
+
         <div>
-          <span class="text-xs font-bold text-slate-400 block"><i class="fa-solid fa-circle text-emerald-500"></i> ORIGIN</span>
-          <span id="resFrom" class="font-bold text-slate-800 text-base md:text-lg"></span>
+
+          <span class="text-xs font-bold text-slate-400 block">
+            <i class="fa-solid fa-circle text-emerald-500"></i>
+            ORIGIN
+          </span>
+
+          <span
+            id="resFrom"
+            class="font-bold text-slate-800 text-base md:text-lg"
+          ></span>
+
         </div>
-        <div class="text-slate-300">|</div>
+
+        <div class="text-slate-300">
+          |
+        </div>
+
         <div>
-          <span class="text-xs font-bold text-slate-400 block"><i class="fa-solid fa-location-dot text-rose-500"></i> DESTINATION</span>
-          <span id="resTo" class="font-bold text-slate-800 text-base md:text-lg"></span>
+
+          <span class="text-xs font-bold text-slate-400 block">
+            <i class="fa-solid fa-location-dot text-rose-500"></i>
+            DESTINATION
+          </span>
+
+          <span
+            id="resTo"
+            class="font-bold text-slate-800 text-base md:text-lg"
+          ></span>
+
         </div>
+
       </div>
 
-      <!-- Shipment Progress Bar -->
+
+      <!-- Shipment Progress -->
       <div class="space-y-3 py-2">
-        <span class="text-xs font-bold text-slate-400 block">SHIPMENT PROGRESS</span>
+
+        <span class="text-xs font-bold text-slate-400 block">
+          SHIPMENT PROGRESS
+        </span>
+
         <div class="relative flex items-center justify-between px-4">
-          <!-- Lines Background -->
+
+          <!-- Background Line -->
           <div class="absolute left-8 right-8 top-4 h-1 bg-slate-200 -z-0">
-            <div id="progressLine" class="h-full bg-slate-200 transition-all duration-500" style="width: 0%;"></div>
+
+            <div
+              id="progressLine"
+              class="h-full bg-slate-200 transition-all duration-500"
+              style="width: 0%;"
+            ></div>
+
           </div>
+
 
           <!-- Step 1 -->
           <div class="flex flex-col items-center z-10">
-            <div id="step1" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">1</div>
-            <span id="stepText1" class="text-xs font-bold text-slate-400 mt-2">Received</span>
+
+            <div
+              id="step1"
+              class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all"
+            >
+              1
+            </div>
+
+            <span
+              id="stepText1"
+              class="text-xs font-bold text-slate-400 mt-2"
+            >
+              Received
+            </span>
+
           </div>
+
+
           <!-- Step 2 -->
           <div class="flex flex-col items-center z-10">
-            <div id="step2" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">2</div>
-            <span id="stepText2" class="text-xs font-bold text-slate-400 mt-2">In Transit</span>
+
+            <div
+              id="step2"
+              class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all"
+            >
+              2
+            </div>
+
+            <span
+              id="stepText2"
+              class="text-xs font-bold text-slate-400 mt-2"
+            >
+              In Transit
+            </span>
+
           </div>
+
+
           <!-- Step 3 -->
           <div class="flex flex-col items-center z-10">
-            <div id="step3" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">3</div>
-            <span id="stepText3" class="text-xs font-bold text-slate-400 mt-2">Clearance</span>
+
+            <div
+              id="step3"
+              class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all"
+            >
+              3
+            </div>
+
+            <span
+              id="stepText3"
+              class="text-xs font-bold text-slate-400 mt-2"
+            >
+              Clearance
+            </span>
+
           </div>
+
+
           <!-- Step 4 -->
           <div class="flex flex-col items-center z-10">
-            <div id="step4" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all">4</div>
-            <span id="stepText4" class="text-xs font-bold text-slate-400 mt-2">Delivered</span>
+
+            <div
+              id="step4"
+              class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all"
+            >
+              4
+            </div>
+
+            <span
+              id="stepText4"
+              class="text-xs font-bold text-slate-400 mt-2"
+            >
+              Delivered
+            </span>
+
           </div>
+
         </div>
+
       </div>
 
-      <!-- Current Location Box -->
-      <div class="bg-sky-600 text-white p-5 rounded-xl flex items-center justify-between shadow-md">
+
+      <!-- Current Location -->
+      <div
+        class="bg-sky-600 text-white p-5 rounded-xl flex items-center justify-between shadow-md"
+      >
+
         <div class="flex items-center gap-4">
+
           <div class="bg-white/20 p-3 rounded-lg">
+
             <i class="fa-solid fa-truck-fast text-2xl"></i>
+
           </div>
+
           <div>
-            <span class="text-xs text-sky-100 block font-semibold">Current Location</span>
-            <span id="resLoc" class="text-xl font-bold block mt-0.5"></span>
+
+            <span class="text-xs text-sky-100 block font-semibold">
+              Current Location
+            </span>
+
+            <span
+              id="resLoc"
+              class="text-xl font-bold block mt-0.5"
+            ></span>
+
           </div>
+
         </div>
-        <span class="bg-white/20 text-xs md:text-sm px-3 py-1.5 rounded-full font-bold">● Live</span>
+
+        <span
+          class="bg-white/20 text-xs md:text-sm px-3 py-1.5 rounded-full font-bold"
+        >
+          ● Live
+        </span>
+
       </div>
 
+
+      <!-- Packages & Status -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
         <!-- Packages -->
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-          <span class="text-xs font-bold text-slate-400 block">PACKAGES / WEIGHT</span>
-          <span id="resPackages" class="font-bold text-slate-800 text-base mt-1 block"></span>
+
+          <span class="text-xs font-bold text-slate-400 block">
+            PACKAGES / WEIGHT
+          </span>
+
+          <span
+            id="resPackages"
+            class="font-bold text-slate-800 text-base mt-1 block"
+          ></span>
+
         </div>
+
 
         <!-- Status Details -->
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 space-y-1">
-          <span class="text-xs font-bold text-slate-400 block">STATUS DETAILS</span>
-          <div id="resStatus" class="font-bold text-slate-800 text-base"></div>
-          <div id="resStatusDesc" class="text-xs text-slate-500"></div>
+
+          <span class="text-xs font-bold text-slate-400 block">
+            STATUS DETAILS
+          </span>
+
+          <div
+            id="resStatus"
+            class="font-bold text-slate-800 text-base"
+          ></div>
+
+          <div
+            id="resStatusDesc"
+            class="text-xs text-slate-500"
+          ></div>
+
         </div>
+
       </div>
+
     </div>
+
 
     <!-- Footer -->
     <div class="text-center text-xs text-slate-400 pt-4">
       All rights reserved ©️ Mariam Basim S.A
     </div>
+
   </div>
 
+
+  <!-- Firebase -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+    import {
+      getDatabase,
+      ref,
+      get,
+      child
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+
+    /* =========================
+       FIREBASE CONFIG
+    ========================= */
 
     const firebaseConfig = {
+
       apiKey: "AIzaSyBAIoX7icGAK8pIMspYba58SfO5O6cOabY",
+
       authDomain: "home-wonderland.firebaseapp.com",
-      databaseURL: "https://home-wonderland-default-rtdb.firebaseio.com",
+
+      databaseURL:
+        "https://home-wonderland-default-rtdb.firebaseio.com",
+
       projectId: "home-wonderland",
-      storageBucket: "home-wonderland.firebasestorage.app",
-      messagingSenderId: "911419710716",
-      appId: "1:911419710716:web:9ba36be5dd456b9f81cb79"
+
+      storageBucket:
+        "home-wonderland.firebasestorage.app",
+
+      messagingSenderId:
+        "911419710716",
+
+      appId:
+        "1:911419710716:web:9ba36be5dd456b9f81cb79"
+
     };
 
+
     const app = initializeApp(firebaseConfig);
+
     const db = getDatabase(app);
 
+
+    /* =========================
+       UPDATE PROGRESS
+    ========================= */
+
     function updateProgress(statusText) {
-      // إعادة تعيين الشارات إلى الحالة الطبيعية
+
+      // Reset steps
       for (let i = 1; i <= 4; i++) {
-        const step = document.getElementById('step' + i);
-        const text = document.getElementById('stepText' + i);
+
+        const step =
+          document.getElementById('step' + i);
+
+        const text =
+          document.getElementById('stepText' + i);
+
+
         if (step) {
-          step.className = "w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all";
+
+          step.className =
+            "w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all";
+
         }
+
+
         if (text) {
-          text.className = "text-xs font-bold text-slate-400 mt-2";
+
+          text.className =
+            "text-xs font-bold text-slate-400 mt-2";
+
         }
+
       }
 
-      const line = document.getElementById('progressLine');
+
+      const line =
+        document.getElementById('progressLine');
+
+
       let stepNumber = 1;
 
-      if (!statusText) statusText = '';
-      const textLower = statusText.toLowerCase();
 
-      // تحديد رقم الخطوة بناءً على الحالة الحالية
-      if (textLower.includes('received') || textLower.includes('استلام')) {
+      if (!statusText) {
+        statusText = '';
+      }
+
+
+      const textLower =
+        statusText.toLowerCase();
+
+
+      // Received
+      if (
+        textLower.includes('received') ||
+        textLower.includes('استلام')
+      ) {
+
         stepNumber = 1;
-      } else if (
-        textLower.includes('transit') || 
-        textLower.includes('way') || 
-        textLower.includes('seaport') || 
-        textLower.includes('airport') || 
-        textLower.includes('طريقها') || 
-        textLower.includes('الشحن') || 
-        textLower.includes('الميناء') || 
+
+      }
+
+
+      // In Transit
+      else if (
+
+        textLower.includes('transit') ||
+        textLower.includes('way') ||
+        textLower.includes('seaport') ||
+        textLower.includes('airport') ||
+        textLower.includes('طريقها') ||
+        textLower.includes('الشحن') ||
+        textLower.includes('الميناء') ||
         textLower.includes('المطار')
+
       ) {
+
         stepNumber = 2;
-      } else if (
-        textLower.includes('clearance') || 
-        textLower.includes('customs') || 
+
+      }
+
+
+      // Clearance
+      else if (
+
+        textLower.includes('clearance') ||
+        textLower.includes('customs') ||
         textLower.includes('تخليص')
+
       ) {
+
         stepNumber = 3;
-      } else if (
-        textLower.includes('delivered') || 
-        textLower.includes('out for delivery') || 
-        textLower.includes('تسليم') || 
+
+      }
+
+
+      // Delivered
+      else if (
+
+        textLower.includes('delivered') ||
+        textLower.includes('out for delivery') ||
+        textLower.includes('تسليم') ||
         textLower.includes('جاهزة')
+
       ) {
+
         stepNumber = 4;
+
       }
 
-      // تلوين الخطوات السابقة باللون الأزرق المكتمل
+
+      // Completed previous steps
       for (let i = 1; i < stepNumber; i++) {
-        const step = document.getElementById('step' + i);
-        const text = document.getElementById('stepText' + i);
-        if (step) step.classList.add('step-active');
-        if (text) text.classList.add('step-text-active');
+
+        const step =
+          document.getElementById('step' + i);
+
+        const text =
+          document.getElementById('stepText' + i);
+
+
+        if (step) {
+          step.classList.add('step-active');
+        }
+
+
+        if (text) {
+          text.classList.add('step-text-active');
+        }
+
       }
 
-      // تطبيق تأثير "النبض الحي" للخطوة الحالية النشطة
-      const currentStep = document.getElementById('step' + stepNumber);
-      const currentText = document.getElementById('stepText' + stepNumber);
-      if (currentStep) currentStep.classList.add('step-current');
-      if (currentText) currentText.classList.add('step-text-active');
 
-      // تحديث خط الشريط السفلي الأزرق
+      // Current step
+      const currentStep =
+        document.getElementById('step' + stepNumber);
+
+      const currentText =
+        document.getElementById('stepText' + stepNumber);
+
+
+      if (currentStep) {
+        currentStep.classList.add('step-current');
+      }
+
+
+      if (currentText) {
+        currentText.classList.add('step-text-active');
+      }
+
+
+      // Progress line
       if (line) {
-        if (stepNumber === 1) line.style.width = '0%';
-        if (stepNumber === 2) line.style.width = '33%';
-        if (stepNumber === 3) line.style.width = '66%';
-        if (stepNumber === 4) line.style.width = '100%';
+
+        if (stepNumber === 1) {
+          line.style.width = '0%';
+        }
+
+        if (stepNumber === 2) {
+          line.style.width = '33%';
+        }
+
+        if (stepNumber === 3) {
+          line.style.width = '66%';
+        }
+
+        if (stepNumber === 4) {
+          line.style.width = '100%';
+        }
+
         line.classList.add('line-active');
+
       }
+
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const trackBtn = document.getElementById('trackBtn');
-      const trackingInput = document.getElementById('trackingInput');
 
-      if (trackBtn) {
-        trackBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const code = trackingInput ? trackingInput.value.trim() : '';
-          if (!code) {
-            alert("Please enter tracking number");
-            return;
-          }
+    /* =========================
+       TRACK SHIPMENT
+    ========================= */
 
-          get(child(ref(db), 'shipments')).then((snapshot) => {
-            if (snapshot.exists()) {
-              const shipments = snapshot.val();
-              const matchedKey = Object.keys(shipments).find(
-                k => k.trim().toLowerCase() === code.toLowerCase()
-              );
+    async function trackShipment(code) {
 
-              if (matchedKey) {
-                const data = shipments[matchedKey];
-                
-                if (document.getElementById('resCodeDisplay')) document.getElementById('resCodeDisplay').innerText = matchedKey;
-                if (document.getElementById('resFrom')) document.getElementById('resFrom').innerText = data.from || '-';
-                if (document.getElementById('resTo')) document.getElementById('resTo').innerText = data.to || '-';
-                if (document.getElementById('resLoc')) document.getElementById('resLoc').innerText = data.currentLoc || '-';
-                if (document.getElementById('resStatus')) document.getElementById('resStatus').innerText = data.status || '-';
-                if (document.getElementById('resDate')) document.getElementById('resDate').innerText = data.lastUpdate || '-';
-                if (document.getElementById('resPackages')) document.getElementById('resPackages').innerText = data.packages || '-';
-                if (document.getElementById('resStatusDesc')) document.getElementById('resStatusDesc').innerText = data.statusDesc || '-';
+      if (!code) {
 
-                updateProgress(data.status);
+        alert("Please enter tracking number");
 
-                const resultCard = document.getElementById('resultCard');
-                if (resultCard) {
-                  resultCard.classList.remove('hidden');
-                }
-              } else {
-                alert("رقم الشحنة غير موجود، يرجى التأكد من الرقم والبحث مجدداً.");
-              }
-            } else {
-              alert("لا توجد شحنات مسجلة حالياً.");
-            }
-          }).catch((error) => {
-            alert("حدث خطأ أثناء جلب البيانات.");
-          });
-        });
+        return;
+
       }
-    });
+
+
+      try {
+
+        const snapshot =
+          await get(
+            child(
+              ref(db),
+              'shipments'
+            )
+          );
+
+
+        if (!snapshot.exists()) {
+
+          alert("لا توجد شحنات مسجلة حالياً.");
+
+          return;
+
+        }
+
+
+        const shipments =
+          snapshot.val();
+
+
+        // البحث عن رقم الشحنة
+        // بدون التأثر بالحروف الكبيرة والصغيرة
+        const matchedKey =
+          Object.keys(shipments).find(
+
+            k =>
+              k.trim().toLowerCase() ===
+              code.trim().toLowerCase()
+
+          );
+
+
+        if (!matchedKey) {
+
+          alert(
+            "رقم الشحنة غير موجود، يرجى التأكد من الرقم والبحث مجدداً."
+          );
+
+          return;
+
+        }
+
+
+        const data =
+          shipments[matchedKey];
+
+
+        /* =========================
+           DISPLAY SHIPMENT DATA
+        ========================= */
+
+        document.getElementById(
+          'resCodeDisplay'
+        ).innerText =
+          matchedKey;
+
+
+        document.getElementById(
+          'resFrom'
+        ).innerText =
+          data.from || '-';
+
+
+        document.getElementById(
+          'resTo'
+        ).innerText =
+          data.to || '-';
+
+
+        document.getElementById(
+          'resLoc'
+        ).innerText =
+          data.currentLoc || '-';
+
+
+        document.getElementById(
+          'resStatus'
+        ).innerText =
+          data.status || '-';
+
+
+        document.getElementById(
+          'resDate'
+        ).innerText =
+          data.lastUpdate || '-';
+
+
+        document.getElementById(
+          'resPackages'
+        ).innerText =
+          data.packages || '-';
+
+
+        document.getElementById(
+          'resStatusDesc'
+        ).innerText =
+          data.statusDesc || '-';
+
+
+        // Update progress
+        updateProgress(data.status);
+
+
+        // Show result
+        const resultCard =
+          document.getElementById('resultCard');
+
+
+        if (resultCard) {
+
+          resultCard.classList.remove('hidden');
+
+
+          // إذا دخل الزبون عن طريق QR
+          // ننزل مباشرة إلى تفاصيل الشحنة
+          setTimeout(() => {
+
+            resultCard.scrollIntoView({
+
+              behavior: 'smooth',
+
+              block: 'start'
+
+            });
+
+          }, 150);
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "Tracking Error:",
+          error
+        );
+
+        alert(
+          "حدث خطأ أثناء جلب البيانات."
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       PAGE LOAD
+    ========================= */
+
+    window.addEventListener(
+      'DOMContentLoaded',
+      () => {
+
+        const trackBtn =
+          document.getElementById(
+            'trackBtn'
+          );
+
+
+        const trackingInput =
+          document.getElementById(
+            'trackingInput'
+          );
+
+
+        /* =========================
+           MANUAL SEARCH
+        ========================= */
+
+        if (trackBtn) {
+
+          trackBtn.addEventListener(
+            'click',
+            (e) => {
+
+              e.preventDefault();
+
+
+              const code =
+                trackingInput
+                  ? trackingInput.value.trim()
+                  : '';
+
+
+              trackShipment(code);
+
+            }
+          );
+
+        }
+
+
+        /* =========================
+           QR CODE AUTO TRACKING
+        ========================= */
+
+        const params =
+          new URLSearchParams(
+            window.location.search
+          );
+
+
+        const trackingFromUrl =
+          params.get('tracking');
+
+
+        if (
+          trackingFromUrl &&
+          trackingInput
+        ) {
+
+          // وضع رقم الشحنة داخل خانة البحث
+          trackingInput.value =
+            trackingFromUrl.trim();
+
+
+          // فتح تفاصيل الشحنة تلقائياً
+          setTimeout(() => {
+
+            trackShipment(
+              trackingFromUrl.trim()
+            );
+
+          }, 300);
+
+        }
+
+      }
+    );
+
   </script>
+
 </body>
 </html>
