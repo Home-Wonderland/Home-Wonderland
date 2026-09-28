@@ -185,6 +185,37 @@
       </div>
 
 
+      <!-- ETA -->
+      <div
+        class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex items-center justify-between"
+      >
+
+        <div class="flex items-center gap-3">
+
+          <div class="bg-emerald-100 text-emerald-600 p-3 rounded-lg">
+            <i class="fa-solid fa-calendar-check text-xl"></i>
+          </div>
+
+          <div>
+
+            <span class="text-xs font-bold text-emerald-600 block">
+              ESTIMATED TIME OF ARRIVAL (ETA)
+            </span>
+
+            <span
+              id="resETA"
+              class="font-bold text-slate-800 text-base md:text-lg mt-1 block"
+            >
+              -
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
       <!-- Shipment Progress -->
       <div class="space-y-3 py-2">
 
@@ -685,6 +716,16 @@
           'resTo'
         ).innerText =
           data.to || '-';
+
+
+        /* =========================
+           ETA
+        ========================= */
+
+        document.getElementById(
+          'resETA'
+        ).innerText =
+          data.eta || '-';
 
 
         document.getElementById(
