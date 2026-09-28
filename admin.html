@@ -394,6 +394,26 @@
               </div>
 
 
+              <!-- ETA -->
+              <div>
+
+                <label class="block text-sm font-bold text-slate-600 mb-1">
+                  ETA - Estimated Time of Arrival
+                </label>
+
+                <input
+                  id="eta"
+                  type="date"
+                  class="w-full border rounded-xl p-3"
+                >
+
+                <p class="text-xs text-slate-400 mt-1">
+                  This information will be visible to the customer only.
+                </p>
+
+              </div>
+
+
               <!-- Current Location -->
               <div>
 
@@ -625,9 +645,7 @@
 
           </thead>
 
-          <tbody id="shipmentsTable">
-
-          </tbody>
+          <tbody id="shipmentsTable"></tbody>
 
         </table>
 
@@ -640,6 +658,7 @@
 
   <!-- =========================================================
        A4 PRINT AREA
+       ETA IS NOT INCLUDED HERE
   ========================================================== -->
 
   <section
@@ -673,7 +692,6 @@
         "
       >
 
-        <!-- Logo -->
         <div
           style="
             width:115px;
@@ -696,7 +714,6 @@
         </div>
 
 
-        <!-- Company -->
         <div style="text-align:center; flex:1;">
 
           <div
@@ -733,7 +750,6 @@
         </div>
 
 
-        <!-- Document numbers -->
         <div
           style="
             width:150px;
@@ -1024,7 +1040,7 @@
       </div>
 
 
-      <!-- FOOTER AREA -->
+      <!-- FOOTER -->
 
       <div
         style="
@@ -1034,8 +1050,6 @@
           margin-top:35px;
         "
       >
-
-        <!-- QR -->
 
         <div style="text-align:center;">
 
@@ -1060,8 +1074,6 @@
 
         </div>
 
-
-        <!-- Company information -->
 
         <div
           style="
@@ -1171,6 +1183,11 @@
     const dateOfIssue =
       document.getElementById(
         "dateOfIssue"
+      );
+
+    const eta =
+      document.getElementById(
+        "eta"
       );
 
 
@@ -1513,6 +1530,10 @@
             document.getElementById(
               "freight"
             ).value.trim(),
+
+          /* ETA - للزبون فقط */
+          eta:
+            eta.value,
 
           description:
             document.getElementById(
@@ -1895,6 +1916,12 @@
           "";
 
 
+        /* ETA */
+        eta.value =
+          data.eta ||
+          "";
+
+
         document.getElementById(
           "description"
         ).value =
@@ -1956,6 +1983,7 @@
 
     /* =========================
        FILL PRINT DATA
+       ETA IS INTENTIONALLY NOT HERE
     ========================== */
 
     function fillPrintData() {
