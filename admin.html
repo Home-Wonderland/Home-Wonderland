@@ -18,12 +18,25 @@
       font-family: Arial, sans-serif;
     }
 
-    /* منطقة البوليصة لا تظهر داخل الأدمن */
+    /* مخفي دائماً من صفحة الإدارة */
     .print-area {
       display: none;
     }
+
+    /*
+      لا نطبع صفحة الـ Admin نفسها.
+      الطباعة تتم داخل iframe خاص بالبوليصة.
+    */
+    @media print {
+      body > header,
+      body > main,
+      #printArea {
+        display: none !important;
+      }
+    }
   </style>
 </head>
+
 
 <body class="bg-slate-100 min-h-screen">
 
@@ -31,7 +44,7 @@
        ADMIN HEADER
   ========================== -->
 
-  <header class="bg-white border-b shadow-sm no-print">
+  <header class="bg-white border-b shadow-sm">
 
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
 
@@ -67,14 +80,17 @@
 
 
   <!-- =========================
-       ADMIN
+       MAIN ADMIN
   ========================== -->
 
-  <main class="max-w-7xl mx-auto p-4 md:p-8 no-print">
+  <main class="max-w-7xl mx-auto p-4 md:p-8">
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-      <!-- FORM -->
+
+      <!-- =========================
+           FORM
+      ========================== -->
 
       <div class="lg:col-span-2">
 
@@ -103,9 +119,11 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
+
               <!-- Tracking -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Tracking No.
                 </label>
@@ -117,12 +135,14 @@
                   placeholder="Auto Generated"
                   class="w-full border rounded-xl p-3 bg-slate-100 text-slate-700 font-bold"
                 >
+
               </div>
 
 
               <!-- B/L -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   B/L No.
                 </label>
@@ -134,12 +154,14 @@
                   placeholder="Auto Generated"
                   class="w-full border rounded-xl p-3 bg-slate-100 text-slate-700 font-bold"
                 >
+
               </div>
 
 
               <!-- Date -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Date of Issue
                 </label>
@@ -149,12 +171,14 @@
                   type="date"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Customer -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Customer Name
                 </label>
@@ -165,12 +189,14 @@
                   placeholder="Customer Name"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Shipment Type -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Shipment Type
                 </label>
@@ -181,12 +207,14 @@
                   placeholder="LCL / FCL / Air / Sea"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Shipper -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Shipper
                 </label>
@@ -197,12 +225,14 @@
                   placeholder="Shipper Name"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Consignee -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Consignee
                 </label>
@@ -213,12 +243,14 @@
                   placeholder="Consignee Name"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Loading -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Place of Loading
                 </label>
@@ -229,12 +261,14 @@
                   placeholder="Place of Loading"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Discharge -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Place of Discharge
                 </label>
@@ -245,12 +279,14 @@
                   placeholder="Place of Discharge"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Final Destination -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Final Destination
                 </label>
@@ -261,12 +297,14 @@
                   placeholder="Final Destination"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Tracking Origin -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Tracking Origin
                 </label>
@@ -277,12 +315,14 @@
                   placeholder="Origin"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Tracking Destination -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Tracking Destination
                 </label>
@@ -293,12 +333,14 @@
                   placeholder="Destination"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Packages -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Number of Packages
                 </label>
@@ -309,12 +351,14 @@
                   placeholder="e.g. 3 Packages"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Weight -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Gross Weight
                 </label>
@@ -325,12 +369,14 @@
                   placeholder="e.g. 5,000 KGS"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Freight -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Freight
                 </label>
@@ -341,12 +387,14 @@
                   placeholder="Prepaid / Collect"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- ETA -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   ETA - Estimated Time of Arrival
                 </label>
@@ -360,12 +408,14 @@
                 <p class="text-xs text-slate-400 mt-1">
                   This information will be visible to the customer only.
                 </p>
+
               </div>
 
 
               <!-- Current Location -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Current Location
                 </label>
@@ -376,12 +426,14 @@
                   placeholder="Current Location"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
               <!-- Status -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Shipment Status
                 </label>
@@ -408,12 +460,14 @@
                   </option>
 
                 </select>
+
               </div>
 
 
               <!-- Last Update -->
 
               <div>
+
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Last Update
                 </label>
@@ -424,6 +478,7 @@
                   placeholder="e.g. 27 Sep 2026"
                   class="w-full border rounded-xl p-3"
                 >
+
               </div>
 
 
@@ -473,8 +528,11 @@
                 type="submit"
                 class="bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-xl font-bold"
               >
+
                 <i class="fa-solid fa-floppy-disk mr-2"></i>
+
                 Save Shipment
+
               </button>
 
 
@@ -483,8 +541,11 @@
                 id="newShipmentBtn"
                 class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-3 rounded-xl font-bold"
               >
+
                 <i class="fa-solid fa-plus mr-2"></i>
+
                 New Shipment
+
               </button>
 
 
@@ -493,8 +554,11 @@
                 id="printBtn"
                 class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl font-bold"
               >
+
                 <i class="fa-solid fa-print mr-2"></i>
+
                 Print / Save PDF
+
               </button>
 
 
@@ -503,8 +567,11 @@
                 id="wordBtn"
                 class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-xl font-bold"
               >
+
                 <i class="fa-solid fa-file-word mr-2"></i>
+
                 Download Word
+
               </button>
 
             </div>
@@ -516,7 +583,9 @@
       </div>
 
 
-      <!-- QR -->
+      <!-- =========================
+           QR PREVIEW
+      ========================== -->
 
       <div>
 
@@ -548,7 +617,9 @@
     </div>
 
 
-    <!-- SHIPMENTS -->
+    <!-- =========================
+         SHIPMENTS TABLE
+    ========================== -->
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mt-6">
 
@@ -603,10 +674,10 @@
   </main>
 
 
-  <!-- =====================================================
-       BILL OF LADING
-       هذه لا تظهر في صفحة الأدمن
-  ====================================================== -->
+  <!-- =========================================================
+       HIDDEN B/L TEMPLATE
+       ETA NOT INCLUDED
+  ========================================================== -->
 
   <section id="printArea" class="print-area" dir="ltr">
 
@@ -618,7 +689,7 @@
         box-sizing:border-box;
         font-family:Arial,sans-serif;
         color:#111827;
-        background:#ffffff;
+        background:#fff;
       "
     >
 
@@ -1048,9 +1119,9 @@
   </section>
 
 
-  <!-- =====================================================
+  <!-- =========================================================
        JAVASCRIPT
-  ====================================================== -->
+  ========================================================== -->
 
   <script type="module">
 
@@ -1109,28 +1180,39 @@
     ========================== */
 
     const form =
-      document.getElementById("shipmentForm");
+      document.getElementById(
+        "shipmentForm"
+      );
 
     const shipCode =
-      document.getElementById("shipCode");
+      document.getElementById(
+        "shipCode"
+      );
 
     const blNo =
-      document.getElementById("blNo");
+      document.getElementById(
+        "blNo"
+      );
 
     const dateOfIssue =
-      document.getElementById("dateOfIssue");
+      document.getElementById(
+        "dateOfIssue"
+      );
 
     const eta =
-      document.getElementById("eta");
+      document.getElementById(
+        "eta"
+      );
 
 
     /* =========================
-       TODAY
+       DATE
     ========================== */
 
     function setToday() {
 
-      const today = new Date();
+      const today =
+        new Date();
 
       const year =
         today.getFullYear();
@@ -1152,7 +1234,7 @@
 
 
     /* =========================
-       TRACKING NUMBER
+       GENERATE TRACKING
     ========================== */
 
     async function generateTrackingNumber() {
@@ -1165,6 +1247,7 @@
           )
         );
 
+
       let nextNumber = 1;
 
 
@@ -1172,6 +1255,7 @@
 
         const shipments =
           snapshot.val();
+
 
         const numbers =
           Object.keys(shipments)
@@ -1214,14 +1298,17 @@
         "2026-" +
         String(
           nextNumber
-        ).padStart(4, "0")
+        ).padStart(
+          4,
+          "0"
+        )
       );
 
     }
 
 
     /* =========================
-       B/L NUMBER
+       GENERATE B/L
     ========================== */
 
     function generateBLNumber(
@@ -1229,7 +1316,8 @@
     ) {
 
       const number =
-        trackingNumber.split("-")[1];
+        trackingNumber
+          .split("-")[1];
 
       return (
         "HWL/2026/" +
@@ -1249,27 +1337,22 @@
 
       setToday();
 
-
       try {
 
         const tracking =
           await generateTrackingNumber();
 
-
         shipCode.value =
           tracking;
-
 
         blNo.value =
           generateBLNumber(
             tracking
           );
 
-
         generateQR(
           tracking
         );
-
 
       } catch (error) {
 
@@ -1359,12 +1442,12 @@
 
 
     /* =========================
-       SAVE
+       SAVE SHIPMENT
     ========================== */
 
     form.addEventListener(
       "submit",
-      async function(e) {
+      async (e) => {
 
         e.preventDefault();
 
@@ -1508,7 +1591,6 @@
 
           loadShipments();
 
-
         } catch (error) {
 
           console.error(error);
@@ -1577,7 +1659,9 @@
           ([tracking, data]) => {
 
             const row =
-              document.createElement("tr");
+              document.createElement(
+                "tr"
+              );
 
 
             row.className =
@@ -1633,59 +1717,63 @@
             `;
 
 
-            table.appendChild(row);
+            table.appendChild(
+              row
+            );
 
           }
         );
 
 
         document
-          .querySelectorAll(".edit-btn")
-          .forEach(button => {
+          .querySelectorAll(
+            ".edit-btn"
+          )
+          .forEach(
+            button => {
 
-            button.addEventListener(
-              "click",
-              () => {
+              button.addEventListener(
+                "click",
+                () => {
 
-                editShipment(
-                  button.dataset.id
-                );
-
-              }
-            );
-
-          });
-
-
-        document
-          .querySelectorAll(".print-existing-btn")
-          .forEach(button => {
-
-            button.addEventListener(
-              "click",
-              async () => {
-
-                const loaded =
-                  await editShipment(
+                  editShipment(
                     button.dataset.id
                   );
 
+                }
+              );
 
-                if (loaded) {
+            }
+          );
+
+
+        document
+          .querySelectorAll(
+            ".print-existing-btn"
+          )
+          .forEach(
+            button => {
+
+              button.addEventListener(
+                "click",
+                async () => {
+
+                  await editShipment(
+                    button.dataset.id
+                  );
 
                   setTimeout(
                     () => {
                       printBL();
                     },
-                    300
+                    500
                   );
 
                 }
+              );
 
-              }
-            );
-
-          });
+            }
+          );
 
 
       } catch (error) {
@@ -1698,7 +1786,7 @@
 
 
     /* =========================
-       EDIT
+       EDIT SHIPMENT
     ========================== */
 
     async function editShipment(
@@ -1723,7 +1811,7 @@
             "Shipment not found."
           );
 
-          return false;
+          return;
 
         }
 
@@ -1744,113 +1832,132 @@
 
 
         dateOfIssue.value =
-          data.dateOfIssue || "";
+          data.dateOfIssue ||
+          "";
 
 
         document.getElementById(
           "shipCustomer"
         ).value =
-          data.customerName || "";
+          data.customerName ||
+          "";
 
 
         document.getElementById(
           "shipType"
         ).value =
-          data.shipmentType || "";
+          data.shipmentType ||
+          "";
 
 
         document.getElementById(
           "shipper"
         ).value =
-          data.shipper || "";
+          data.shipper ||
+          "";
 
 
         document.getElementById(
           "consignee"
         ).value =
-          data.consignee || "";
+          data.consignee ||
+          "";
 
 
         document.getElementById(
           "loadingPlace"
         ).value =
-          data.loadingPlace || "";
+          data.loadingPlace ||
+          "";
 
 
         document.getElementById(
           "dischargePlace"
         ).value =
-          data.dischargePlace || "";
+          data.dischargePlace ||
+          "";
 
 
         document.getElementById(
           "finalDestination"
         ).value =
-          data.finalDestination || "";
+          data.finalDestination ||
+          "";
 
 
         document.getElementById(
           "shipFrom"
         ).value =
-          data.from || "";
+          data.from ||
+          "";
 
 
         document.getElementById(
           "shipTo"
         ).value =
-          data.to || "";
+          data.to ||
+          "";
 
 
         document.getElementById(
           "packages"
         ).value =
-          data.packages || "";
+          data.packages ||
+          "";
 
 
         document.getElementById(
           "weight"
         ).value =
-          data.weight || "";
+          data.weight ||
+          "";
 
 
         document.getElementById(
           "freight"
         ).value =
-          data.freight || "";
+          data.freight ||
+          "";
 
 
         eta.value =
-          data.eta || "";
+          data.eta ||
+          "";
 
 
         document.getElementById(
           "description"
         ).value =
-          data.description || "";
+          data.description ||
+          "";
 
 
         document.getElementById(
           "shipLoc"
         ).value =
-          data.currentLoc || "";
+          data.currentLoc ||
+          "";
 
 
         document.getElementById(
           "shipStatus"
         ).value =
-          data.status || "Received";
+          data.status ||
+          "Received";
 
 
         document.getElementById(
           "shipStatusDesc"
         ).value =
-          data.statusDesc || "";
+          data.statusDesc ||
+          "";
 
 
         document.getElementById(
           "shipLastUpdate"
         ).value =
-          data.lastUpdate || "";
+          data.lastUpdate ||
+          "";
 
 
         generateQR(
@@ -1864,9 +1971,6 @@
         });
 
 
-        return true;
-
-
       } catch (error) {
 
         console.error(error);
@@ -1875,17 +1979,15 @@
           "Error loading shipment."
         );
 
-        return false;
-
       }
 
     }
 
 
-    /* =====================================================
-       FILL BILL OF LADING
+    /* =========================
+       FILL PRINT DATA
        ETA NOT INCLUDED
-    ====================================================== */
+    ========================== */
 
     function fillPrintData() {
 
@@ -1999,7 +2101,7 @@
 
 
     /* =========================
-       PRINT QR
+       GENERATE PRINT QR
     ========================== */
 
     function generatePrintQR(
@@ -2041,14 +2143,69 @@
     }
 
 
-    /* =====================================================
-       NEW PRINT SYSTEM
-       يفتح نافذة مستقلة للبوليصة فقط
-    ====================================================== */
+    /* =========================
+       GET QR IMAGE
+    ========================== */
+
+    function getQRImage() {
+
+      const qr =
+        document.getElementById(
+          "printQR"
+        );
+
+
+      const canvas =
+        qr.querySelector(
+          "canvas"
+        );
+
+
+      if (canvas) {
+
+        try {
+
+          return canvas.toDataURL(
+            "image/png"
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+        }
+
+      }
+
+
+      const img =
+        qr.querySelector(
+          "img"
+        );
+
+
+      if (img) {
+        return img.src;
+      }
+
+
+      return "";
+
+    }
+
+
+    /* =========================
+       PRINT / SAVE PDF
+       PRINT ONLY THE B/L
+    ========================== */
 
     function printBL() {
 
-      if (!shipCode.value.trim()) {
+      const tracking =
+        shipCode.value.trim();
+
+
+      if (!tracking) {
 
         alert(
           "Please select or create a shipment first."
@@ -2062,50 +2219,149 @@
       fillPrintData();
 
 
-      const source =
-        document.getElementById(
-          "printArea"
-        );
+      /*
+        Give QRCodeJS time to create
+        the QR image/canvas.
+      */
+
+      setTimeout(
+        () => {
+
+          const qrImage =
+            getQRImage();
 
 
-      if (!source) {
-
-        alert(
-          "Bill of Lading area not found."
-        );
-
-        return;
-
-      }
+          const logoURL =
+            new URL(
+              "WhatsApp Image 2026-09-25 at 18.32.28.jpeg",
+              window.location.href
+            ).href;
 
 
-      const printWindow =
-        window.open(
-          "",
-          "_blank",
-          "width=900,height=1100"
-        );
+          const printTracking =
+            document.getElementById(
+              "printTracking"
+            ).innerText;
 
 
-      if (!printWindow) {
-
-        alert(
-          "Please allow pop-ups for this website to print the Bill of Lading."
-        );
-
-        return;
-
-      }
+          const printBLNumber =
+            document.getElementById(
+              "printBL"
+            ).innerText;
 
 
-      const content =
-        source.innerHTML;
+          const printDate =
+            document.getElementById(
+              "printDate"
+            ).innerText;
 
 
-      printWindow.document.open();
+          const printShipper =
+            document.getElementById(
+              "printShipper"
+            ).innerText;
 
 
-      printWindow.document.write(`
+          const printConsignee =
+            document.getElementById(
+              "printConsignee"
+            ).innerText;
+
+
+          const printLoading =
+            document.getElementById(
+              "printLoading"
+            ).innerText;
+
+
+          const printDischarge =
+            document.getElementById(
+              "printDischarge"
+            ).innerText;
+
+
+          const printDestination =
+            document.getElementById(
+              "printDestination"
+            ).innerText;
+
+
+          const printType =
+            document.getElementById(
+              "printType"
+            ).innerText;
+
+
+          const printPackages =
+            document.getElementById(
+              "printPackages"
+            ).innerText;
+
+
+          const printWeight =
+            document.getElementById(
+              "printWeight"
+            ).innerText;
+
+
+          const printFreight =
+            document.getElementById(
+              "printFreight"
+            ).innerText;
+
+
+          const printDescription =
+            document.getElementById(
+              "printDescription"
+            ).innerText;
+
+
+          /*
+            Create a completely separate
+            print document.
+          */
+
+          const iframe =
+            document.createElement(
+              "iframe"
+            );
+
+
+          iframe.style.position =
+            "fixed";
+
+          iframe.style.left =
+            "-10000px";
+
+          iframe.style.top =
+            "0";
+
+          iframe.style.width =
+            "210mm";
+
+          iframe.style.height =
+            "297mm";
+
+          iframe.style.border =
+            "0";
+
+          iframe.style.visibility =
+            "hidden";
+
+
+          document.body.appendChild(
+            iframe
+          );
+
+
+          const printDocument =
+            iframe.contentWindow.document;
+
+
+          printDocument.open();
+
+
+          printDocument.write(`
 
 <!DOCTYPE html>
 
@@ -2115,9 +2371,14 @@
 
 <meta charset="UTF-8">
 
-<title>Bill of Lading - ${shipCode.value}</title>
+<title>Bill of Lading - ${printTracking}</title>
 
 <style>
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
 
 * {
   box-sizing: border-box;
@@ -2125,83 +2386,584 @@
 
 html,
 body {
+  width: 210mm;
+  height: 297mm;
   margin: 0;
   padding: 0;
-  width: 210mm;
-  min-height: 297mm;
   background: #ffffff;
 }
 
 body {
   font-family: Arial, sans-serif;
+  color: #111827;
 }
 
-@page {
-  size: A4 portrait;
-  margin: 0;
-}
-
-.print-sheet {
+.page {
   width: 210mm;
   height: 297mm;
-  min-height: 297mm;
   margin: 0;
-  padding: 0;
+  padding: 15mm;
   background: #ffffff;
   overflow: hidden;
 }
 
-.print-sheet > div {
-  width: 210mm !important;
-  height: 297mm !important;
-  min-height: 297mm !important;
-  padding: 15mm !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-  background: #ffffff !important;
+
+/* HEADER */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 2px solid #111827;
+
+  padding-bottom: 10px;
+
+  margin-bottom: 18px;
 }
 
-img {
-  max-width: 100%;
+
+.logo-box {
+  width: 115px;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.logo-box img {
+  max-width: 115px;
+  max-height: 90px;
+
+  object-fit: contain;
+}
+
+
+.company {
+  flex: 1;
+  text-align: center;
+}
+
+
+.company-name {
+  font-size: 24px;
+  font-weight: bold;
+
+  letter-spacing: 1px;
+}
+
+
+.company-service {
+  font-size: 14px;
+  font-weight: bold;
+
+  color: #0284c7;
+
+  margin-top: 4px;
+}
+
+
+.document-title {
+  font-size: 22px;
+  font-weight: bold;
+
+  margin-top: 14px;
+}
+
+
+.document-info {
+  width: 150px;
+
+  text-align: left;
+
+  font-size: 12px;
+
+  line-height: 1.8;
+}
+
+
+/* BOX */
+
+.box {
+  border: 1px solid #cbd5e1;
+
+  margin-bottom: 12px;
+}
+
+
+.two-columns {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+}
+
+
+.three-columns {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr 1fr;
+}
+
+
+.cell {
+  padding: 10px;
+}
+
+
+.border-right {
+  border-right:
+    1px solid #cbd5e1;
+}
+
+
+.label {
+  font-size: 10px;
+
+  font-weight: bold;
+
+  color: #64748b;
+
+  margin-bottom: 5px;
+}
+
+
+.value {
+  font-size: 13px;
+
+  font-weight: bold;
+}
+
+
+.section-title {
+  background: #f8fafc;
+
+  padding: 9px;
+
+  font-size: 11px;
+
+  font-weight: bold;
+
+  border-bottom:
+    1px solid #cbd5e1;
+}
+
+
+/* GOODS */
+
+.goods {
+  min-height: 150px;
+}
+
+
+.description {
+  padding: 12px;
+
+  font-size: 13px;
+
+  white-space: pre-wrap;
+
+  line-height: 1.5;
+}
+
+
+/* FOOTER */
+
+.footer {
+  display: flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    flex-end;
+
+  margin-top: 35px;
+}
+
+
+.qr-section {
+  text-align: center;
+}
+
+
+.qr-section img {
+  width: 120px;
+
+  height: 120px;
+
+  display: block;
+
+  margin: auto;
+}
+
+
+.qr-text {
+  font-size: 9px;
+
+  color: #64748b;
+
+  margin-top: 5px;
+}
+
+
+.company-footer {
+  text-align: right;
+
+  font-size: 10px;
+
+  color: #64748b;
+
+  line-height: 1.7;
+}
+
+
+/*
+  Prevent browser from adding
+  unwanted layout inside page.
+*/
+
+@media print {
+
+  html,
+  body {
+    width: 210mm !important;
+    height: 297mm !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .page {
+    width: 210mm !important;
+    height: 297mm !important;
+
+    margin: 0 !important;
+    padding: 15mm !important;
+  }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
-<div class="print-sheet">
+<div class="page">
 
-${content}
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+
+    <div class="logo-box">
+
+      <img
+        src="${logoURL}"
+        alt="HOME WONDERLAND"
+      >
+
+    </div>
+
+
+    <div class="company">
+
+      <div class="company-name">
+        HOME WONDERLAND
+      </div>
+
+      <div class="company-service">
+        LOGISTICS SERVICES
+      </div>
+
+      <div class="document-title">
+        BILL OF LADING
+      </div>
+
+    </div>
+
+
+    <div class="document-info">
+
+      <div>
+        <strong>Tracking No.:</strong>
+        ${printTracking}
+      </div>
+
+      <div>
+        <strong>B/L No.:</strong>
+        ${printBLNumber}
+      </div>
+
+      <div>
+        <strong>Date of Issue:</strong>
+        ${printDate}
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- PARTIES -->
+
+  <div class="box two-columns">
+
+
+    <div class="cell border-right">
+
+      <div class="label">
+        SHIPPER
+      </div>
+
+      <div class="value">
+        ${printShipper}
+      </div>
+
+    </div>
+
+
+    <div class="cell">
+
+      <div class="label">
+        CONSIGNEE
+      </div>
+
+      <div class="value">
+        ${printConsignee}
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- ROUTE -->
+
+  <div class="box three-columns">
+
+
+    <div class="cell border-right">
+
+      <div class="label">
+        PLACE OF LOADING
+      </div>
+
+      <div class="value">
+        ${printLoading}
+      </div>
+
+    </div>
+
+
+    <div class="cell border-right">
+
+      <div class="label">
+        PLACE OF DISCHARGE
+      </div>
+
+      <div class="value">
+        ${printDischarge}
+      </div>
+
+    </div>
+
+
+    <div class="cell">
+
+      <div class="label">
+        FINAL DESTINATION
+      </div>
+
+      <div class="value">
+        ${printDestination}
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- SHIPMENT INFORMATION -->
+
+  <div class="box">
+
+
+    <div class="section-title">
+      SHIPMENT INFORMATION
+    </div>
+
+
+    <div class="three-columns">
+
+
+      <div class="cell border-right">
+
+        <div class="label">
+          SHIPMENT TYPE
+        </div>
+
+        <div class="value">
+          ${printType}
+        </div>
+
+      </div>
+
+
+      <div class="cell border-right">
+
+        <div class="label">
+          NUMBER OF PACKAGES
+        </div>
+
+        <div class="value">
+          ${printPackages}
+        </div>
+
+      </div>
+
+
+      <div class="cell">
+
+        <div class="label">
+          GROSS WEIGHT
+        </div>
+
+        <div class="value">
+          ${printWeight}
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+  <!-- GOODS -->
+
+  <div class="box goods">
+
+
+    <div class="section-title">
+      DESCRIPTION OF GOODS
+    </div>
+
+
+    <div class="description">
+      ${printDescription}
+    </div>
+
+
+  </div>
+
+
+  <!-- FREIGHT -->
+
+  <div class="box">
+
+
+    <div
+      class="cell"
+      style="
+        display:flex;
+        justify-content:space-between;
+      "
+    >
+
+      <strong style="font-size:11px;">
+        FREIGHT
+      </strong>
+
+
+      <span
+        style="
+          font-size:13px;
+          font-weight:bold;
+        "
+      >
+        ${printFreight}
+      </span>
+
+    </div>
+
+
+  </div>
+
+
+  <!-- FOOTER -->
+
+  <div class="footer">
+
+
+    <div class="qr-section">
+
+      ${
+        qrImage
+        ? `
+          <img
+            src="${qrImage}"
+            alt="Shipment QR Code"
+          >
+        `
+        : `
+          <div
+            style="
+              width:120px;
+              height:120px;
+              border:1px solid #e2e8f0;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              font-size:9px;
+              color:#94a3b8;
+            "
+          >
+            QR
+          </div>
+        `
+      }
+
+
+      <div class="qr-text">
+        Scan to track shipment
+      </div>
+
+    </div>
+
+
+    <div class="company-footer">
+
+      <div>
+        HOME WONDERLAND
+      </div>
+
+      <div>
+        LOGISTICS SERVICES
+      </div>
+
+      <div>
+        Shipment Tracking: Online
+      </div>
+
+    </div>
+
+
+  </div>
+
 
 </div>
-
-<script>
-
-window.onload = function() {
-
-  setTimeout(function() {
-
-    window.focus();
-
-    window.print();
-
-  }, 700);
-
-};
-
-window.onafterprint = function() {
-
-  setTimeout(function() {
-
-    window.close();
-
-  }, 300);
-
-};
-
-<\/script>
 
 </body>
 
@@ -2210,22 +2972,101 @@ window.onafterprint = function() {
 `);
 
 
-      printWindow.document.close();
+          printDocument.close();
+
+
+          /*
+            Wait for the logo to load,
+            then print only this iframe.
+          */
+
+          const logo =
+            printDocument.querySelector(
+              ".logo-box img"
+            );
+
+
+          const doPrint =
+            () => {
+
+              setTimeout(
+                () => {
+
+                  iframe.contentWindow.focus();
+
+                  iframe.contentWindow.print();
+
+                  /*
+                    Remove iframe after
+                    print dialog is closed.
+                  */
+
+                  setTimeout(
+                    () => {
+
+                      if (
+                        iframe.parentNode
+                      ) {
+
+                        iframe.parentNode.removeChild(
+                          iframe
+                        );
+
+                      }
+
+                    },
+                    2000
+                  );
+
+                },
+                300
+              );
+
+            };
+
+
+          if (logo) {
+
+            if (logo.complete) {
+
+              doPrint();
+
+            } else {
+
+              logo.onload =
+                doPrint;
+
+              logo.onerror =
+                doPrint;
+
+            }
+
+          } else {
+
+            doPrint();
+
+          }
+
+        },
+        500
+      );
 
     }
 
 
     document
-      .getElementById("printBtn")
+      .getElementById(
+        "printBtn"
+      )
       .addEventListener(
         "click",
         printBL
       );
 
 
-    /* =====================================================
+    /* =========================
        WORD DOWNLOAD
-    ====================================================== */
+    ========================== */
 
     function downloadWord() {
 
@@ -2338,9 +3179,11 @@ ${printContent}
 
       setTimeout(
         () => {
+
           URL.revokeObjectURL(
             url
           );
+
         },
         1000
       );
@@ -2349,7 +3192,9 @@ ${printContent}
 
 
     document
-      .getElementById("wordBtn")
+      .getElementById(
+        "wordBtn"
+      )
       .addEventListener(
         "click",
         downloadWord
@@ -2357,11 +3202,13 @@ ${printContent}
 
 
     /* =========================
-       NEW SHIPMENT
+       NEW BUTTON
     ========================== */
 
     document
-      .getElementById("newShipmentBtn")
+      .getElementById(
+        "newShipmentBtn"
+      )
       .addEventListener(
         "click",
         prepareNewShipment
@@ -2369,7 +3216,7 @@ ${printContent}
 
 
     /* =========================
-       START
+       INITIALIZE
     ========================== */
 
     setToday();
