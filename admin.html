@@ -18,43 +18,12 @@
       font-family: Arial, sans-serif;
     }
 
+    /* منطقة البوليصة لا تظهر داخل الأدمن */
     .print-area {
       display: none;
     }
-
-    @media print {
-
-      body * {
-        visibility: hidden;
-      }
-
-      .print-area,
-      .print-area * {
-        visibility: visible;
-      }
-
-      .print-area {
-        display: block !important;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 210mm;
-        min-height: 297mm;
-        background: white;
-      }
-
-      @page {
-        size: A4;
-        margin: 0;
-      }
-
-      .no-print {
-        display: none !important;
-      }
-    }
   </style>
 </head>
-
 
 <body class="bg-slate-100 min-h-screen">
 
@@ -98,17 +67,14 @@
 
 
   <!-- =========================
-       MAIN ADMIN
+       ADMIN
   ========================== -->
 
   <main class="max-w-7xl mx-auto p-4 md:p-8 no-print">
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-
-      <!-- =========================
-           FORM
-      ========================== -->
+      <!-- FORM -->
 
       <div class="lg:col-span-2">
 
@@ -137,10 +103,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-
               <!-- Tracking -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Tracking No.
                 </label>
@@ -152,13 +117,12 @@
                   placeholder="Auto Generated"
                   class="w-full border rounded-xl p-3 bg-slate-100 text-slate-700 font-bold"
                 >
-
               </div>
 
 
               <!-- B/L -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   B/L No.
                 </label>
@@ -170,13 +134,12 @@
                   placeholder="Auto Generated"
                   class="w-full border rounded-xl p-3 bg-slate-100 text-slate-700 font-bold"
                 >
-
               </div>
 
 
               <!-- Date -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Date of Issue
                 </label>
@@ -186,13 +149,12 @@
                   type="date"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Customer -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Customer Name
                 </label>
@@ -203,13 +165,12 @@
                   placeholder="Customer Name"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Shipment Type -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Shipment Type
                 </label>
@@ -220,13 +181,12 @@
                   placeholder="LCL / FCL / Air / Sea"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Shipper -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Shipper
                 </label>
@@ -237,13 +197,12 @@
                   placeholder="Shipper Name"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Consignee -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Consignee
                 </label>
@@ -254,13 +213,12 @@
                   placeholder="Consignee Name"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Loading -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Place of Loading
                 </label>
@@ -271,13 +229,12 @@
                   placeholder="Place of Loading"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Discharge -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Place of Discharge
                 </label>
@@ -288,13 +245,12 @@
                   placeholder="Place of Discharge"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Final Destination -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Final Destination
                 </label>
@@ -305,13 +261,12 @@
                   placeholder="Final Destination"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Tracking Origin -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Tracking Origin
                 </label>
@@ -322,13 +277,12 @@
                   placeholder="Origin"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Tracking Destination -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Tracking Destination
                 </label>
@@ -339,13 +293,12 @@
                   placeholder="Destination"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Packages -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Number of Packages
                 </label>
@@ -356,13 +309,12 @@
                   placeholder="e.g. 3 Packages"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Weight -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Gross Weight
                 </label>
@@ -373,13 +325,12 @@
                   placeholder="e.g. 5,000 KGS"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Freight -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Freight
                 </label>
@@ -390,13 +341,12 @@
                   placeholder="Prepaid / Collect"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- ETA -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   ETA - Estimated Time of Arrival
                 </label>
@@ -410,13 +360,12 @@
                 <p class="text-xs text-slate-400 mt-1">
                   This information will be visible to the customer only.
                 </p>
-
               </div>
 
 
               <!-- Current Location -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Current Location
                 </label>
@@ -427,13 +376,12 @@
                   placeholder="Current Location"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Status -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Shipment Status
                 </label>
@@ -460,13 +408,12 @@
                   </option>
 
                 </select>
-
               </div>
 
 
               <!-- Last Update -->
-              <div>
 
+              <div>
                 <label class="block text-sm font-bold text-slate-600 mb-1">
                   Last Update
                 </label>
@@ -477,11 +424,11 @@
                   placeholder="e.g. 27 Sep 2026"
                   class="w-full border rounded-xl p-3"
                 >
-
               </div>
 
 
               <!-- Description -->
+
               <div class="md:col-span-2">
 
                 <label class="block text-sm font-bold text-slate-600 mb-1">
@@ -499,6 +446,7 @@
 
 
               <!-- Status Details -->
+
               <div class="md:col-span-2">
 
                 <label class="block text-sm font-bold text-slate-600 mb-1">
@@ -517,7 +465,8 @@
             </div>
 
 
-            <!-- Buttons -->
+            <!-- BUTTONS -->
+
             <div class="flex flex-wrap gap-3 mt-6">
 
               <button
@@ -567,9 +516,7 @@
       </div>
 
 
-      <!-- =========================
-           QR PREVIEW
-      ========================== -->
+      <!-- QR -->
 
       <div>
 
@@ -583,9 +530,11 @@
             id="qrPreview"
             class="flex justify-center items-center min-h-40 bg-slate-50 rounded-xl border border-slate-100"
           >
+
             <span class="text-sm text-slate-400">
               QR will appear here
             </span>
+
           </div>
 
           <p class="text-xs text-slate-400 text-center mt-4">
@@ -599,9 +548,7 @@
     </div>
 
 
-    <!-- =========================
-         SHIPMENTS TABLE
-    ========================== -->
+    <!-- SHIPMENTS -->
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mt-6">
 
@@ -656,16 +603,12 @@
   </main>
 
 
-  <!-- =========================================================
-       A4 PRINT AREA
-       ETA IS NOT INCLUDED HERE
-  ========================================================== -->
+  <!-- =====================================================
+       BILL OF LADING
+       هذه لا تظهر في صفحة الأدمن
+  ====================================================== -->
 
-  <section
-    id="printArea"
-    class="print-area"
-    dir="ltr"
-  >
+  <section id="printArea" class="print-area" dir="ltr">
 
     <div
       style="
@@ -675,7 +618,7 @@
         box-sizing:border-box;
         font-family:Arial,sans-serif;
         color:#111827;
-        background:#fff;
+        background:#ffffff;
       "
     >
 
@@ -714,7 +657,7 @@
         </div>
 
 
-        <div style="text-align:center; flex:1;">
+        <div style="text-align:center;flex:1;">
 
           <div
             style="
@@ -1105,9 +1048,9 @@
   </section>
 
 
-  <!-- =========================================================
+  <!-- =====================================================
        JAVASCRIPT
-  ========================================================== -->
+  ====================================================== -->
 
   <script type="module">
 
@@ -1166,39 +1109,28 @@
     ========================== */
 
     const form =
-      document.getElementById(
-        "shipmentForm"
-      );
+      document.getElementById("shipmentForm");
 
     const shipCode =
-      document.getElementById(
-        "shipCode"
-      );
+      document.getElementById("shipCode");
 
     const blNo =
-      document.getElementById(
-        "blNo"
-      );
+      document.getElementById("blNo");
 
     const dateOfIssue =
-      document.getElementById(
-        "dateOfIssue"
-      );
+      document.getElementById("dateOfIssue");
 
     const eta =
-      document.getElementById(
-        "eta"
-      );
+      document.getElementById("eta");
 
 
     /* =========================
-       DATE
+       TODAY
     ========================== */
 
     function setToday() {
 
-      const today =
-        new Date();
+      const today = new Date();
 
       const year =
         today.getFullYear();
@@ -1220,7 +1152,7 @@
 
 
     /* =========================
-       GENERATE TRACKING
+       TRACKING NUMBER
     ========================== */
 
     async function generateTrackingNumber() {
@@ -1233,7 +1165,6 @@
           )
         );
 
-
       let nextNumber = 1;
 
 
@@ -1241,7 +1172,6 @@
 
         const shipments =
           snapshot.val();
-
 
         const numbers =
           Object.keys(shipments)
@@ -1284,17 +1214,14 @@
         "2026-" +
         String(
           nextNumber
-        ).padStart(
-          4,
-          "0"
-        )
+        ).padStart(4, "0")
       );
 
     }
 
 
     /* =========================
-       GENERATE B/L
+       B/L NUMBER
     ========================== */
 
     function generateBLNumber(
@@ -1302,8 +1229,7 @@
     ) {
 
       const number =
-        trackingNumber
-          .split("-")[1];
+        trackingNumber.split("-")[1];
 
       return (
         "HWL/2026/" +
@@ -1344,6 +1270,7 @@
           tracking
         );
 
+
       } catch (error) {
 
         console.error(error);
@@ -1370,7 +1297,6 @@
           "qrPreview"
         );
 
-
       const printQR =
         document.getElementById(
           "printQR"
@@ -1378,16 +1304,11 @@
 
 
       if (qrPreview) {
-
         qrPreview.innerHTML = "";
-
       }
 
-
       if (printQR) {
-
         printQR.innerHTML = "";
-
       }
 
 
@@ -1438,12 +1359,12 @@
 
 
     /* =========================
-       SAVE SHIPMENT
+       SAVE
     ========================== */
 
     form.addEventListener(
       "submit",
-      async (e) => {
+      async function(e) {
 
         e.preventDefault();
 
@@ -1531,7 +1452,7 @@
               "freight"
             ).value.trim(),
 
-          /* ETA - للزبون فقط */
+          /* ETA للزبون فقط */
           eta:
             eta.value,
 
@@ -1586,6 +1507,7 @@
 
 
           loadShipments();
+
 
         } catch (error) {
 
@@ -1655,9 +1577,7 @@
           ([tracking, data]) => {
 
             const row =
-              document.createElement(
-                "tr"
-              );
+              document.createElement("tr");
 
 
             row.className =
@@ -1679,9 +1599,9 @@
               </td>
 
               <td class="p-3">
-                ${(data.from || "-")}
+                ${data.from || "-"}
                 →
-                ${(data.to || "-")}
+                ${data.to || "-"}
               </td>
 
               <td class="p-3">
@@ -1713,50 +1633,45 @@
             `;
 
 
-            table.appendChild(
-              row
-            );
+            table.appendChild(row);
 
           }
         );
 
 
         document
-          .querySelectorAll(
-            ".edit-btn"
-          )
-          .forEach(
-            button => {
+          .querySelectorAll(".edit-btn")
+          .forEach(button => {
 
-              button.addEventListener(
-                "click",
-                () => {
+            button.addEventListener(
+              "click",
+              () => {
 
-                  editShipment(
-                    button.dataset.id
-                  );
+                editShipment(
+                  button.dataset.id
+                );
 
-                }
-              );
+              }
+            );
 
-            }
-          );
+          });
 
 
         document
-          .querySelectorAll(
-            ".print-existing-btn"
-          )
-          .forEach(
-            button => {
+          .querySelectorAll(".print-existing-btn")
+          .forEach(button => {
 
-              button.addEventListener(
-                "click",
-                async () => {
+            button.addEventListener(
+              "click",
+              async () => {
 
+                const loaded =
                   await editShipment(
                     button.dataset.id
                   );
+
+
+                if (loaded) {
 
                   setTimeout(
                     () => {
@@ -1766,10 +1681,11 @@
                   );
 
                 }
-              );
 
-            }
-          );
+              }
+            );
+
+          });
 
 
       } catch (error) {
@@ -1782,7 +1698,7 @@
 
 
     /* =========================
-       EDIT SHIPMENT
+       EDIT
     ========================== */
 
     async function editShipment(
@@ -1807,7 +1723,7 @@
             "Shipment not found."
           );
 
-          return;
+          return false;
 
         }
 
@@ -1828,133 +1744,113 @@
 
 
         dateOfIssue.value =
-          data.dateOfIssue ||
-          "";
+          data.dateOfIssue || "";
 
 
         document.getElementById(
           "shipCustomer"
         ).value =
-          data.customerName ||
-          "";
+          data.customerName || "";
 
 
         document.getElementById(
           "shipType"
         ).value =
-          data.shipmentType ||
-          "";
+          data.shipmentType || "";
 
 
         document.getElementById(
           "shipper"
         ).value =
-          data.shipper ||
-          "";
+          data.shipper || "";
 
 
         document.getElementById(
           "consignee"
         ).value =
-          data.consignee ||
-          "";
+          data.consignee || "";
 
 
         document.getElementById(
           "loadingPlace"
         ).value =
-          data.loadingPlace ||
-          "";
+          data.loadingPlace || "";
 
 
         document.getElementById(
           "dischargePlace"
         ).value =
-          data.dischargePlace ||
-          "";
+          data.dischargePlace || "";
 
 
         document.getElementById(
           "finalDestination"
         ).value =
-          data.finalDestination ||
-          "";
+          data.finalDestination || "";
 
 
         document.getElementById(
           "shipFrom"
         ).value =
-          data.from ||
-          "";
+          data.from || "";
 
 
         document.getElementById(
           "shipTo"
         ).value =
-          data.to ||
-          "";
+          data.to || "";
 
 
         document.getElementById(
           "packages"
         ).value =
-          data.packages ||
-          "";
+          data.packages || "";
 
 
         document.getElementById(
           "weight"
         ).value =
-          data.weight ||
-          "";
+          data.weight || "";
 
 
         document.getElementById(
           "freight"
         ).value =
-          data.freight ||
-          "";
+          data.freight || "";
 
 
-        /* ETA */
         eta.value =
-          data.eta ||
-          "";
+          data.eta || "";
 
 
         document.getElementById(
           "description"
         ).value =
-          data.description ||
-          "";
+          data.description || "";
 
 
         document.getElementById(
           "shipLoc"
         ).value =
-          data.currentLoc ||
-          "";
+          data.currentLoc || "";
 
 
         document.getElementById(
           "shipStatus"
         ).value =
-          data.status ||
-          "Received";
+          data.status || "Received";
 
 
         document.getElementById(
           "shipStatusDesc"
         ).value =
-          data.statusDesc ||
-          "";
+          data.statusDesc || "";
 
 
         document.getElementById(
           "shipLastUpdate"
         ).value =
-          data.lastUpdate ||
-          "";
+          data.lastUpdate || "";
 
 
         generateQR(
@@ -1968,6 +1864,9 @@
         });
 
 
+        return true;
+
+
       } catch (error) {
 
         console.error(error);
@@ -1976,15 +1875,17 @@
           "Error loading shipment."
         );
 
+        return false;
+
       }
 
     }
 
 
-    /* =========================
-       FILL PRINT DATA
-       ETA IS INTENTIONALLY NOT HERE
-    ========================== */
+    /* =====================================================
+       FILL BILL OF LADING
+       ETA NOT INCLUDED
+    ====================================================== */
 
     function fillPrintData() {
 
@@ -2140,9 +2041,10 @@
     }
 
 
-    /* =========================
-       PRINT
-    ========================== */
+    /* =====================================================
+       NEW PRINT SYSTEM
+       يفتح نافذة مستقلة للبوليصة فقط
+    ====================================================== */
 
     function printBL() {
 
@@ -2160,31 +2062,170 @@
       fillPrintData();
 
 
-      setTimeout(
-        () => {
+      const source =
+        document.getElementById(
+          "printArea"
+        );
 
-          window.print();
 
-        },
-        300
-      );
+      if (!source) {
+
+        alert(
+          "Bill of Lading area not found."
+        );
+
+        return;
+
+      }
+
+
+      const printWindow =
+        window.open(
+          "",
+          "_blank",
+          "width=900,height=1100"
+        );
+
+
+      if (!printWindow) {
+
+        alert(
+          "Please allow pop-ups for this website to print the Bill of Lading."
+        );
+
+        return;
+
+      }
+
+
+      const content =
+        source.innerHTML;
+
+
+      printWindow.document.open();
+
+
+      printWindow.document.write(`
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Bill of Lading - ${shipCode.value}</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 210mm;
+  min-height: 297mm;
+  background: #ffffff;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+.print-sheet {
+  width: 210mm;
+  height: 297mm;
+  min-height: 297mm;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.print-sheet > div {
+  width: 210mm !important;
+  height: 297mm !important;
+  min-height: 297mm !important;
+  padding: 15mm !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  background: #ffffff !important;
+}
+
+img {
+  max-width: 100%;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="print-sheet">
+
+${content}
+
+</div>
+
+<script>
+
+window.onload = function() {
+
+  setTimeout(function() {
+
+    window.focus();
+
+    window.print();
+
+  }, 700);
+
+};
+
+window.onafterprint = function() {
+
+  setTimeout(function() {
+
+    window.close();
+
+  }, 300);
+
+};
+
+<\/script>
+
+</body>
+
+</html>
+
+`);
+
+
+      printWindow.document.close();
 
     }
 
 
     document
-      .getElementById(
-        "printBtn"
-      )
+      .getElementById("printBtn")
       .addEventListener(
         "click",
         printBL
       );
 
 
-    /* =========================
+    /* =====================================================
        WORD DOWNLOAD
-    ========================== */
+    ====================================================== */
 
     function downloadWord() {
 
@@ -2218,7 +2259,9 @@
 
 <meta charset="UTF-8">
 
-<title>Bill of Lading - ${shipCode.value}</title>
+<title>
+Bill of Lading - ${shipCode.value}
+</title>
 
 <style>
 
@@ -2250,7 +2293,7 @@ ${printContent}
       const blob =
         new Blob(
           [
-            '\ufeff',
+            "\ufeff",
             wordHTML
           ],
           {
@@ -2293,17 +2336,20 @@ ${printContent}
       );
 
 
-      URL.revokeObjectURL(
-        url
+      setTimeout(
+        () => {
+          URL.revokeObjectURL(
+            url
+          );
+        },
+        1000
       );
 
     }
 
 
     document
-      .getElementById(
-        "wordBtn"
-      )
+      .getElementById("wordBtn")
       .addEventListener(
         "click",
         downloadWord
@@ -2311,13 +2357,11 @@ ${printContent}
 
 
     /* =========================
-       NEW BUTTON
+       NEW SHIPMENT
     ========================== */
 
     document
-      .getElementById(
-        "newShipmentBtn"
-      )
+      .getElementById("newShipmentBtn")
       .addEventListener(
         "click",
         prepareNewShipment
@@ -2325,7 +2369,7 @@ ${printContent}
 
 
     /* =========================
-       INITIALIZE
+       START
     ========================== */
 
     setToday();
