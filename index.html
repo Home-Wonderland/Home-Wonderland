@@ -316,6 +316,25 @@
 
           </div>
 
+          <!-- Step 5 -->
+          <div class="flex flex-col items-center z-10">
+
+            <div
+              id="step5"
+              class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 font-bold text-sm flex items-center justify-center border-2 border-white transition-all"
+            >
+              5
+            </div>
+
+            <span
+              id="stepText5"
+              class="text-xs font-bold text-slate-400 mt-2"
+            >
+              Finished
+            </span>
+
+          </div>
+
         </div>
 
       </div>
@@ -357,6 +376,30 @@
 
       </div>
 
+
+      <!-- Optional Reference Numbers -->
+      <div id="resOptionalRefs" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+        <div id="resPONoBox" class="bg-slate-50 p-4 rounded-xl border border-slate-100 hidden">
+          <span class="text-xs font-bold text-slate-400 block">PO NO.</span>
+          <span id="resPONo" class="font-bold text-slate-800 text-base mt-1 block"></span>
+        </div>
+        <div id="resContainerNoBox" class="bg-slate-50 p-4 rounded-xl border border-slate-100 hidden">
+          <span class="text-xs font-bold text-slate-400 block">CONTAINER NO.</span>
+          <span id="resContainerNo" class="font-bold text-slate-800 text-base mt-1 block"></span>
+        </div>
+      </div>
+
+      <!-- Optional Reference Numbers -->
+      <div id="resOptionalRefs" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+        <div id="resPONoBox" class="bg-slate-50 p-4 rounded-xl border border-slate-100 hidden">
+          <span class="text-xs font-bold text-slate-400 block">PO NO.</span>
+          <span id="resPONo" class="font-bold text-slate-800 text-base mt-1 block"></span>
+        </div>
+        <div id="resContainerNoBox" class="bg-slate-50 p-4 rounded-xl border border-slate-100 hidden">
+          <span class="text-xs font-bold text-slate-400 block">CONTAINER NO.</span>
+          <span id="resContainerNo" class="font-bold text-slate-800 text-base mt-1 block"></span>
+        </div>
+      </div>
 
       <!-- Packages & Status -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -462,7 +505,7 @@
     function updateProgress(statusText) {
 
       // Reset steps
-      for (let i = 1; i <= 4; i++) {
+      for (let i = 1; i <= 5; i++) {
 
         const step =
           document.getElementById('step' + i);
@@ -549,6 +592,32 @@
       }
 
 
+      // Finished - final completed stage
+      else if (
+        textLower.includes('finished') ||
+        textLower.includes('complete') ||
+        textLower.includes('completed') ||
+        textLower.includes('منتهية') ||
+        textLower.includes('مكتملة')
+      ) {
+
+        stepNumber = 5;
+
+      }
+
+
+      // Finished - final completed stage
+      else if (
+        textLower.includes('finished') ||
+        textLower.includes('complete') ||
+        textLower.includes('completed') ||
+        textLower.includes('منتهية') ||
+        textLower.includes('مكتملة')
+      ) {
+        stepNumber = 5;
+      }
+
+
       // Delivered
       else if (
 
@@ -612,14 +681,18 @@
         }
 
         if (stepNumber === 2) {
-          line.style.width = '33%';
+          line.style.width = '25%';
         }
 
         if (stepNumber === 3) {
-          line.style.width = '66%';
+          line.style.width = '50%';
         }
 
         if (stepNumber === 4) {
+          line.style.width = '75%';
+        }
+
+        if (stepNumber === 5) {
           line.style.width = '100%';
         }
 
@@ -750,6 +823,19 @@
           'resPackages'
         ).innerText =
           data.packages || '-';
+
+        // Optional PO and Container numbers: show only when populated.
+        const poNo = String(data.poNo || data.poNO || data.po || '').trim();
+        const containerNo = String(data.containerNo || data.containerNumber || '').trim();
+        const poBox = document.getElementById('resPONoBox');
+        const containerBox = document.getElementById('resContainerNoBox');
+        const refsBox = document.getElementById('resOptionalRefs');
+
+        document.getElementById('resPONo').innerText = poNo;
+        document.getElementById('resContainerNo').innerText = containerNo;
+        poBox.classList.toggle('hidden', !poNo);
+        containerBox.classList.toggle('hidden', !containerNo);
+        refsBox.classList.toggle('hidden', !poNo && !containerNo);
 
 
         document.getElementById(
