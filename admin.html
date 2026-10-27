@@ -193,6 +193,42 @@
               </div>
 
 
+              <!-- Optional PO Number -->
+
+              <div>
+
+                <label class="block text-sm font-bold text-slate-600 mb-1">
+                  PO No. (Optional)
+                </label>
+
+                <input
+                  id="poNo"
+                  type="text"
+                  placeholder="Purchase Order Number"
+                  class="w-full border rounded-xl p-3"
+                >
+
+              </div>
+
+
+              <!-- Optional Container Number -->
+
+              <div>
+
+                <label class="block text-sm font-bold text-slate-600 mb-1">
+                  Container No. (Optional)
+                </label>
+
+                <input
+                  id="containerNo"
+                  type="text"
+                  placeholder="Container Number"
+                  class="w-full border rounded-xl p-3"
+                >
+
+              </div>
+
+
               <!-- Shipment Type -->
 
               <div>
@@ -301,40 +337,6 @@
               </div>
 
 
-              <!-- Tracking Origin -->
-
-              <div>
-
-                <label class="block text-sm font-bold text-slate-600 mb-1">
-                  Tracking Origin
-                </label>
-
-                <input
-                  id="shipFrom"
-                  type="text"
-                  placeholder="Origin"
-                  class="w-full border rounded-xl p-3"
-                >
-
-              </div>
-
-
-              <!-- Tracking Destination -->
-
-              <div>
-
-                <label class="block text-sm font-bold text-slate-600 mb-1">
-                  Tracking Destination
-                </label>
-
-                <input
-                  id="shipTo"
-                  type="text"
-                  placeholder="Destination"
-                  class="w-full border rounded-xl p-3"
-                >
-
-              </div>
 
 
               <!-- Packages -->
@@ -373,22 +375,6 @@
               </div>
 
 
-              <!-- Freight -->
-
-              <div>
-
-                <label class="block text-sm font-bold text-slate-600 mb-1">
-                  Freight
-                </label>
-
-                <input
-                  id="freight"
-                  type="text"
-                  placeholder="Prepaid / Collect"
-                  class="w-full border rounded-xl p-3"
-                >
-
-              </div>
 
 
               <!-- ETA -->
@@ -461,6 +447,10 @@
                     Delivered
                   </option>
 
+                  <option value="Finished">
+                    Finished
+                  </option>
+
                 </select>
 
               </div>
@@ -495,8 +485,12 @@
                 <textarea
                   id="description"
                   rows="4"
+                  dir="ltr"
+                  lang="en"
+                  spellcheck="true"
                   placeholder="Description of Goods"
-                  class="w-full border rounded-xl p-3"
+                  class="w-full border rounded-xl p-3 text-left"
+                  style="direction: ltr; text-align: left; unicode-bidi: plaintext; resize: vertical;"
                 ></textarea>
 
               </div>
@@ -790,6 +784,16 @@
             <span id="printDate"></span>
           </div>
 
+          <div id="printPODetails" style="display:none;">
+            <strong>PO No.:</strong>
+            <span id="printPONo"></span>
+          </div>
+
+          <div id="printContainerDetails" style="display:none;">
+            <strong>Container No.:</strong>
+            <span id="printContainerNo"></span>
+          </div>
+
         </div>
 
       </div>
@@ -1025,35 +1029,6 @@
       </div>
 
 
-      <!-- FREIGHT -->
-
-      <div
-        style="
-          border:1px solid #cbd5e1;
-          margin-bottom:25px;
-        "
-      >
-
-        <div
-          style="
-            padding:10px;
-            display:flex;
-            justify-content:space-between;
-          "
-        >
-
-          <strong style="font-size:11px;">
-            FREIGHT
-          </strong>
-
-          <span
-            id="printFreight"
-            style="font-size:13px;font-weight:bold;"
-          ></span>
-
-        </div>
-
-      </div>
 
 
       <!-- FOOTER -->
@@ -1231,6 +1206,20 @@
 
       dateOfIssue.value =
         `${year}-${month}-${day}`;
+
+      // Automatically populate Last Update with today's date
+      // when the admin opens the site or starts a new shipment.
+      const lastUpdateField =
+        document.getElementById("shipLastUpdate");
+
+      if (lastUpdateField) {
+        lastUpdateField.value =
+          new Intl.DateTimeFormat("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          }).format(today);
+      }
 
     }
 
@@ -1482,6 +1471,16 @@
               "shipCustomer"
             ).value.trim(),
 
+          poNo:
+            document.getElementById(
+              "poNo"
+            ).value.trim(),
+
+          containerNo:
+            document.getElementById(
+              "containerNo"
+            ).value.trim(),
+
           shipmentType:
             document.getElementById(
               "shipType"
@@ -1512,16 +1511,6 @@
               "finalDestination"
             ).value.trim(),
 
-          from:
-            document.getElementById(
-              "shipFrom"
-            ).value.trim(),
-
-          to:
-            document.getElementById(
-              "shipTo"
-            ).value.trim(),
-
           packages:
             document.getElementById(
               "packages"
@@ -1530,11 +1519,6 @@
           weight:
             document.getElementById(
               "weight"
-            ).value.trim(),
-
-          freight:
-            document.getElementById(
-              "freight"
             ).value.trim(),
 
           /* ETA للزبون فقط */
@@ -1844,6 +1828,12 @@
           data.customerName ||
           "";
 
+        document.getElementById("poNo").value =
+          data.poNo || "";
+
+        document.getElementById("containerNo").value =
+          data.containerNo || "";
+
 
         document.getElementById(
           "shipType"
@@ -1888,20 +1878,6 @@
 
 
         document.getElementById(
-          "shipFrom"
-        ).value =
-          data.from ||
-          "";
-
-
-        document.getElementById(
-          "shipTo"
-        ).value =
-          data.to ||
-          "";
-
-
-        document.getElementById(
           "packages"
         ).value =
           data.packages ||
@@ -1912,13 +1888,6 @@
           "weight"
         ).value =
           data.weight ||
-          "";
-
-
-        document.getElementById(
-          "freight"
-        ).value =
-          data.freight ||
           "";
 
 
@@ -2014,6 +1983,13 @@
       ).innerText =
         dateOfIssue.value || "-";
 
+      const poValue = document.getElementById("poNo").value.trim();
+      const containerValue = document.getElementById("containerNo").value.trim();
+      document.getElementById("printPONo").innerText = poValue;
+      document.getElementById("printContainerNo").innerText = containerValue;
+      document.getElementById("printPODetails").style.display = poValue ? "block" : "none";
+      document.getElementById("printContainerDetails").style.display = containerValue ? "block" : "none";
+
 
       document.getElementById(
         "printShipper"
@@ -2076,14 +2052,6 @@
       ).innerText =
         document.getElementById(
           "weight"
-        ).value.trim() || "-";
-
-
-      document.getElementById(
-        "printFreight"
-      ).innerText =
-        document.getElementById(
-          "freight"
         ).value.trim() || "-";
 
 
@@ -2257,6 +2225,8 @@
               "printDate"
             ).innerText;
 
+          const printPONo = document.getElementById("printPONo").innerText;
+          const printContainerNo = document.getElementById("printContainerNo").innerText;
 
           const printShipper =
             document.getElementById(
@@ -2303,12 +2273,6 @@
           const printWeight =
             document.getElementById(
               "printWeight"
-            ).innerText;
-
-
-          const printFreight =
-            document.getElementById(
-              "printFreight"
             ).innerText;
 
 
@@ -2464,6 +2428,13 @@ body {
   color: #0284c7;
 
   margin-top: 4px;
+}
+
+.company-contact {
+  font-size: 8px;
+  line-height: 1.5;
+  color: #475569;
+  margin-top: 5px;
 }
 
 
@@ -2684,6 +2655,11 @@ body {
         LOGISTICS SERVICES
       </div>
 
+      <div class="company-contact">
+        Dubai - UAE | Mobile: +964 783 666 6656 | UAE: +971 553 676 620<br>
+        Email: malhadie@home-wonderland.com | Website: www.home-wonderland.com
+      </div>
+
       <div class="document-title">
         BILL OF LADING
       </div>
@@ -2795,6 +2771,11 @@ body {
   </div>
 
 
+  <!-- OPTIONAL REFERENCE NUMBERS -->
+
+  ${printPONo || printContainerNo ? '<div class="box two-columns">' + (printPONo ? '<div class="cell ' + (printContainerNo ? 'border-right' : '') + '"><div class="label">PO NO.</div><div class="value">' + printPONo + '</div></div>' : '') + (printContainerNo ? '<div class="cell"><div class="label">CONTAINER NO.</div><div class="value">' + printContainerNo + '</div></div>' : '') + '</div>' : ''}
+
+
   <!-- SHIPMENT INFORMATION -->
 
   <div class="box">
@@ -2871,37 +2852,6 @@ body {
   </div>
 
 
-  <!-- FREIGHT -->
-
-  <div class="box">
-
-
-    <div
-      class="cell"
-      style="
-        display:flex;
-        justify-content:space-between;
-      "
-    >
-
-      <strong style="font-size:11px;">
-        FREIGHT
-      </strong>
-
-
-      <span
-        style="
-          font-size:13px;
-          font-weight:bold;
-        "
-      >
-        ${printFreight}
-      </span>
-
-    </div>
-
-
-  </div>
 
 
   <!-- FOOTER -->
@@ -2953,6 +2903,14 @@ body {
 
       <div>
         LOGISTICS SERVICES
+      </div>
+
+      <div>
+        Dubai - UAE | +964 783 666 6656 | +971 553 676 620
+      </div>
+
+      <div>
+        malhadie@home-wonderland.com | www.home-wonderland.com
       </div>
 
       <div>
